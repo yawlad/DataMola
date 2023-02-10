@@ -1,6 +1,6 @@
-## DataMola HomeTasks
+# DataMola HomeTasks
 
-# Stack:
+## Stack:
 * HTML5
 * CSS3
 * JavaScript

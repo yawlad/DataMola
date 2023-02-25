@@ -1,0 +1,408 @@
+:root {
+  --white-color: #ffffff;
+  --black-color: #333333;
+  --grey-color: #dddddd;
+  --dark-grey-color: #999999;
+
+  --button-color: #ff6f32;
+  --confirm-button-color: #147dfa;
+  --cheapest-color: #30c873;
+  --fastest-color: #ba83f1;
+
+  --text-font-family: -apple-system, BlinkMacSystemFont, Inter, Roboto,
+    Helvetica, Arial, sans-serif;
+
+  --button-font: 600 24px var(--text-font-family);
+
+  --title-font: 700 28px var(--text-font-family);
+  --text-font-medium: 600 16px var(--text-font-family);
+  --text-font-small: 400 12px var(--text-font-family);
+  --text-font-extra-small: 400 10px var(--text-font-family);
+}
+
+.cheapest__special {
+  background-color: var(--cheapest-color);
+}
+
+.fastest__special {
+  background-color: var(--fastest-color);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--grey-color);
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  padding: 20px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 30px;
+}
+
+.card {
+  background-color: var(--white-color);
+  display: flex;
+  width: 100%;
+  border-radius: 10px;
+  position: relative;
+}
+
+.special__info {
+  position: absolute;
+  color: var(--white-color);
+  padding: 3px 10px;
+  border-radius: 20px;
+  top: -10px;
+  left: 30px;
+}
+
+.card__side {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 30%;
+}
+
+.card__price {
+  margin: 0;
+  font: var(--title-font);
+}
+
+.buy__button {
+  padding: 20px 0;
+  width: 100%;
+  background-color: var(--button-color);
+  border-radius: 10px;
+  border: none;
+  font: var(--button-font);
+  color: var(--white-color);
+  cursor: pointer;
+}
+
+.card__line {
+  height: 100%;
+  border-left: 1px solid var(--grey-color);
+}
+
+.card__main {
+  padding: 30px 20px;
+  width: 70%;
+}
+
+.main__top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo__container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.logo {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.company__name {
+  color: #2a2175;
+  font: var(--text-font-medium);
+  margin: 0;
+}
+
+.icons__container {
+  display: flex;
+  gap: 20px;
+}
+
+.special__icons,
+.repost__icons {
+  display: flex;
+  gap: 8px;
+}
+
+.icon__container {
+  font-size: 20px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--grey-color);
+  position: relative;
+  transition: 0.5s;
+}
+
+.special__icons .icon__container {
+  color: var(--button-color);
+}
+
+.repost__icons .icon__container {
+  color: var(--dark-grey-color);
+}
+
+.icon__container:hover .pop__up {
+  opacity: 1;
+  bottom: 125%;
+}
+
+.repost__icons .icon__container:hover {
+  color: var(--confirm-button-color);
+}
+
+/*-------------------------------------*/
+
+.main__center {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--grey-color);
+  border-radius: 5px;
+}
+
+.main__center:last-of-type {
+  border-bottom: none;
+}
+
+.from__section,
+.to__section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  gap: 15px;
+}
+
+.to__section {
+  text-align: right;
+}
+
+.time {
+  font: var(--title-font);
+  font-weight: 400;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  font: var(--text-font-extra-small);
+  color: var(--dark-grey-color);
+  gap: 5px;
+}
+
+/*-------------------------------------*/
+
+.flight__section {
+  padding: 20px;
+  flex-grow: 1;
+  position: relative;
+  color: var(--dark-grey-color);
+}
+
+.flight__time {
+  text-align: center;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 100%;
+  font: var(--text-font-small);
+}
+
+.plane__img {
+  position: absolute;
+  top: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.plane__img__start {
+  left: 20px;
+}
+
+.plane__img__end {
+  right: 20px;
+}
+
+.flight__way {
+  display: flex;
+  flex-direction: row;
+  padding: 40px 0;
+  width: 100%;
+  align-items: center;
+  cursor: pointer;
+}
+
+.flight__way__start,
+.flight__way__end {
+  border: 2px solid var(--dark-grey-color);
+  width: 60%;
+  border-radius: 10px;
+}
+
+.flight__way__transfer__container {
+  position: relative;
+  width: 20%;
+}
+
+.flight__way__transfer {
+  border: 1px solid var(--dark-grey-color);
+  width: 100%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.flight__location {
+  position: absolute;
+  width: fit-content;
+  text-align: center;
+  font: var(--text-font-extra-small);
+  color: var(--confirm-button-color);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.flight__location__transfer {
+  top: 17px;
+  right: 43%;
+}
+
+.flight__location__start {
+  bottom: 30px;
+  left: 20px;
+  text-align: left;
+}
+
+.flight__location__end {
+  bottom: 30px;
+  right: 20px;
+  text-align: right;
+}
+
+/**************************************/
+
+.flight__location__transfer:hover ~ .flight__way__transfer {
+  border-color: var(--button-color);
+}
+
+.plane__img:hover,
+.flight__location:hover,
+.flight__location__start:hover ~ .plane__img__start,
+.flight__location__end:hover ~ .plane__img__end {
+  color: var(--button-color);
+}
+
+/*******************/
+
+/*   
+      It's impossible to to the same animation to previous by
+    hovering the next. Only JS.
+*/
+
+/*   
+      And for me it was a big problem to animate flight lines
+    without JS
+*/
+
+/*******************/
+
+.plane__img__start .pop__up {
+  left: -30px;
+}
+.plane__img:hover .pop__up,
+.flight__location__start:hover ~ .plane__img__start .pop__up,
+.flight__location__end:hover ~ .plane__img__end .pop__up {
+  opacity: 1;
+  bottom: 30px;
+  left: -30px;
+}
+
+.flight__location__transfer ~ .pop__up {
+  bottom: -10px;
+  margin: 5px;
+}
+
+.flight__location__transfer:hover ~ .pop__up {
+  opacity: 1;
+  bottom: 10px;
+  margin: 5px;
+}
+
+/*******************/
+
+.pop__up {
+  position: absolute;
+  font: var(--text-font-extra-small);
+  color: var(--white-color);
+  background-color: #333333;
+  padding: 10px 25px;
+  bottom: 0;
+  border-radius: 5px;
+  max-width: 700%;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s cubic-bezier(0, 1.24, 0.52, 1.09);
+  text-align: center;
+}
+
+.pop__up::after {
+  content: "";
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  width: 40%;
+  height: 15px;
+  left: 30%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%, 50% 100%);
+  background-color: var(--black-color);
+}
+
+/*******__TESTINGS__*******/
+
+.flight__way__start {
+  width: 40%;
+}
+
+.flight__way__transfer__container {
+  width: 35%;
+}
+
+.flight__way__end {
+  width: 25%;
+}
+
+.var_2 .flight__way__start {
+  width: 20%;
+}
+
+.var_2 .flight__way__transfer__container {
+  width: 55%;
+}
+
+.var_2 .flight__way__end {
+  width: 25%;
+}
+
+.var_2 .special__info {
+  background-color: var(--fastest-color);
+}
+
+.flight__way__transfer__container .pop__up {
+  right: 30px;
+}
+
+/*   
+      PopUp position should be counted in JS
+*/

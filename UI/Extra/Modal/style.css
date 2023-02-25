@@ -1,0 +1,114 @@
+:root {
+  --white-color: #ffffff;
+  --black-color: #333333;
+  --grey-color: #f3f3f3;
+  --dark-grey-color: #999999;
+  --confirm-button-color: rgb(20, 125, 250);
+
+  --title-font: 700 24px "sans-serif";
+  --text-font: 400 18px "sans-serif";
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark-grey-color);
+}
+
+.modal__window {
+  max-width: 500px;
+  border-radius: 5px;
+  background-color: var(--white-color);
+  position: relative;
+}
+
+.modal__window__cross {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
+}
+
+.modal__window__cross::after,
+.modal__window__cross::before {
+  content: "";
+  display: block;
+  width: 15px;
+  border-bottom: 3px solid var(--dark-grey-color);
+  transform-origin: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.modal__window__cross::after {
+  rotate: -45deg;
+}
+
+.modal__window__cross::before {
+  rotate: 45deg;
+}
+
+.modal__window__line {
+  border: 1px solid var(--grey-color);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.modal__window__top {
+  padding: 20px 30px;
+}
+
+.modal__window__title {
+  font: var(--title-font);
+}
+
+.modal__window__body {
+  padding: 20px 30px;
+}
+
+.modal__window__message {
+  font: var(--text-font);
+}
+
+.modal__window__bottom {
+  padding: 20px 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal__window__button {
+  padding: 10px;
+  color: var(--white-color);
+  background-color: var(--dark-grey-color);
+  border: none;
+  border-radius: 3px;
+  margin-left: 10px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.save__button {
+  background-color: var(--confirm-button-color);
+}
+
+.modal__window__cross:hover:after,
+.modal__window__cross:hover:before {
+  border-color: var(--black-color);
+}
+
+.modal__window__button:hover {
+  transform: scale(1.05);
+  box-shadow: 5px 5px 15px var(--dark-grey-color);
+}

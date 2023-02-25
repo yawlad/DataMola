@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/36ed5ed2fc.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="logo__container">
+          <img src="./static/img/Logo.svg" alt="logo" class="logo" />
+          <div class="app__name">Task Manager</div>
+        </div>
+        <div class="user__container">
+          <div class="username">
+            <a href="./user_page.html" class="link">User_01 </a
+            ><i
+              class="fa-solid fa-right-from-bracket clickable__element dangerous__icon"
+            ></i>
+          </div>
+          <a href="./user_page.html" class="link">
+            <img
+              src="./static/img/Avata.png"
+              alt="user__avatar"
+              class="user__avatar clickable__element"
+            />
+          </a>
+        </div>
+      </header>
+
+      <main class="main__task__page main">
+        <form class="detailed__task__form detailed__task">
+          <h2 class="section__header">New_Task_01</h2>
+          <div class="task">
+            <div class="input__block">
+              <h3 class="input__block__name">Priority:</h3>
+              <select
+                type=""
+                name="task_priority"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="username"
+                  value="User_01"
+                  class="input__block__option low__prioprity"
+                >
+                  Low
+                </option>
+                <option
+                  name="username"
+                  value="User_02"
+                  class="input__block__option medium__prioprity"
+                >
+                  Medium
+                </option>
+                <option
+                  name="username"
+                  value="User_03"
+                  class="input__block__option high__prioprity"
+                >
+                  High
+                </option>
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Task Name:</h3>
+              <div class="input__block__body">
+                <input type="text" name="task_name" class="input__block__input" value="New_Task_01"/>
+                <span class="help__message">max - 100</span>
+              </div>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Executor:</h3>
+              <select
+                type=""
+                name="task_executor"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="username"
+                  value="User_01"
+                  class="input__block__option"
+                >
+                  User_01
+                </option>
+                <option
+                  name="username"
+                  value="User_02"
+                  class="input__block__option"
+                >
+                  User_02
+                </option>
+                <option
+                  name="username"
+                  value="User_03"
+                  class="input__block__option"
+                >
+                  User_03
+                </option>
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Privacy:</h3>
+              <select
+                type=""
+                name="task_privacy"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="username"
+                  value="User_01"
+                  class="input__block__option"
+                >
+                  Public
+                </option>
+                <option
+                  name="username"
+                  value="User_02"
+                  class="input__block__option"
+                >
+                  Private
+                </option>
+              </select>
+            </div>
+
+            <div class="input__block">
+              <h3 class="input__block__name">Status:</h3>
+              <select
+                type=""
+                name="task_status"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="username"
+                  value="User_01"
+                  class="input__block__option"
+                >
+                  To Do
+                </option>
+                <option
+                  name="username"
+                  value="User_02"
+                  class="input__block__option"
+                >
+                  In Progress
+                </option>
+                <option
+                  name="username"
+                  value="User_03"
+                  class="input__block__option"
+                >
+                  Completed
+                </option>
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Description:</h3>
+              <div class="input__block__body">
+                <textarea
+                  name="task_description"
+                  class="input__block__input input__block__textarea"
+                >
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis in laborum magni magnam architecto, earum doloribus et eos aliquid sequi commodi dolorum modi consequatur, numquam ut veniam porro deserunt suscipit expedita excepturi deleniti nisi? Deserunt, nostrum adipisci? Dolorem, tempore nulla.</textarea
+                ><span class="help__message">max - 180</span>
+              </div>
+            </div>
+            <div class="task__additional__info">
+              <div class="task__date">13.11.2022 15:30</div>
+
+              <div class="task__comments">
+                12 <i class="fa fa-comment" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <hr class="line" />
+            <div class="task__bottom">
+              <a href="./task_page.html" class="standart__button edit__button">
+                BACK <i class="fa fa-backward" aria-hidden="true"></i
+              ></a>
+
+              <button type="reset" class="standart__button delete__button">
+                UNDO CHANGES <i class="fa fa-undo" aria-hidden="true"></i>
+              </button>
+              <button type="submit" class="standart__button add__button">
+                CONFIRM <i class="fa-solid fa-check-double"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <section class="comments">
+          <h2 class="section__header">Comments</h2>
+          <div class="comments__body">
+            <div class="comments__list scrollable__element">
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Facilis molestias quisquam assumenda officiis. Nesciunt
+                  laudantium ipsum nemo nihil maxime delectus.
+                </div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Facilis molestias quisquam assumenda officiis. Nesciunt
+                  laudantium ipsum nemo nihil maxime delectus.
+                </div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Facilis molestias quisquam assumenda officiis. Nesciunt
+                  laudantium ipsum nemo nihil maxime delectus.
+                </div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">Lorem ipsum dolor, sit amet.</div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Facilis molestias quisquam assumenda officiis. Nesciunt
+                  laudantium ipsum nemo nihil maxime delectus.
+                </div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+              <div class="comment">
+                <span class="commentator">User_01</span>
+                <div class="comment__text">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Facilis molestias quisquam assumenda officiis. Nesciunt
+                  laudantium ipsum nemo nihil maxime delectus.
+                </div>
+                <span class="comment__date">12.01.2023 10:00</span>
+              </div>
+            </div>
+            <hr class="line" />
+            <form action="#" class="add__comment">
+              <div class="input__block">
+                <h3 class="input__block__name">Comment</h3>
+                <div class="input__block__body">
+                  <textarea
+                    name="inner_text"
+                    class="input__block__input input__block__textarea"
+                  ></textarea>
+                </div>
+                <div class="help__message">max - 280</div>
+              </div>
+              <div class="form__buttons">
+                <button type="submit" class="standart__button neutral__button">
+                  COMMENT <i class="fa-solid fa-comment"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="contact__email">y.yawlad@gmail.com</div>
+        <div class="footer__info">Task Manager v 1.0.0 © y.yawlad</div>
+      </footer>
+    </div>
+  </body>
+</html>

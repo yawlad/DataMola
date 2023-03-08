@@ -40,128 +40,139 @@
 
       <main class="main">
         <section class="filters">
-          <div class="input__block" id="executor_filter">
-            <h3 class="input__block__name">Executor</h3>
-            <select
-              type=""
-              name="executor"
-              class="input__block__select input__block__input"
-            >
-              <option
-                name="username"
-                value="User_01"
-                class="input__block__option"
+          <div class="filters__part">
+            <div class="input__block" id="executor_filter">
+              <h3 class="input__block__name">Executor</h3>
+              <select
+                type=""
+                name="executor"
+                class="input__block__select input__block__input"
               >
-                User_01
-              </option>
-              <option
-                name="username"
-                value="User_02"
-                class="input__block__option"
-              >
-                User_02
-              </option>
-              <option
-                name="username"
-                value="User_03"
-                class="input__block__option"
-              >
-                User_03
-              </option>
-            </select>
-          </div>
-          <div class="input__block" id="data_filter">
-            <h3 class="input__block__name">Date</h3>
-            <div class="input__block__body">
-              <input
-                type="date"
-                name="date_from"
-                class="input__block__input"
-              />-<input
-                type="date"
-                name="date_to"
-                class="input__block__input"
-              />
+                <option
+                  name="username"
+                  value="All"
+                  class="input__block__option"
+                >
+                  All
+                </option>
+                <option
+                  name="username"
+                  value="User_01"
+                  class="input__block__option"
+                >
+                  User_01
+                </option>
+                <option
+                  name="username"
+                  value="User_02"
+                  class="input__block__option"
+                >
+                  User_02
+                </option>
+                <option
+                  name="username"
+                  value="User_03"
+                  class="input__block__option"
+                >
+                  User_03
+                </option>
+              </select>
+            </div>
+            <div class="input__block" id="data_filter">
+              <h3 class="input__block__name">Date</h3>
+              <div class="input__block__body">
+                <input
+                  type="date"
+                  name="date_from"
+                  class="input__block__input"
+                />-<input
+                  type="date"
+                  name="date_to"
+                  class="input__block__input"
+                />
+              </div>
+            </div>
+            <div class="input__block" id="inner_text_filter">
+              <h3 class="input__block__name">Inner Text</h3>
+              <div class="input__block__body">
+                <textarea
+                  name="inner_text"
+                  class="input__block__input input__block__textarea"
+                ></textarea>
+                <div class="help__message">max - 180</div>
+              </div>
             </div>
           </div>
-          <div class="input__block" id="inner_text_filter">
-            <h3 class="input__block__name">Inner Text</h3>
-            <div class="input__block__body">
-              <textarea
-                name="inner_text"
-                class="input__block__input input__block__textarea"
-              ></textarea>
-              <div class="help__message">max - 180</div>
+          <div class="filters__part">
+            <div class="input__block" id="priority_filter">
+              <h3 class="input__block__name">Priority</h3>
+              <div class="input__block__body">
+                <label class="input__block__checkbox"
+                  ><input
+                    type="checkbox"
+                    name="priority"
+                    value="low"
+                    class="input__block__input"
+                  />Low</label
+                >
+                <label class="input__block__checkbox"
+                  ><input
+                    type="checkbox"
+                    name="priority"
+                    value="medium"
+                    class="input__block__input"
+                  />Medium</label
+                >
+                <label class="input__block__checkbox"
+                  ><input
+                    type="checkbox"
+                    name="priority"
+                    value="high"
+                    class="input__block__input"
+                  />High</label
+                >
+              </div>
             </div>
-          </div>
-          <div class="input__block" id="priority_filter">
-            <h3 class="input__block__name">Priority</h3>
-            <div class="input__block__body">
-              <label class="input__block__checkbox"
+            <div class="input__block" id="privacy_filter">
+              <h3 class="input__block__name">Privacy</h3>
+              <div class="input__block__body">
+                <label class="input__block__checkbox"
+                  ><input
+                    type="checkbox"
+                    name="privacy"
+                    value="private"
+                    class="input__block__input"
+                  />Private</label
+                >
+                <label class="input__block__checkbox"
+                  ><input
+                    type="checkbox"
+                    name="privacy"
+                    value="public"
+                    class="input__block__input"
+                  />Public</label
+                >
+              </div>
+            </div>
+            <div class="input__block" id="type_of_page_filter">
+              <label class="input__block__radio active__input"
                 ><input
-                  type="checkbox"
-                  name="priority"
-                  value="low"
+                  type="radio"
+                  name="type_of_page"
+                  value="table"
+                  checked
                   class="input__block__input"
-                />Low</label
+                />Table</label
               >
-              <label class="input__block__checkbox"
+              <label class="input__block__radio"
                 ><input
-                  type="checkbox"
-                  name="priority"
-                  value="medium"
+                  type="radio"
+                  name="type_of_page"
+                  value="list"
                   class="input__block__input"
-                />Medium</label
-              >
-              <label class="input__block__checkbox"
-                ><input
-                  type="checkbox"
-                  name="priority"
-                  value="high"
-                  class="input__block__input"
-                />High</label
+                />List</label
               >
             </div>
-          </div>
-          <div class="input__block" id="privacy_filter">
-            <h3 class="input__block__name">Privacy</h3>
-            <div class="input__block__body">
-              <label class="input__block__checkbox"
-                ><input
-                  type="checkbox"
-                  name="privacy"
-                  value="private"
-                  class="input__block__input"
-                />Private</label
-              >
-              <label class="input__block__checkbox"
-                ><input
-                  type="checkbox"
-                  name="privacy"
-                  value="public"
-                  class="input__block__input"
-                />Public</label
-              >
-            </div>
-          </div>
-          <div class="input__block" id="type_of_page_filter">
-            <label class="input__block__radio active__input"
-              ><input
-                type="radio"
-                name="type_of_page"
-                value="table"
-                checked
-                class="input__block__input"
-              />Table</label
-            >
-            <label class="input__block__radio"
-              ><input
-                type="radio"
-                name="type_of_page"
-                value="list"
-                class="input__block__input"
-              />List</label
-            >
           </div>
         </section>
 
@@ -958,145 +969,152 @@
               </div>
             </article>
           </div>
-
           <aside class="add__new__task">
+            <div class="add__new__task__unauthorised__window">
+              AUTHORIZE TO USE TASK MANAGER
+            </div>
             <div class="section__header">Add New Task</div>
             <form action="#" class="task__form">
-              <div class="input__block">
-                <h3 class="input__block__name">Task Name*</h3>
-                <div class="input__block__body">
-                  <input
-                    type="text"
-                    name="task_name"
-                    class="input__block__input"
-                  />
+              <div class="task__form__part">
+                <div class="input__block">
+                  <h3 class="input__block__name">Task Name*</h3>
+                  <div class="input__block__body">
+                    <input
+                      type="text"
+                      name="task_name"
+                      class="input__block__input"
+                    />
+                  </div>
+                  <span class="help__message">max - 100</span>
                 </div>
-                <span class="help__message">max - 100</span>
-              </div>
 
-              <div class="input__block">
-                <h3 class="input__block__name">Executor</h3>
-                <select
-                  type=""
-                  name="task_executor"
-                  class="input__block__select input__block__input"
-                >
-                  <option
-                    name="username"
-                    value="User_01"
-                    class="input__block__option"
+                <div class="input__block">
+                  <h3 class="input__block__name">Executor</h3>
+                  <select
+                    type=""
+                    name="task_executor"
+                    class="input__block__select input__block__input"
                   >
-                    User_01
-                  </option>
-                  <option
-                    name="username"
-                    value="User_02"
-                    class="input__block__option"
-                  >
-                    User_02
-                  </option>
-                  <option
-                    name="username"
-                    value="User_03"
-                    class="input__block__option"
-                  >
-                    User_03
-                  </option>
-                </select>
-              </div>
-
-              <div class="input__block">
-                <h3 class="input__block__name">Description*</h3>
-                <div class="input__block__body">
-                  <textarea
-                    name="task_decription"
-                    class="input__block__input input__block__textarea"
-                  ></textarea>
+                    <option
+                      name="username"
+                      value="User_01"
+                      class="input__block__option"
+                    >
+                      User_01
+                    </option>
+                    <option
+                      name="username"
+                      value="User_02"
+                      class="input__block__option"
+                    >
+                      User_02
+                    </option>
+                    <option
+                      name="username"
+                      value="User_03"
+                      class="input__block__option"
+                    >
+                      User_03
+                    </option>
+                  </select>
                 </div>
-                <div class="help__message">max - 180</div>
-              </div>
 
-              <div class="input__block">
-                <h3 class="input__block__name">Status</h3>
-                <div class="input__block__body">
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_status"
-                      value="in_progress"
-                      class="input__block__input"
-                    />In Progress</label
-                  >
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="in_progress"
-                      value="completed"
-                      class="input__block__input"
-                    />Completed</label
-                  >
-                  <label class="active__input input__block__radio"
-                    ><input
-                      type="radio"
-                      name="in_progress"
-                      value="to_do"
-                      class="input__block__input"
-                    />To Do</label
-                  >
+                <div class="input__block">
+                  <h3 class="input__block__name">Description*</h3>
+                  <div class="input__block__body">
+                    <textarea
+                      name="task_decription"
+                      class="input__block__input input__block__textarea"
+                    ></textarea>
+                  </div>
+                  <div class="help__message">max - 180</div>
                 </div>
               </div>
 
-              <div class="input__block">
-                <h3 class="input__block__name">Priority*</h3>
-                <div class="input__block__body">
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_priority"
-                      value="low"
-                      class="input__block__input"
-                    />Low</label
-                  >
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_priority"
-                      value="medium"
-                      class="input__block__input"
-                    />Medium</label
-                  >
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_priority"
-                      value="high"
-                      class="input__block__input"
-                    />High</label
-                  >
+              <div class="task__form__part">
+                <div class="input__block">
+                  <h3 class="input__block__name">Status</h3>
+                  <div class="input__block__body">
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_status"
+                        value="in_progress"
+                        class="input__block__input"
+                      />In Progress</label
+                    >
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="in_progress"
+                        value="completed"
+                        class="input__block__input"
+                      />Completed</label
+                    >
+                    <label class="active__input input__block__radio"
+                      ><input
+                        type="radio"
+                        name="in_progress"
+                        value="to_do"
+                        class="input__block__input"
+                      />To Do</label
+                    >
+                  </div>
+                </div>
+
+                <div class="input__block">
+                  <h3 class="input__block__name">Priority*</h3>
+                  <div class="input__block__body">
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_priority"
+                        value="low"
+                        class="input__block__input"
+                      />Low</label
+                    >
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_priority"
+                        value="medium"
+                        class="input__block__input"
+                      />Medium</label
+                    >
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_priority"
+                        value="high"
+                        class="input__block__input"
+                      />High</label
+                    >
+                  </div>
+                </div>
+
+                <div class="input__block">
+                  <h3 class="input__block__name">Privacy</h3>
+                  <div class="input__block__body">
+                    <label class="input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_privacy"
+                        value="private"
+                        class="input__block__input"
+                      />Private</label
+                    >
+                    <label class="active__input input__block__radio"
+                      ><input
+                        type="radio"
+                        name="task_privacy"
+                        value="public"
+                        class="input__block__input"
+                      />Public</label
+                    >
+                  </div>
                 </div>
               </div>
 
-              <div class="input__block">
-                <h3 class="input__block__name">Privacy</h3>
-                <div class="input__block__body">
-                  <label class="input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_privacy"
-                      value="private"
-                      class="input__block__input"
-                    />Private</label
-                  >
-                  <label class="active__input input__block__radio"
-                    ><input
-                      type="radio"
-                      name="task_privacy"
-                      value="public"
-                      class="input__block__input"
-                    />Public</label
-                  >
-                </div>
-              </div>
               <hr class="line" />
               <div class="form__buttons">
                 <button type="reset" class="standart__button delete__button">

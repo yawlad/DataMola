@@ -23,27 +23,33 @@
 
   --primary-font-style: "DM Sans", sans-serif;
 
-  --logo-text-font: 700 48px var(--primary-font-style);
-  --title-font-huge: 700 32px var(--primary-font-style);
-  --title-font-large: 700 28px var(--primary-font-style);
-  --title-font-medium: 700 24px var(--primary-font-style);
-  --title-font-small: 700 20px var(--primary-font-style);
-  --text-font-large: 400 18px var(--primary-font-style);
-  --text-font-medium: 400 16px var(--primary-font-style);
-  --text-font-small: 400 14px var(--primary-font-style);
+  --logo-font-m: 700 3rem var(--primary-font-style);
+  --title-font-xl: 700 2rem var(--primary-font-style);
+  --title-font-l: 700 1.75rem var(--primary-font-style);
+  --title-font-m: 700 1.5rem var(--primary-font-style);
+  --title-font-s: 700 1.25rem var(--primary-font-style);
+  --text-font-l: 400 1.125rem var(--primary-font-style);
+  --text-font-m: 400 1rem var(--primary-font-style);
+  --text-font-s: 400 0.875rem var(--primary-font-style);
 
-  /* --large-padding: 25px;
-  --main-padding: 20px;
-  --medium-padding: 15px;
-  --small-padding: 10px;
-  --extra-small-padding: 5px; 
-  
-    I'll use it after creating all templates
+  --offset-xxxxl: 3rem;
+  --offset-xxxl: 2.5rem;
+  --offset-xxl: 2rem;
+  --offset-xl: 1.5rem;
+  --offset-l: 1.25rem;
+  --offset-m: 1rem;
+  --offset-s: 0.75rem;
+  --offset-xs: 0.5rem;
+  --offset-xxs: 0.25rem;   
 
-  */
+  --border-width: 0.0625rem;
 
-  --logo-size: 64px;
-  --avatar-size: 72px;
+  --logo-size: 4rem;
+  --avatar-size: 4.5rem;
+}
+
+html {
+  font-size: calc(12px + 6 * ((100vw - 370px)/(1440 - 370)));
 }
 
 * {
@@ -59,7 +65,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--primary-color);
-  font: var(--text-font-medium);
+  font: var(--text-font-m);
   color: var(--white-color);
 }
 
@@ -67,23 +73,22 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 1440px;
   margin: auto;
-  padding: 0 20px;
+  padding: 0 var(--offset-l);
   min-height: 100vh;
 }
 
 ::-webkit-scrollbar {
-  width: 3px;
+  width: var(--offset-xxs);
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: var(--offset-s);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--dark-grey-color);
-  border-radius: 10px;
+  border-radius: var(--offset-s);
 }
 
 /**************************___ADDITIONAL___**************************/
@@ -127,14 +132,15 @@ body {
 }
 
 .standart__button {
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: 1px dotted var(--dark-grey-color);
+  padding: var(--offset-s) var(--offset-l);
+  border-radius: var(--offset-xxs);
+  border: var(--border-width) dotted var(--dark-grey-color);
   background: none;
   color: var(--white-color);
   transition: 0.5s;
   cursor: pointer;
   text-align: center;
+  font: var(--text-font-s);
 }
 
 .clickable__element {
@@ -168,13 +174,13 @@ body {
 
 .scrollable__element {
   overflow-y: hidden;
-  padding-right: 8px;
-  padding-left: 5px;
+  padding-right: var(--offset-xs);
+  padding-left: var(--offset-xxs);
 }
 
 .scrollable__element:hover {
   overflow-y: scroll;
-  padding-right: 5px;
+  padding-right: var(--offset-xxs);
 }
 
 .line {
@@ -191,46 +197,46 @@ body {
 
 .input__block__name {
   text-align: center;
-  font: var(--text-font-large);
+  font: var(--text-font-l);
   margin: 0;
-  margin-bottom: 5px;
+  margin-bottom: var(--offset-xxs);
 }
 
 .input__block__body {
-  font: var(--text-font-medium);
+  font: var(--text-font-m);
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: var(--offset-s);
   flex-wrap: wrap;
 }
 
 .help__message {
-  font: var(--text-font-small);
+  font: var(--text-font-s);
   color: var(--dark-grey-color);
 }
 
 /***********__INPUT__***********/
 
 .input__block__input {
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: var(--offset-xxs) var(--offset-s);
+  border-radius: var(--offset-xxs);
   border: none;
-  font: var(--text-font-medium);
+  font: var(--text-font-m);
   outline: none;
   width: 100%;
 }
 
 .input__block__input::-webkit-calendar-picker-indicator {
-  display: none;
+  /* display: none; */
 }
 
 /***********__TEXTAREA__***********/
 
 .input__block__textarea {
   text-align: start;
-  height: 80px;
+  height: calc(2*var(--offset-xxxl));
   resize: none;
 }
 
@@ -238,9 +244,9 @@ body {
 
 .input__block__checkbox,
 .input__block__radio {
-  padding: 8px 15px;
-  border: 1px dotted var(--grey-color);
-  border-radius: 5px;
+  padding: var(--offset-xs) var(--offset-m);
+  border: var(--border-width) dotted var(--grey-color);
+  border-radius: var(--offset-xxs);
   display: block;
   cursor: pointer;
   transition: 0.5s;
@@ -266,7 +272,7 @@ body {
 
 .input__block__select {
   appearance: none;
-  font: var(--text-font-medium);
+  font: var(--text-font-m);
   text-align: center;
 }
 
@@ -275,7 +281,7 @@ body {
 }
 
 .input__block__option {
-  font: var(--text-font-small);
+  font: var(--text-font-s);
   text-align: left;
   background-color: var(--grey-color);
   text-align: center;
@@ -299,30 +305,30 @@ body {
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: var(--offset-l);
 }
 .logo__container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: var(--offset-xxl);
 }
 .logo {
   width: var(--logo-size);
 }
 .app__name {
-  font: var(--logo-text-font);
+  font: var(--logo-font-m);
 }
 .user__container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  font: var(--title-font-large);
+  gap: var(--offset-s);
+  font: var(--title-font-l);
 }
 .username {
   display: flex;
-  gap: 15px;
+  gap: var(--offset-m);
   justify-content: center;
   align-items: center;
 }
@@ -333,7 +339,7 @@ body {
 /**************************___MAIN___**************************/
 
 .main {
-  border-radius: 5px;
+  border-radius: var(--offset-xxs);
   overflow: hidden;
   background-color: var(--primary-color-dark-1);
   margin: auto;
@@ -346,14 +352,14 @@ body {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  padding: 25px 15px;
-  gap: 20px;
+  padding: var(--offset-xl) var(--offset-m);
+  gap: var(--offset-l);
 }
 
 .filters__part {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  gap: var(--offset-xxs);
   flex-grow: 1;
 }
 
@@ -366,7 +372,7 @@ body {
 }
 
 .filters .input__block__radio {
-  margin-top: 10px;
+  margin-top: var(--offset-s);
 }
 
 .input__block[id="data_filter"] .input__block__input {
@@ -400,16 +406,16 @@ body {
   width: 80%;
   display: flex;
   justify-content: space-between;
-  padding-bottom: 25px;
-  border-top: 2px dotted var(--primary-color-light-2);
-  border-right: 2px dotted var(--primary-color-light-2);
+  padding-bottom: var(--offset-xl);
+  border-top: calc(2 * var(--border-width)) dotted var(--primary-color-light-2);
+  border-right: calc(2 * var(--border-width)) dotted var(--primary-color-light-2);
 }
 
 .main__window__section {
   width: 33%;
-  padding: 20px;
-  padding-top: 5px;
-  border-left: 1px dotted var(--primary-color-light-1);
+  padding: var(--offset-l);
+  padding-top: var(--offset-xxs);
+  border-left: var(--border-width) dotted var(--primary-color-light-1);
 }
 
 .main__window__section:first-of-type {
@@ -417,33 +423,33 @@ body {
 }
 
 .section__header {
-  font: var(--title-font-medium);
+  font: var(--title-font-m);
   text-align: center;
-  padding: 20px;
+  padding: var(--offset-l);
   margin: 0;
 }
 
 .tasks__container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-height: 950px;
+  gap: var(--offset-m);
+  max-height: 60rem;
 }
 
 .tasks__container > button {
-  margin-bottom: 10px;
+  margin-bottom: var(--offset-s);
 }
 
 .tasks__container > button:hover {
-  margin: 0 30px 10px 30px;
+  margin: 0 var(--offset-xxl) var(--offset-s) var(--offset-xxl);
 }
 
 /***********__TASK__***********/
 
 .task {
-  padding: 15px;
+  padding: var(--offset-m);
   background-color: var(--primary-color);
-  border-radius: 5px;
+  border-radius: var(--offset-xxs);
 }
 
 .task__additional__info {
@@ -453,7 +459,7 @@ body {
 
 .task__main {
   display: block;
-  padding: 20px;
+  padding: var(--offset-l);
 }
 
 .task__main__content__item {
@@ -468,7 +474,7 @@ body {
 .task__bottom {
   display: flex;
   justify-content: space-around;
-  padding-top: 10px;
+  padding-top: var(--offset-s);
 }
 
 .task__date,
@@ -480,9 +486,9 @@ body {
 
 .add__new__task {
   width: 20%;
-  padding: 20px;
-  padding-top: 5px;
-  border-top: 2px dotted var(--primary-color-light-2);
+  padding: var(--offset-l);
+  padding-top: var(--offset-xxs);
+  border-top: calc(2 * var(--border-width)) dotted var(--primary-color-light-2);
   height: 100%;
   position: relative;
 }
@@ -492,20 +498,20 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  gap: 20px;
+  gap: var(--offset-l);
 }
 
 .task__form__part {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--offset-l);
 }
 
 .form__buttons {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--offset-s);
 }
 
 .form__buttons * {
@@ -520,8 +526,8 @@ body {
   display: flex;
   justify-content: space-between;
   color: var(--dark-grey-color);
-  font: var(--text-font-small);
-  padding: 50px 0 20px 0;
+  font: var(--text-font-s);
+  padding: var(--offset-xxxxl) 0 var(--offset-l) 0;
 }
 
 /**************************___MAIN_WINDOW_LIST___**************************/
@@ -529,8 +535,8 @@ body {
 .main__window__list {
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 10px;
-  max-height: 1000px;
+  padding-top: var(--offset-s);
+  max-height: 60rem;
 }
 
 .main__window__section__list {
@@ -540,9 +546,9 @@ body {
 
 .section__header__list {
   text-align: start;
-  padding-left: 20px;
+  padding-left: var(--offset-l);
   background-color: var(--primary-color-light-1);
-  border-radius: 5px;
+  border-radius: var(--offset-xxs);
   position: relative;
   cursor: pointer;
 }
@@ -551,12 +557,12 @@ body {
 .section__header__list::after {
   content: "";
   display: block;
-  height: 20px;
-  border-right: 3px solid var(--dark-grey-color);
+  height: var(--offset-l);
+  border-right: calc(3 * var(--border-width)) solid var(--dark-grey-color);
   position: absolute;
   top: 35%;
-  right: 40px;
-  transform-origin: bottom;
+  right: var(--offset-xxxl);
+  transform-origin: bottom center;
   pointer-events: none;
   transition: 0.5s;
 }
@@ -571,7 +577,7 @@ body {
 
 .section__header__list__active::before,
 .section__header__list__active::after {
-  height: 25px;
+  height: var(--offset-xl);
   transform-origin: center;
 }
 
@@ -586,7 +592,7 @@ body {
 
 .section__header__list__active + .tasks__container__list {
   display: flex;
-  padding: 15px 20px 0 20px;
+  padding: var(--offset-m) var(--offset-l) 0 var(--offset-l);
   opacity: 1;
   height: fit-content;
 }
@@ -594,7 +600,7 @@ body {
 .task__list {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: var(--offset-l);
   position: relative;
 }
 
@@ -606,7 +612,7 @@ body {
 .task__additional__info__list > * {
   position: absolute;
   width: fit-content;
-  padding: 10px 15px;
+  padding: var(--offset-s) var(--offset-m);
 }
 
 .task__additional__info__list .task__priority {
@@ -636,33 +642,37 @@ body {
 .task__bottom__list {
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: var(--offset-xxs);
 }
 
 .task__bottom__list .standart__button {
   height: fit-content;
   display: flex;
-  gap: 5px;
+  gap: var(--offset-xxs);
 }
 
 /**************************___UNAUTHORIZED___**************************/
 
-.unauthorized .add__new__task * {
-  opacity: 0.6;
+.add__new__task__unauthorised__window {
+  opacity: 0;
+  padding: var(--offset-xxxxl) var(--offset-l);
+  background-color: var(--primary-color-light-1);
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  right: 0;
+  font: var(--title-font-l);
+  text-align: center;
+  z-index: 1;
+}
+
+.unauthorized .add__new__task .task__form {
+  opacity: 0.5;
   pointer-events: none;
 }
 
-.unauthorized .add__new__task::before {
-  content: "AUTHORIZE TO USE TASK MANAGER";
-  display: block;
-  padding: 50px 20px;
-  background-color: var(--primary-color-light-1);
-  position: absolute;
-  top: 50%;
-  right: 0;
-  font: var(--title-font-medium);
-  text-align: center;
-  z-index: 1;
+.unauthorized .add__new__task__unauthorised__window {
+  opacity: 1;
 }
 
 .unauthorized .task .standart__button {
@@ -677,25 +687,25 @@ body {
 /**************************___SIGN_IN/SIGN_UP___**************************/
 
 .sign__form {
-  padding: 40px;
-  max-width: 400px;
+  padding: var(--offset-xxxl);
+  max-width: 25rem;
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: var(--offset-xxl);
 }
 
 .sign__form .input__block__name,
 .sign__form .standart__button {
-  font: var(--title-font-medium);
+  font: var(--title-font-m);
 }
 
 .sign__form__header {
   margin: 0;
-  padding-bottom: 15px;
-  font: var(--title-font-huge);
+  padding-bottom: var(--offset-m);
+  font: var(--title-font-xl);
   text-align: center;
-  border-bottom: 1px dotted var(--dark-grey-color);
+  border-bottom: var(--border-width) dotted var(--dark-grey-color);
 }
 
 /**************************___TASK_PAGE___**************************/
@@ -703,35 +713,35 @@ body {
 .main__task__page {
   width: 100%;
   display: flex;
-  padding: 10px;
-  min-height: 500px;
-  max-height: 900px;
+  padding: var(--offset-s);
+  min-height: 30rem;
+  max-height: 55rem;
 }
 
 .main__task__page .section__header {
-  border-bottom: 2px dotted var(--dark-grey-color);
-  font: var(--title-font-huge);
+  border-bottom: calc(2 * var(--border-width)) dotted var(--dark-grey-color);
+  font: var(--title-font-xl);
 }
 
 .detailed__task {
   width: 70%;
-  border-right: 2px dotted var(--dark-grey-color);
+  border-right: calc(2 * var(--border-width)) dotted var(--dark-grey-color);
   display: flex;
   flex-direction: column;
 }
 
 .main__task__page .task {
-  margin: 10px;
+  margin: var(--offset-s);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--offset-l);
   position: relative;
   flex-grow: 3;
   justify-content: space-between;
 }
 
 .main__task__page .task__main__content__item {
-  font: var(--text-font-large);
+  font: var(--text-font-l);
   font-weight: 700;
 }
 
@@ -740,7 +750,7 @@ body {
 }
 
 .main__task__page .standart__button {
-  font: var(--text-font-large);
+  font: var(--text-font-l);
   font-weight: 700;
 }
 
@@ -758,15 +768,15 @@ body {
 }
 
 .comments__body {
-  padding: 15px;
+  padding: var(--offset-m);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: var(--offset-xxs);
   flex-grow: 3;
 }
 
 .comments__list {
-  max-height: 400px;
+  max-height: 25rem;
 }
 
 .comment {
@@ -775,14 +785,14 @@ body {
 
 .commentator,
 .comment__date {
-  font: var(--text-font-small);
+  font: var(--text-font-s);
   color: var(--primary-color-light-2);
 }
 
 .comment__text {
   background-color: var(--primary-color);
-  padding: 10px 20px;
-  border-radius: 0 10px 0 10px;
+  padding: var(--offset-s) var(--offset-l);
+  border-radius: 0 var(--offset-s) 0 var(--offset-s);
 }
 
 .comment__date {
@@ -794,7 +804,7 @@ body {
 .add__comment {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--offset-s);
 }
 
 /**************************___TASK_PAGE_UPDATE___**************************/
@@ -802,7 +812,7 @@ body {
 .detailed__task__form .input__block {
   flex-direction: row;
   width: fit-content;
-  gap: 30px;
+  gap: var(--offset-xxl);
   align-items: center;
 }
 
@@ -812,7 +822,7 @@ body {
 
 .detailed__task__form .help__message {
   position: absolute;
-  bottom: -20px;
+  bottom: calc(-1 * var(--offset-l));
   left: 0;
 }
 
@@ -837,8 +847,8 @@ body {
 }
 
 .main__user__page .section__header {
-  border-bottom: 2px dotted var(--dark-grey-color);
-  font: var(--title-font-huge);
+  border-bottom: calc(2 * var(--border-width)) dotted var(--dark-grey-color);
+  font: var(--title-font-xl);
 }
 
 .detailed__user {
@@ -849,28 +859,28 @@ body {
 .user__image__container,
 .user__form {
   display: flex;
-  padding: 40px;
-  gap: 20px;
+  padding: var(--offset-xxxl);
+  gap: var(--offset-l);
 }
 
 .main__user__page__avatar {
-  border-radius: 10px;
-  width: 200px;
-  height: 340px;
+  border-radius: var(--offset-s);
+  width: 12.5rem;
+  height: 21.25rem;
 }
 
 .main__user__page .user {
-  margin: 10px;
+  margin: var(--offset-s);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--offset-l);
   position: relative;
   flex-grow: 3;
   justify-content: space-between;
 }
 
 .main__user__page .user__main__content__item {
-  font: var(--text-font-large);
+  font: var(--text-font-l);
   font-weight: 700;
   position: relative;
 }
@@ -880,14 +890,14 @@ body {
 }
 
 .main__user__page .standart__button {
-  font: var(--text-font-large);
+  font: var(--text-font-l);
   font-weight: 700;
 }
 
 .user__bottom {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--offset-s);
   flex-wrap: wrap;
 }
 
@@ -900,7 +910,7 @@ body {
 .user__form .input__block {
   flex-direction: row;
   width: fit-content;
-  gap: 30px;
+  gap: var(--offset-xxl);
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -914,7 +924,7 @@ body {
 
 .user__form .help__message {
   position: absolute;
-  bottom: -20px;
+  bottom: calc(-1 * var(--offset-l));
   left: 0;
 }
 
@@ -932,29 +942,7 @@ body {
 /**************************___ADAPTIVE___**************************/
 
 @media (max-width: 1440px) {
-  /* :root {
-    --logo-text-font: 700 calc(32px + 16 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --title-font-huge: 700 calc(22px + 10 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --title-font-large: 700 calc(19px + 9 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --title-font-medium: 700 calc(16px + 8 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --title-font-small: 700 calc(13px + 7 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --text-font-large: 400 calc(12px + 6 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --text-font-medium: 400 calc(11px + 5 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-    --text-font-small: 400 calc(10px + 4 * ((100vw - 320px) / (1440 - 370))) var(--primary-font-style);
-
-    --large-padding: calc(12.5px + 12.5 * ((100vw - 320px) / (1440 - 370)));
-    --main-padding: calc(10px + 10 * ((100vw - 320px) / (1440 - 370)));
-    --medium-padding: calc(10px + 5 * ((100vw - 320px) / (1440 - 370)));
-    --small-padding: calc(7.5px + 2.5 * ((100vw - 320px) / (1440 - 370)));
-    --extra-small-padding: 5px;
-
-    --logo-size: calc(48px + 16 * ((100vw - 320px) / (1440 - 370)));
-    --avatar-size: calc(60px + 12 * ((100vw - 320px) / (1440 - 370)));
-  } 
   
-    For now only testing adaptive formules
-  
-  */
   
 }
 
@@ -970,13 +958,13 @@ body {
   .input__block[id="data_filter"] .input__block__body {
     text-align: center;
     flex-direction: column;
-    gap: 0px;
+    gap: 0;
   }
 
   .filters__part:first-of-type {
     justify-content: space-between;
-    border-bottom: 1px dotted var(--primary-color);
-    padding-bottom: 10px;
+    border-bottom: var(--border-width) dotted var(--primary-color);
+    padding-bottom: var(--offset-s);
   }
 
   .filters__part .input__block {
@@ -999,7 +987,7 @@ body {
   }
 
   .tasks__container {
-    max-height: 450px;
+    max-height: 28rem;
   }
 
   .task__form__part {
@@ -1025,15 +1013,12 @@ body {
   }
 
   .main__window__list {
-    max-height: 700px;
+    max-height: 44rem;
   }
 
   /***********************************/
 
-  .unauthorized .add__new__task::before {
-    right: 20px;
-    width: calc(100% - 80px);
-  }
+  
 }
 
 @media (max-width: 810px) {
@@ -1051,7 +1036,7 @@ body {
 
   .main__window__section {
     width: 100%;
-    border-top: 1px dotted var(--primary-color);
+    border-top: var(--border-width) dotted var(--primary-color);
     border-left: none;
   }
 
@@ -1095,7 +1080,7 @@ body {
 
   .task__bottom__list {
     padding: 0;
-    padding-bottom: 30px;
+    padding-bottom: var(--offset-xxl);
   }
 
   .task__list .task__main {
@@ -1112,7 +1097,7 @@ body {
   .user__main__content__item {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: var(--offset-s);
   }
 
   .user__bottom > * {
@@ -1126,23 +1111,23 @@ body {
 
   .user__form {
     flex-direction: column;
-    gap: 10px;
+    gap: var(--offset-s);
   }
 
   .user__form .input__block {
     flex-direction: column;
-    gap: 5px;
+    gap: var(--offset-xxs);
   }
 
   .user {
-    gap: 10px;
+    gap: var(--offset-s);
   }
 
   .user__form .file__input {
     flex-direction: row;
     top: 40%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: calc(-2 * var(--offset-xxl));
   }
 
   /***********************************/
@@ -1165,7 +1150,7 @@ body {
   }
 
   .main__task__page .task__bottom {
-    gap: 5px;
+    gap: var(--offset-xxs);
     flex-wrap: wrap;
   }
 
@@ -1188,7 +1173,7 @@ body {
   }
 
   .detailed__task__form .task {
-    gap: 30px;
+    gap: var(--offset-xxl);
   }
 
   
@@ -1203,13 +1188,13 @@ body {
   .footer {
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap:var(--offset-s);
   }
 
   .detailed__task__form .input__block {
     flex-direction: column;
     width: 100%;
-    gap: 10px;
+    gap: var(--offset-s);
   }
 
   .detailed__task__form .input__block:has(.input__block__textarea) {

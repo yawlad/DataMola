@@ -1,0 +1,24 @@
+/**************************___SIGN_IN/SIGN_UP___**************************/
+
+.sign__form {
+    padding: var(--offset-xxxl);
+    max-width: 25rem;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--offset-xxl);
+  }
+  
+  .sign__form .input__block__name,
+  .sign__form .standart__button {
+    font: var(--title-font-m);
+  }
+  
+  .sign__form__header {
+    margin: 0;
+    padding-bottom: var(--offset-m);
+    font: var(--title-font-xl);
+    text-align: center;
+    border-bottom: var(--border-width) dotted var(--dark-grey-color);
+  }
+  

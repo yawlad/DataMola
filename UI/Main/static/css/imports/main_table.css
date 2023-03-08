@@ -1,0 +1,90 @@
+/*********************___APP___*********************/
+
+.app__table {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+}
+
+/***********__MAIN_WINDOW__***********/
+
+.main__window {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--offset-xl);
+  border-top: calc(2 * var(--border-width)) dotted var(--primary-color-light-2);
+  border-right: calc(2 * var(--border-width)) dotted
+    var(--primary-color-light-2);
+}
+
+.main__window__section {
+  width: 33%;
+  padding: var(--offset-l);
+  padding-top: var(--offset-xxs);
+  border-left: var(--border-width) dotted var(--primary-color-light-1);
+}
+
+.main__window__section:first-of-type {
+  border: none;
+}
+
+.section__header {
+  font: var(--title-font-m);
+  text-align: center;
+  padding: var(--offset-l);
+  margin: 0;
+}
+
+.tasks__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--offset-m);
+  max-height: 60rem;
+}
+
+.tasks__container > button {
+  margin-bottom: var(--offset-s);
+}
+
+.tasks__container > button:hover {
+  margin: 0 var(--offset-xxl) var(--offset-s) var(--offset-xxl);
+}
+
+/***********__TASK__***********/
+
+.task {
+  padding: var(--offset-m);
+  background-color: var(--primary-color);
+  border-radius: var(--offset-xxs);
+}
+
+.task__additional__info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.task__main {
+  display: block;
+  padding: var(--offset-l);
+}
+
+.task__main__content__item {
+  font-weight: 700;
+}
+
+.task__main__content__item span {
+  color: var(--dark-grey-color);
+  font-weight: 400;
+}
+
+.task__bottom {
+  display: flex;
+  justify-content: space-around;
+  padding-top: var(--offset-s);
+}
+
+.task__date,
+.task__comments {
+  text-align: right;
+}

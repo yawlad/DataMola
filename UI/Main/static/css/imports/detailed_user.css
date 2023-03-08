@@ -1,0 +1,101 @@
+/**************************___USER_PAGE___**************************/
+
+.main__user__page {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+  }
+  
+  .main__user__page .section__header {
+    border-bottom: calc(2 * var(--border-width)) dotted var(--dark-grey-color);
+    font: var(--title-font-xl);
+  }
+  
+  .detailed__user {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user__image__container,
+  .user__form {
+    display: flex;
+    padding: var(--offset-xxxl);
+    gap: var(--offset-l);
+  }
+  
+  .main__user__page__avatar {
+    border-radius: var(--offset-s);
+    width: 12.5rem;
+    height: 21.25rem;
+  }
+  
+  .main__user__page .user {
+    margin: var(--offset-s);
+    display: flex;
+    flex-direction: column;
+    gap: var(--offset-l);
+    position: relative;
+    flex-grow: 3;
+    justify-content: space-between;
+  }
+  
+  .main__user__page .user__main__content__item {
+    font: var(--text-font-l);
+    font-weight: 700;
+    position: relative;
+  }
+  
+  .main__user__page span {
+    font-weight: 400;
+  }
+  
+  .main__user__page .standart__button {
+    font: var(--text-font-l);
+    font-weight: 700;
+  }
+  
+  .user__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--offset-s);
+    flex-wrap: wrap;
+  }
+  
+  .user__bottom > * {
+    flex-grow: 1;
+  }
+  
+  /**************************___USER_PAGE_UPDATE___**************************/
+  
+  .user__form .input__block {
+    flex-direction: row;
+    width: fit-content;
+    gap: var(--offset-xxl);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .user__form .input__block__name {
+    margin: 0;
+    flex-grow: 1;
+    text-align: right;
+  }
+  
+  .user__form .help__message {
+    position: absolute;
+    bottom: calc(-1 * var(--offset-l));
+    left: 0;
+  }
+  
+  .user__main__content__item .file__input {
+    width: fit-content;
+    position: absolute;
+    top: 40%;
+    left: 14%;
+  }
+  
+  .user__form .main__user__page__avatar {
+    opacity: 0.5;
+  }

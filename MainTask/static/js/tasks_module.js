@@ -6,6 +6,11 @@ const taskModule = (function () {
   function getTasks(skip = 0, top = 10, filterConfig = {}) {
     let filteredTasks = tasks.slice();
 
+    if (filterConfig.name) {
+      filteredTasks = filteredTasks.filter((task) =>
+        task.name.includes(filterConfig.name)
+      );
+    }
     if (filterConfig.assignee) {
       filteredTasks = filteredTasks.filter((task) =>
         task.assignee.includes(filterConfig.assignee)

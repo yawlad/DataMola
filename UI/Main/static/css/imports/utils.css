@@ -46,6 +46,8 @@
   
     --logo-size: 4rem;
     --avatar-size: 4.5rem;
+
+    --button-transform-scale: scale(1.07);
   }
   
   html {
@@ -106,29 +108,29 @@
   }
   
   .edit__button:hover {
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
     background-color: var(--dark-grey-color);
   }
   
   .neutral__button:hover {
     background-color: var(--primary-color);
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
   }
   
   .delete__button:hover {
     background-color: var(--high-priority-color);
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
   }
   
   .add__button:hover {
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
     background-color: var(--low-priority-color);
   }
   
   .invert__button:hover {
     color: var(--black-color);
     background-color: var(--white-color);
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
   }
   
   .standart__button {
@@ -154,17 +156,17 @@
   }
   
   .dangerous__icon:hover {
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
     color: var(--high-priority-color);
   }
   
   .neutral__icon:hover {
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
     color: var(--low-priority-color);
   }
   
   .friendly__icon:hover {
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
     color: var(--low-priority-color);
   }
   
@@ -265,7 +267,7 @@
   .input__block__radio:hover {
     color: var(--black-color);
     background-color: var(--white-color);
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
   }
   
   /***********__SELECT__***********/
@@ -389,5 +391,5 @@
   .active__input {
     color: var(--black-color);
     background-color: var(--white-color);
-    transform: scale(1.07);
+    transform: var(--button-transform-scale);
   }

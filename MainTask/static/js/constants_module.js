@@ -47,20 +47,6 @@ const constantsModule = (function () {
     LOW: "Low",
   };
 
-  const REQUIRED_FIELDS_TASK = [
-    "id",
-    "name",
-    "description",
-    "createdAt",
-    "assignee",
-    "comments",
-    "status",
-    "priority",
-    "isPrivate",
-  ];
-
-  const REQUIRED_FIELDS_COMMENT = ["id", "text", "createdAt", "author"];
-
 
   const ERRORS_DICT = {
     INVALID_TASK_OBJECT: "Invalid task object",
@@ -90,6 +76,8 @@ const constantsModule = (function () {
 
     NOT_ASSIGNEE: "Current user is not assignee of the task",
 
+    OBJECT_FIELDS_ERROR: "Object fileds error",
+
     NO_TABLE_FOUND: "No table found",
     NO_ITEM_FOUND: "No item found",
   };
@@ -100,7 +88,5 @@ const constantsModule = (function () {
     STATUSES_DICT,
     PRIORITIES_DICT,
     ERRORS_DICT,
-    REQUIRED_FIELDS_TASK,
-    REQUIRED_FIELDS_COMMENT,
   };
 })();

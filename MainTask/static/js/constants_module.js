@@ -47,10 +47,26 @@ const constantsModule = (function () {
     LOW: "Low",
   };
 
+  const REQUIRED_FIELDS_TASK = [
+    "id",
+    "name",
+    "description",
+    "createdAt",
+    "assignee",
+    "comments",
+    "status",
+    "priority",
+    "isPrivate",
+  ];
+
+  const REQUIRED_FIELDS_COMMENT = ["id", "text", "createdAt", "author"];
+
+
   const ERRORS_DICT = {
     INVALID_TASK_OBJECT: "Invalid task object",
     TASK_NOT_FOUND: "Task not found",
     INVALID_TASK_ID: "Invalid task id",
+    INVALID_TASK_AUTHOR: "Invalid task author",
     INVALID_TASK_NAME: "Invalid task name",
     INVALID_TASK_DESCRIPTION: "Invalid task description",
     INVALID_TASK_DATE: "Invalid task date",
@@ -59,15 +75,23 @@ const constantsModule = (function () {
     INVALID_TASK_PRIORITY: "Invalid task priority",
     INVALID_TASK_PRIVACY: "Invalid task privacy",
     INVALID_TASK_COMMENTS_LIST: "Invalid task comments list",
-    
-    INVALID_COMMENT_OBJECT: "Invalid comment object",
 
+    INVALID_COMMENT_OBJECT: "Invalid comment object",
     INVALID_COMMENT_ID: "Invalid comment id",
     INVALID_COMMENT_TEXT: "Invalid comment text",
     INVALID_COMMENT_DATE: "Invalid comment date",
     INVALID_COMMENT_AUTHOR: "Invalid comment author",
 
+    INVALID_USER_OBJECT: "Invalid user object",
+    INVALID_USER_ID: "Invalid user id",
+    INVALID_USER_NAME: "Invalid user name",
+
+    VALIDATION_ERROR: "Validation error",
+
     NOT_ASSIGNEE: "Current user is not assignee of the task",
+
+    NO_TABLE_FOUND: "No table found",
+    NO_ITEM_FOUND: "No item found",
   };
 
   return {
@@ -76,5 +100,7 @@ const constantsModule = (function () {
     STATUSES_DICT,
     PRIORITIES_DICT,
     ERRORS_DICT,
+    REQUIRED_FIELDS_TASK,
+    REQUIRED_FIELDS_COMMENT,
   };
 })();

@@ -15,22 +15,19 @@ console.log(
   })
 );
 
-console.log("Change user: ", taskModule.changeUser("Vlad"));
+console.log("Change user: ", taskModule.changeUser("Eva"));
 for (let i = 0; i < 3; i++) {
   console.log(
     "Added task: ",
     taskModule.addTask(
       utilsModule.getRandomArrayElement(Object.values(constantsModule.TASK_NAMES_LIST)),
       `Test Description ${i}`,
-      undefined,
-      undefined,
       utilsModule.getRandomArrayElement(Object.values(constantsModule.PRIORITIES_DICT)),
-      undefined
     )
   );
 }
 
-console.log("Change user: ", taskModule.changeUser("AnotherVlad"));
+console.log("Change user: ", taskModule.changeUser("John"));
 
 for (let i = 0; i < 3; i++) {
   console.log(
@@ -38,10 +35,7 @@ for (let i = 0; i < 3; i++) {
     taskModule.addTask(
       utilsModule.getRandomArrayElement(Object.values(constantsModule.TASK_NAMES_LIST)),
       `Test Description ${i}`,
-      undefined,
-      undefined,
       utilsModule.getRandomArrayElement(Object.values(constantsModule.PRIORITIES_DICT)),
-      undefined
     )
   );
 }

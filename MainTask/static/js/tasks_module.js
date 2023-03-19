@@ -1,5 +1,5 @@
 const taskModule = (function () {
-  let user = "Guest";
+  let user = "John";
 
   const tasks = utilsModule.createTasksList(30, 10);
 
@@ -62,19 +62,7 @@ const taskModule = (function () {
 
   function validateTask(task) {
     try {
-      const requiredFields = [
-        "id",
-        "name",
-        "description",
-        "createdAt",
-        "assignee",
-        "comments",
-        "status",
-        "priority",
-        "isPrivate",
-      ];
-
-      if (!requiredFields.every((field) => task.hasOwnProperty(field))) {
+      if (!constantsModule.REQUIRED_FIELDS_TASK.every((field) => task.hasOwnProperty(field))) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_OBJECT);
       }
 
@@ -97,7 +85,7 @@ const taskModule = (function () {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_DATE);
       }
 
-      if (typeof task.assignee !== "string") {
+      if (typeof task.assignee !== "string" || constantsModule.USER_NAMES_LIST.includes(task.assignee)) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_ASSIGNEE);
       }
 
@@ -139,9 +127,9 @@ const taskModule = (function () {
   function addTask(
     name,
     description,
+    priority,
     assignee = user,
     status = constantsModule.STATUSES_DICT.TO_DO,
-    priority,
     isPrivate = false
   ) {
     const getLastTaskId = function () {
@@ -194,18 +182,21 @@ const taskModule = (function () {
       return false;
     }
 
-    task.name = name || task.name;
-    task.description = description || task.description;
-    task.assignee = assignee || task.assignee;
-    task.status = status || task.status;
-    task.priority = priority || task.priority;
-    task.isPrivate = isPrivate;
+    const editedTask = {}
+    Object.assign(editedTask, task);
+    
+    editedTask.name = name || editedTask.name;
+    editedTask.description = description || editedTask.description;
+    editedTask.assignee = assignee || editedTask.assignee;
+    editedTask.status = status || editedTask.status;
+    editedTask.priority = priority || editedTask.priority;
+    editedTask.isPrivate = isPrivate;
 
-    if (!validateTask(task)) {
-      tasks[index] = task;
+    if (!validateTask(editedTask)) {
       return false;
     }
 
+    Object.assign(task, editedTask);
     return true;
   }
 
@@ -226,9 +217,8 @@ const taskModule = (function () {
   }
 
   function validateComment(comment) {
-    const requiredFields = ["id", "text", "createdAt", "author"];
     try {
-      if (!requiredFields.every((field) => comment.hasOwnProperty(field))) {
+      if (!constantsModule.REQUIRED_FIELDS_COMMENT.every((field) => comment.hasOwnProperty(field))) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_OBJECT);
       }
       if (typeof comment.id !== "string") {
@@ -243,7 +233,7 @@ const taskModule = (function () {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_DATE);
       }
 
-      if (typeof comment.author !== "string") {
+      if (typeof comment.author !== "string" || !constantsModule.USER_NAMES_LIST.includes(comment.author) ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_AUTHOR);
       }
     } catch (error) {
@@ -263,7 +253,7 @@ const taskModule = (function () {
       }, 0);
     };
 
-    task = getTask(id);
+    const task = getTask(id);
     if (!task) {
       return false;
     }
@@ -271,7 +261,7 @@ const taskModule = (function () {
     const date = new Date();
 
     const comment = {
-      id: String(getLastCommentId(task.comments) + 1),
+      id: (getLastCommentId() + 1).toString(),
       text,
       createdAt: date,
       author: user,

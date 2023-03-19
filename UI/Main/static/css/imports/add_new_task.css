@@ -31,7 +31,5 @@
   }
   
   .form__buttons * {
-    /* font: var(--title-font-small); */
-    /* font-weight: 400; */
     flex-grow: 1;
   }

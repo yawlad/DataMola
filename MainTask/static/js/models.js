@@ -1,7 +1,8 @@
 class Model {
   constructor() {
-    this._id = "";
+    this._id = '';
   }
+
   static validate(obj, validTemplate) {
     const objKeys = Object.keys(obj);
     let propsKeys;
@@ -15,7 +16,7 @@ class Model {
       const key = propsKeys[i];
       if (!objKeys.includes(key)) {
         throw new Error(
-          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`
+          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`,
         );
       }
     }
@@ -24,7 +25,7 @@ class Model {
       const key = objKeys[i];
       if (!propsKeys.includes(key)) {
         throw new Error(
-          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`
+          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`,
         );
       }
     }
@@ -35,7 +36,7 @@ class Model {
   clone() {
     const clone = Object.assign(
       Object.create(Object.getPrototypeOf(this)),
-      this
+      this,
     );
     return clone;
   }
@@ -55,7 +56,7 @@ class Comment extends Model {
   }
 
   get createdAt() {
-    return this._createdAt;S
+    return this._createdAt; S;
   }
 
   get author() {
@@ -69,7 +70,7 @@ class Comment extends Model {
   static validate(comment, templateObj) {
     try {
       super.validate(comment, templateObj);
-      if (typeof comment._id !== "string") {
+      if (typeof comment._id !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_ID);
       }
 
@@ -77,15 +78,15 @@ class Comment extends Model {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_DATE);
       }
 
-      if (typeof comment._author !== "string") {
+      if (typeof comment._author !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_AUTHOR);
       }
 
-      if (typeof comment._taskId !== "string") {
+      if (typeof comment._taskId !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_AUTHOR);
       }
 
-      if (typeof comment.text !== "string" || comment.text.length > 280) {
+      if (typeof comment.text !== 'string' || comment.text.length > 280) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_TEXT);
       }
     } catch (error) {
@@ -105,7 +106,7 @@ class Task extends Model {
     this.description = description || this.description;
     this.priority = priority || this.priority;
 
-    this.assignee = assignee || "Guest";
+    this.assignee = assignee || 'Guest';
     this.status = status || constantsModule.STATUSES_DICT.TO_DO;
     this.isPrivate = isPrivate === undefined ? false : isPrivate;
   }
@@ -125,21 +126,21 @@ class Task extends Model {
   static validate(task, templateObj) {
     try {
       super.validate(task, templateObj);
-      if (typeof task._id !== "string") {
+      if (typeof task._id !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_ID);
       }
 
-      if (typeof task._author !== "string") {
+      if (typeof task._author !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_AUTHOR);
       }
 
-      if (typeof task.name !== "string" || task.name.length > 100) {
+      if (typeof task.name !== 'string' || task.name.length > 100) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_NAME);
       }
 
       if (
-        typeof task.description !== "string" ||
-        task.description.length > 280
+        typeof task.description !== 'string'
+        || task.description.length > 280
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_DESCRIPTION);
       }
@@ -148,25 +149,25 @@ class Task extends Model {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_DATE);
       }
 
-      if (typeof task.assignee !== "string") {
+      if (typeof task.assignee !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_ASSIGNEE);
       }
 
       if (
-        typeof task.status !== "string" ||
-        !Object.values(constantsModule.STATUSES_DICT).includes(task.status)
+        typeof task.status !== 'string'
+        || !Object.values(constantsModule.STATUSES_DICT).includes(task.status)
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_STATUS);
       }
 
       if (
-        typeof task.priority !== "string" ||
-        !Object.values(constantsModule.PRIORITIES_DICT).includes(task.priority)
+        typeof task.priority !== 'string'
+        || !Object.values(constantsModule.PRIORITIES_DICT).includes(task.priority)
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_PRIORITY);
       }
 
-      if (typeof task.isPrivate !== "boolean") {
+      if (typeof task.isPrivate !== 'boolean') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_PRIVACY);
       }
     } catch (error) {
@@ -191,10 +192,10 @@ class User extends Model {
   static validate(user) {
     try {
       super.validate(user);
-      if (typeof user.id !== "string") {
+      if (typeof user.id !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_USER_ID);
       }
-      if (typeof user.name !== "string" || user.name.length > 100) {
+      if (typeof user.name !== 'string' || user.name.length > 100) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_USER_NAME);
       }
     } catch (error) {

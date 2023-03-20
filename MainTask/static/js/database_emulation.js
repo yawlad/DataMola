@@ -3,4 +3,4 @@ const simpleDataBaseModule = (function () {
   return {
     db,
   };
-})();
+}());

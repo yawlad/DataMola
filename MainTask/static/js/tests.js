@@ -1,79 +1,66 @@
-console.log("Get tasks: ", taskModule.getTasks());
-console.log("Get tasks: ", taskModule.getTasks(5));
-console.log("Get tasks: ", taskModule.getTasks(0, 5));
-console.log("Get tasks: ", taskModule.getTasks(0, 15));
-console.log("Get tasks: ", taskModule.getTasks(10, 10));
-console.log(
-  "Get tasks: ",
-  taskModule.getTasks(0, 30, { assignee: constantsModule.USER_NAMES_LIST[0] })
-);
-console.log(
-  "Get tasks: ",
-  taskModule.getTasks(0, 30, {
-    dateFrom: new Date("06.01.2022"),
-    dateTo: new Date("08.30.2022"),
-  })
-);
+enviroment.currentTaskId = '1';
 
-console.log("Change user: ", taskModule.changeUser("Eva"));
-for (let i = 0; i < 3; i++) {
-  console.log(
-    "Added task: ",
-    taskModule.addTask(
-      utilsModule.getRandomArrayElement(Object.values(constantsModule.TASK_NAMES_LIST)),
-      `Test Description ${i}`,
-      utilsModule.getRandomArrayElement(Object.values(constantsModule.PRIORITIES_DICT)),
-    )
-  );
+// CurrentTaskId is using to add/remove comments to current task
+
+enviroment.currentUserId = '1';
+
+const um = new UserDBManager();
+const tm = new TaskDBManager();
+const cm = new CommentDBManager();
+
+// Valid tests
+
+for (let i = 1; i < 30; i++) {
+  console.log(tm.create(`Name_${i}`, `Description_${i}`, 'Medium'));
+}
+for (const task of tm.getAll()) {
+  for (let i = 0; i < Math.random() * 5; i++) {
+    console.log(
+      tm.addComment(task.id, `Comment ${i} for task with id ${task.id}`),
+    );
+  }
 }
 
-console.log("Change user: ", taskModule.changeUser("John"));
-
-for (let i = 0; i < 3; i++) {
-  console.log(
-    "Added task: ",
-    taskModule.addTask(
-      utilsModule.getRandomArrayElement(Object.values(constantsModule.TASK_NAMES_LIST)),
-      `Test Description ${i}`,
-      utilsModule.getRandomArrayElement(Object.values(constantsModule.PRIORITIES_DICT)),
-    )
-  );
+for (let i = 1; i < 6; i++) {
+  console.log(tm.update(`${i}`, { name: 'UPDATED' }));
 }
 
-console.log("Get tasks: ", taskModule.getTasks(30, 10));
+console.log(cm.getAll());
+console.log(tm.getAll());
+
+console.log(tm.delete('1'));
+console.log(tm.delete('2'));
+console.log(tm.delete('3'));
+console.log(tm.delete('4'));
+console.log(tm.delete('5'));
+
+console.log(cm.getAll().length);
+console.log(tm.getAll().length);
+
+console.log(tm.getPage(0, 5));
+console.log(tm.getPage(0, 5, { description: '3' }));
+
+// Invalid data tests
+
+console.log(tm.create(132213, 'Test', 'Medium'));
+console.log(tm.create('132213', 123, 'Medium'));
+console.log(tm.create('132213', '123', 'TEST'));
+console.log(tm.update('10', { prioritie: 'Medium' }));
+
+// Invalid user tests
+
+enviroment.currentUserId = '2';
+console.log(tm.delete('7'));
+console.log(tm.update('7', { name: 'UPDATED' }));
+console.log(tm.getPage(0, 1));
+
+console.log(tm.clear());
 
 console.log(
-  "Edited task: ",
-  taskModule.editTask("35", "EDITED NAME", "EDITED DESCRIPTION")
+  tm.addAll([
+    new Task('Name', 'Desct', 'High'),
+    new Task('123123', 13, 'High'),
+    new Task('Name', 'Desct', 'High2'),
+    new Task('Name'),
+  ]),
 );
-
-console.log(
-  "Removed task: ",
-  taskModule.removeTask("33", "EDITED NAME", "EDITED DESCRIPTION")
-);
-
-console.log("Get tasks: ", taskModule.getTasks(30, 10));
-
-console.log(
-  "Bad added task: ",
-  taskModule.addTask("NAME", "DESCRIPTION")
-);
-console.log(
-  "Bad edited task: ",
-  taskModule.editTask("1", "EDITED NAME", "EDITED DESCRIPTION")
-);
-console.log(
-  "Bad remove task: ",
-  taskModule.editTask("1")
-);
-
-console.log(
-  "Add comment: ",
-  taskModule.addComment("0", "TEXT")
-);
-console.log(
-  "Bad add comment: ",
-  taskModule.addComment("101", "TEXT")
-);
-console.log("Get task: ", taskModule.getTask("0"));
-

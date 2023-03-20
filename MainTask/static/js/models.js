@@ -2,9 +2,14 @@ class Model {
   constructor() {
     this._id = "";
   }
-  static validate(obj) {
+  static validate(obj, validTemplate) {
     const objKeys = Object.keys(obj);
-    const propsKeys = Object.keys(new this());
+    let propsKeys;
+    if (validTemplate) {
+      propsKeys = Object.keys(validTemplate);
+    } else {
+      propsKeys = Object.keys(new this());
+    }
 
     for (let i = 0; i < propsKeys.length; i++) {
       const key = propsKeys[i];
@@ -36,9 +41,9 @@ class Comment extends Model{
   constructor(text) {
     super()
     this._createdAt = new Date();
-    this._author = "Guest";
+    this._author = enviroment.currentUserId;
     this.text = text;
-    this._taskId = "1";
+    this._taskId = enviroment.currentTaskId;;
   }
 
   get id() {
@@ -57,9 +62,9 @@ class Comment extends Model{
     return this._taskId;
   }
 
-  static validate(comment) {
+  static validate(comment, templateObj) {
     try {
-      super.validate(comment)
+      super.validate(comment, templateObj)
       if (typeof comment._id !== "string") {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_ID);
       }
@@ -91,7 +96,7 @@ class Task extends Model{
   constructor(name, description, priority, assignee, status, isPrivate) {
     super()
     this._createdAt = new Date();
-    this._author = "Guest";
+    this._author = enviroment.currentUserId;;
     this.name = name || this.name;
     this.description = description || this.description;
     this.priority = priority || this.priority;
@@ -113,9 +118,9 @@ class Task extends Model{
     return this._author;
   }
 
-  static validate(task) {
+  static validate(task, templateObj) {
     try {
-      super.validate(task)
+      super.validate(task, templateObj)
       if (typeof task._id !== "string") {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_ID);
       }
@@ -195,6 +200,3 @@ class User extends Model{
     return true;
   }
 }
-
-current_user_id = "1";
-current_task_id = "1";

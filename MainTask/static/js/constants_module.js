@@ -74,7 +74,7 @@ const constantsModule = (function () {
 
     VALIDATION_ERROR: "Validation error",
 
-    NOT_ASSIGNEE: "Current user is not assignee of the task",
+    PERMISSION_ERROR: "Current user doesn't have necessary permissions",
 
     OBJECT_FIELDS_ERROR: "Object fileds error",
 

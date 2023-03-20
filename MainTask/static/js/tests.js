@@ -45,7 +45,7 @@ console.log(tm.getPage(0, 5, { description: "3" }));
 console.log(tm.create(132213, "Test", "Medium"));
 console.log(tm.create("132213", 123, "Medium"));
 console.log(tm.create("132213", "123", "TEST"));
-console.log(tm.update("10", {prioritie: "Medium"}));
+console.log(tm.update("10", { prioritie: "Medium" }));
 
 // Invalid user tests
 
@@ -56,4 +56,11 @@ console.log(tm.getPage(0, 1));
 
 console.log(tm.clear());
 
-console.log(tm.addAll([new Task("Name", "Desct", "High"), new Task("123123", 13, "High"),new Task("Name", "Desct", "High2"),new Task("Name",)]))
+console.log(
+  tm.addAll([
+    new Task("Name", "Desct", "High"),
+    new Task("123123", 13, "High"),
+    new Task("Name", "Desct", "High2"),
+    new Task("Name"),
+  ])
+);

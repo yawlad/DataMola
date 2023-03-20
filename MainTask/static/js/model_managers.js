@@ -164,8 +164,8 @@ class TaskDBManager extends DBManager {
   clear() {
     const tasks = this.getAll();
     let i = 0;
-    let length = tasks.length
-    while(length > 0){
+    let length = tasks.length;
+    while (length > 0) {
       const task = tasks[0];
       enviroment.currentUserId = task.author;
       this.delete(task.id);

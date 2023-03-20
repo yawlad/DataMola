@@ -47,7 +47,6 @@ const constantsModule = (function () {
     LOW: "Low",
   };
 
-
   const ERRORS_DICT = {
     INVALID_TASK_OBJECT: "Invalid task object",
     TASK_NOT_FOUND: "Task not found",

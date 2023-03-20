@@ -14,20 +14,24 @@ class Model {
     for (let i = 0; i < propsKeys.length; i++) {
       const key = propsKeys[i];
       if (!objKeys.includes(key)) {
-        throw new Error(`${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`)
+        throw new Error(
+          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`
+        );
       }
     }
 
     for (let i = 0; i < objKeys.length; i++) {
       const key = objKeys[i];
       if (!propsKeys.includes(key)) {
-        throw new Error(`${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`)
+        throw new Error(
+          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`
+        );
       }
     }
 
     return true;
   }
-  
+
   clone() {
     const clone = Object.assign(
       Object.create(Object.getPrototypeOf(this)),
@@ -37,13 +41,13 @@ class Model {
   }
 }
 
-class Comment extends Model{
+class Comment extends Model {
   constructor(text) {
-    super()
+    super();
     this._createdAt = new Date();
     this._author = enviroment.currentUserId;
     this.text = text;
-    this._taskId = enviroment.currentTaskId;;
+    this._taskId = enviroment.currentTaskId;
   }
 
   get id() {
@@ -51,7 +55,7 @@ class Comment extends Model{
   }
 
   get createdAt() {
-    return this._createdAt;
+    return this._createdAt;S
   }
 
   get author() {
@@ -64,7 +68,7 @@ class Comment extends Model{
 
   static validate(comment, templateObj) {
     try {
-      super.validate(comment, templateObj)
+      super.validate(comment, templateObj);
       if (typeof comment._id !== "string") {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_COMMENT_ID);
       }
@@ -92,11 +96,11 @@ class Comment extends Model{
   }
 }
 
-class Task extends Model{
+class Task extends Model {
   constructor(name, description, priority, assignee, status, isPrivate) {
-    super()
+    super();
     this._createdAt = new Date();
-    this._author = enviroment.currentUserId;;
+    this._author = enviroment.currentUserId;
     this.name = name || this.name;
     this.description = description || this.description;
     this.priority = priority || this.priority;
@@ -120,7 +124,7 @@ class Task extends Model{
 
   static validate(task, templateObj) {
     try {
-      super.validate(task, templateObj)
+      super.validate(task, templateObj);
       if (typeof task._id !== "string") {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_ID);
       }
@@ -174,9 +178,9 @@ class Task extends Model{
   }
 }
 
-class User extends Model{
+class User extends Model {
   constructor(name) {
-    super()
+    super();
     this.name = name;
   }
 
@@ -186,7 +190,7 @@ class User extends Model{
 
   static validate(user) {
     try {
-      super.validate(user)
+      super.validate(user);
       if (typeof user.id !== "string") {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_USER_ID);
       }

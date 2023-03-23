@@ -28,7 +28,7 @@ class List {
         return false;
       }
       currentNode = currentNode.next;
-      currentIndex += 1;
+      currentIndex++;
     }
     newNode.next = currentNode.next;
     currentNode.next = newNode;
@@ -36,17 +36,17 @@ class List {
   }
 
   removeNode(i = null) {
-    let currentNode = this.root;
-    let previousNode = null;
-    let currentIndex = 0;
-
     if (this.root.next === null) {
       return false;
     }
 
+    let currentNode = this.root;
+    let previousNode = null;
+    let currentIndex = 0;
+
     if (i === 0) {
       this.root = currentNode.next;
-      return true
+      return true;
     }
 
     if (i === null) {
@@ -64,7 +64,7 @@ class List {
       }
       previousNode = currentNode;
       currentNode = currentNode.next;
-      currentIndex += 1;
+      currentIndex++;
     }
     previousNode.next = currentNode.next;
     return true;
@@ -77,7 +77,7 @@ class List {
       result.push(currentNode.value);
       currentNode = currentNode.next;
     }
-    console.log(result.join(", "));
+    console.log(result.join(', '));
   }
 }
 

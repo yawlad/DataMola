@@ -1,18 +1,20 @@
 class DBManager {
-  static a = 10;
-
   constructor(tableName, model) {
     this.tableName = tableName;
     this.db = simpleDataBaseModule.db;
     this.model = model;
     this.havePermissions = true;
   }
+  
+  checkPermissions() {
+    if (!this.havePermissions) {
+      throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
+    }
+  }
 
   create(record) {
     try {
-      if (!this.havePermissions) {
-        throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
-      }
+      this.checkPermissions();
       if (!this.db[this.tableName]) {
         this.db[this.tableName] = [];
       }
@@ -31,9 +33,7 @@ class DBManager {
 
   getAll() {
     try {
-      if (!this.havePermissions) {
-        throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
-      }
+      this.checkPermissions();
       if (!this.db[this.tableName]) {
         return [];
       }
@@ -47,14 +47,15 @@ class DBManager {
 
   get(id) {
     try {
-      if (!this.havePermissions) {
-        throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
-      }
+      this.checkPermissions();
       if (!this.db[this.tableName]) {
-        console.error(constantsModule.ERRORS_DICT.NO_TABLE_FOUND);
-        return false;
+        throw new Error(constantsModule.ERRORS_DICT.NO_TABLE_FOUND);
       }
-      return this.db[this.tableName].find((record) => record.id === id);
+      const record = this.db[this.tableName].find((record) => record.id === id);
+      if (!record) {
+        throw new Error(constantsModule.ERRORS_DICT.NO_ITEM_FOUND);
+      }
+      return record;
     } catch (error) {
       console.error(error);
       this.havePermissions = true;
@@ -64,9 +65,7 @@ class DBManager {
 
   update(id, updateData) {
     try {
-      if (!this.havePermissions) {
-        throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
-      }
+      this.checkPermissions();
       if (!this.db[this.tableName]) {
         return false;
       }
@@ -89,15 +88,12 @@ class DBManager {
 
   delete(id) {
     try {
-      if (!this.havePermissions) {
-        throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
-      }
+      this.checkPermissions();
       if (!this.db[this.tableName]) {
-        console.error(constantsModule.ERRORS_DICT.NO_TABLE_FOUND);
-        return false;
+        throw new Error(constantsModule.ERRORS_DICT.NO_TABLE_FOUND);
       }
       const recordIndex = this.db[this.tableName].findIndex(
-        (record) => record.id === id,
+        (record) => record.id === id
       );
       if (recordIndex === -1) {
         console.error(constantsModule.ERRORS_DICT.NO_ITEM_FOUND);
@@ -114,7 +110,10 @@ class DBManager {
 
   _getLastRecordId() {
     const records = this.getAll();
-    return records.reduce((maxId, record) => Math.max(maxId, Number(record.id)), 0);
+    return records.reduce(
+      (maxId, record) => Math.max(maxId, Number(record.id)),
+      0
+    );
   }
 }
 
@@ -138,10 +137,8 @@ class CommentDBManager extends DBManager {
     return super.create(comment);
   }
 
-  getByTaskId(taskId) {
-    let taskComments = this.getAll();
-    taskComments = taskComments.filter((comment) => comment.taskId === taskId);
-    return taskComments;
+  getByTaskId(taskIdToFind) {
+    return this.getAll().filter(({taskId}) => taskId === taskIdToFind);
   }
 }
 
@@ -182,7 +179,7 @@ class TaskDBManager extends DBManager {
       priority,
       assignee,
       status,
-      isPrivate,
+      isPrivate
     );
     return super.create(task);
   }
@@ -218,7 +215,8 @@ class TaskDBManager extends DBManager {
 
   delete(id) {
     const deleted = this.get(id);
-    if (enviroment.currentUserId !== deleted.author) this.havePermissions = false;
+    if (enviroment.currentUserId !== deleted.author)
+      this.havePermissions = false;
     const cm = new CommentDBManager();
     deleted.comments.forEach((comment) => cm.delete(comment.id));
     return super.delete(id);
@@ -227,34 +225,44 @@ class TaskDBManager extends DBManager {
   getPage(skip = 0, top = 10, filterConfig = {}) {
     let filteredTasks = this.getAll();
     if (filterConfig.name) {
-      filteredTasks = filteredTasks.filter((task) => task.name.includes(filterConfig.name));
+      filteredTasks = filteredTasks.filter((task) =>
+        task.name.includes(filterConfig.name)
+      );
     }
     if (filterConfig.assignee) {
-      filteredTasks = filteredTasks.filter((task) => task.assignee.includes(filterConfig.assignee));
+      filteredTasks = filteredTasks.filter((task) =>
+        task.assignee.includes(filterConfig.assignee)
+      );
     }
     if (filterConfig.dateFrom) {
       filteredTasks = filteredTasks.filter(
-        (task) => task.createdAt >= filterConfig.dateFrom,
+        (task) => task.createdAt >= filterConfig.dateFrom
       );
     }
     if (filterConfig.dateTo) {
       filteredTasks = filteredTasks.filter(
-        (task) => task.createdAt <= filterConfig.dateTo,
+        (task) => task.createdAt <= filterConfig.dateTo
       );
     }
     if (filterConfig.status) {
-      filteredTasks = filteredTasks.filter((task) => task.status.includes(filterConfig.status));
+      filteredTasks = filteredTasks.filter((task) =>
+        task.status.includes(filterConfig.status)
+      );
     }
     if (filterConfig.priority) {
-      filteredTasks = filteredTasks.filter((task) => task.priority.includes(filterConfig.priority));
+      filteredTasks = filteredTasks.filter((task) =>
+        task.priority.includes(filterConfig.priority)
+      );
     }
     if (filterConfig.isPrivate !== undefined) {
       filteredTasks = filteredTasks.filter(
-        (task) => task.isPrivate === filterConfig.isPrivate,
+        (task) => task.isPrivate === filterConfig.isPrivate
       );
     }
     if (filterConfig.description) {
-      filteredTasks = filteredTasks.filter((task) => task.description.includes(filterConfig.description));
+      filteredTasks = filteredTasks.filter((task) =>
+        task.description.includes(filterConfig.description)
+      );
     }
     filteredTasks = filteredTasks.slice(skip, skip + top);
     return filteredTasks;

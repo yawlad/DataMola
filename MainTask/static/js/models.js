@@ -6,37 +6,27 @@ class Model {
   static validate(obj, validTemplate) {
     const objKeys = Object.keys(obj);
     let propsKeys;
-    if (validTemplate) {
-      propsKeys = Object.keys(validTemplate);
-    } else {
-      propsKeys = Object.keys(new this());
-    }
+    propsKeys = Object.keys(validTemplate || new this());
 
-    for (let i = 0; i < propsKeys.length; i++) {
-      const key = propsKeys[i];
-      if (!objKeys.includes(key)) {
-        throw new Error(
-          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`,
-        );
+    function checkSameLists(target, source) {
+      for (let i = 0; i < target.length; i++) {
+        const key = target[i];
+        if (!source.includes(key)) {
+          throw new Error(
+            `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`
+          );
+        }
       }
     }
-
-    for (let i = 0; i < objKeys.length; i++) {
-      const key = objKeys[i];
-      if (!propsKeys.includes(key)) {
-        throw new Error(
-          `${constantsModule.ERRORS_DICT.OBJECT_FIELDS_ERROR}: ${key}`,
-        );
-      }
-    }
-
+    checkSameLists(objKeys, propsKeys);
+    checkSameLists(propsKeys, objKeys);
     return true;
   }
 
   clone() {
     const clone = Object.assign(
       Object.create(Object.getPrototypeOf(this)),
-      this,
+      this
     );
     return clone;
   }
@@ -56,7 +46,7 @@ class Comment extends Model {
   }
 
   get createdAt() {
-    return this._createdAt; S;
+    return this._createdAt;
   }
 
   get author() {
@@ -139,8 +129,8 @@ class Task extends Model {
       }
 
       if (
-        typeof task.description !== 'string'
-        || task.description.length > 280
+        typeof task.description !== 'string' ||
+        task.description.length > 280
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_DESCRIPTION);
       }
@@ -154,15 +144,15 @@ class Task extends Model {
       }
 
       if (
-        typeof task.status !== 'string'
-        || !Object.values(constantsModule.STATUSES_DICT).includes(task.status)
+        typeof task.status !== 'string' ||
+        !Object.values(constantsModule.STATUSES_DICT).includes(task.status)
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_STATUS);
       }
 
       if (
-        typeof task.priority !== 'string'
-        || !Object.values(constantsModule.PRIORITIES_DICT).includes(task.priority)
+        typeof task.priority !== 'string' ||
+        !Object.values(constantsModule.PRIORITIES_DICT).includes(task.priority)
       ) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_TASK_PRIORITY);
       }

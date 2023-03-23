@@ -5,7 +5,7 @@
     "eslint-plugin-import": "^2.25.2"
   },
   "scripts": {
-    "lint": "eslint ./MainTask",
-    "lint-fix": "eslint --fix ./MainTask"
+    "lint": "eslint ./",
+    "lint-fix": "eslint --fix ./"
   }
 }

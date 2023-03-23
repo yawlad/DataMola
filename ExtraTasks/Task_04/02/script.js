@@ -8,6 +8,6 @@ function maxProfit(arr) {
   return maxProfit;
 }
 
-console.log(maxProfit([10,8,7,6,6,6,5,10]))
-console.log(maxProfit([10,8,7,6,6,6,5]))
-console.log(maxProfit([1,10,1,15,20,1,3,5]))
+console.log(maxProfit([10,8,7,6,6,6,5,10]));
+console.log(maxProfit([10,8,7,6,6,6,5]));
+console.log(maxProfit([1,10,1,15,20,1,3,5]));

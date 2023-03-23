@@ -17,4 +17,4 @@ function maxSubarraySum(arr) {
   return maxSoFar;
 }
 
-console.log(maxSubarraySum([1,2,3,4,5,3,-100,2,-2,3,5]))
+console.log(maxSubarraySum([1,2,3,4,5,3,-100,2,-2,3,5]));

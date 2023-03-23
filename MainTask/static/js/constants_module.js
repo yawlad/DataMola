@@ -73,7 +73,7 @@ const constantsModule = (function () {
 
     VALIDATION_ERROR: 'Validation error',
 
-    PERMISSION_ERROR: "Current user doesn't have necessary permissions",
+    PERMISSION_ERROR: 'Current user doesn\'t have necessary permissions',
 
     OBJECT_FIELDS_ERROR: 'Object fileds error',
 

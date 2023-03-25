@@ -64,3 +64,10 @@ console.log(
     new Task('Name'),
   ]),
 );
+
+// Task_06 tests 
+
+const head = new HeaderView("wrapper");
+head.display();
+const main = new MainView("wrapper");
+main.display()

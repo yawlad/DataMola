@@ -1,9 +1,9 @@
 const enviroment = (() => {
-  currentUserId = '1';
-  currentTaskId = '1';
+  currentUser = new User("Vlad", "#");
+  currentTask = '1';
 
   return {
-    currentUserId,
-    currentTaskId,
+    currentUser,
+    currentTask,
   };
 })();

@@ -1,0 +1,257 @@
+/**************************___ADAPTIVE___**************************/
+
+@media (max-width: 1200px) {
+  .input__block__input {
+    width: fit-content;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .input__block[id="data_filter"] .input__block__body {
+    text-align: center;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .filters__part:first-of-type {
+    justify-content: space-between;
+    border-bottom: var(--border-width) dotted var(--primary-color);
+    padding-bottom: var(--offset-s);
+  }
+
+  .filters__part .input__block {
+    align-items: center;
+    width: 33%;
+    justify-content: flex-start;
+  }
+
+  .app__table {
+    flex-direction: column;
+  }
+
+  .add__new__task,
+  .main__window {
+    width: 100%;
+  }
+
+  .main__window {
+    border-right: none;
+  }
+
+  .tasks__container {
+    max-height: 28rem;
+  }
+
+  .task__form__part {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .task__form__part .input__block {
+    justify-content: space-between;
+    align-items: center;
+    width: 33%;
+  }
+
+  .form__buttons .standart__button {
+    flex-grow: 0;
+  }
+
+  /***********************************/
+
+  .tasks__container__list {
+    max-height: none;
+  }
+
+  .main__window__list {
+    max-height: 44rem;
+  }
+
+  /***********************************/
+
+  
+}
+
+@media (max-width: 810px) {
+  .username .link {
+    display: none;
+  }
+
+  .app__name {
+    display: none;
+  }
+
+  .main__window {
+    flex-direction: column;
+  }
+
+  .main__window__section {
+    width: 100%;
+    border-top: var(--border-width) dotted var(--primary-color);
+    border-left: none;
+  }
+
+  .filters__part {
+    flex-direction: column;
+  }
+
+  .filters__part .input__block {
+    width: 100%;
+  }
+
+  .filters__part:first-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .task__form__part {
+    flex-direction: column;
+  }
+
+  .task__form__part .input__block {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form__buttons .standart__button {
+    flex-grow: 0;
+  }
+
+  /***********************************/
+
+  .task__list {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .line__list {
+    display: block;
+  }
+
+  .task__bottom__list {
+    padding: 0;
+    padding-bottom: var(--offset-xxl);
+  }
+
+  .task__list .task__main {
+    padding-bottom: 0;
+  }
+
+  /***********************************/
+
+  .user__image__container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .user__main__content__item {
+    display: flex;
+    justify-content: center;
+    gap: var(--offset-s);
+  }
+
+  .user__bottom > * {
+    flex-grow: 1;
+  }
+  .user__bottom a .standart__button {
+    width: 100%;
+  }
+
+  /***********************************/
+
+  .user__form {
+    flex-direction: column;
+    gap: var(--offset-s);
+  }
+
+  .user__form .input__block {
+    flex-direction: column;
+    gap: var(--offset-xxs);
+  }
+
+  .user {
+    gap: var(--offset-s);
+  }
+
+  .user__form .file__input {
+    flex-direction: row;
+    top: 40%;
+    left: 50%;
+    margin-left: calc(-2 * var(--offset-xxl));
+  }
+
+  /***********************************/
+
+  .main__task__page {
+    flex-direction: column;
+    max-height: none;
+    min-height: none;
+    height: fit-content;
+  }
+  .detailed__task,
+  .comments {
+    width: 100%;
+    border-right: none;
+  }
+
+  .input__block {
+    width: fit-content;
+    margin: auto;
+  }
+
+  .main__task__page .task__bottom {
+    gap: var(--offset-xxs);
+    flex-wrap: wrap;
+  }
+
+  .main__task__page .task__bottom * {
+    flex-grow: 1;
+  }
+
+  /***********************************/
+
+  .detailed__task__form .input__block {
+    margin: 0;
+  }
+
+  .detailed__task__form .input__block__name {
+    text-align: left;
+  }
+
+  .detailed__task__form .input__block__textarea {
+    width: 100%;
+  }
+
+  .detailed__task__form .task {
+    gap: var(--offset-xxl);
+  }
+
+  
+}
+
+@media (max-width: 420px) {
+  .unauthorized .user__container {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  } 
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap:var(--offset-s);
+  }
+
+  .detailed__task__form .input__block {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--offset-s);
+  }
+
+  .detailed__task__form .input__block:has(.input__block__textarea) {
+    align-items: center;
+  }
+}

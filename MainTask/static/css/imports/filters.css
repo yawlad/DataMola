@@ -1,0 +1,46 @@
+/*********************___FILTERS___*********************/
+  
+.filters {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: var(--offset-xl) var(--offset-m);
+    gap: var(--offset-l);
+  }
+  
+  .filters__part {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--offset-xxs);
+    flex-grow: 1;
+    gap: 1rem;
+  }
+  
+  .filters__part .input__block {
+    flex-grow: 1;
+  }
+  
+  #inner_text_filter .input__block__body {
+    display: block;
+  }
+  
+  .filters .input__block__radio {
+    margin-top: var(--offset-s);
+  }
+  
+  .input__block[id="data_filter"] .input__block__input {
+    text-align: center;
+    width: fit-content;
+  }
+  
+  .input__block[id="type_of_page_filter"] {
+    justify-content: center;
+  }
+  
+  /***********__ADDITIONAL__***********/
+  
+  .active__input {
+    color: var(--black-color);
+    background-color: var(--white-color);
+    transform: var(--button-transform-scale);
+  }

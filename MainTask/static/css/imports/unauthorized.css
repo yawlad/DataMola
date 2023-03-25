@@ -1,0 +1,32 @@
+/**************************___UNAUTHORIZED___**************************/
+
+.add__new__task__unauthorised__window {
+    opacity: 0;
+    padding: var(--offset-xxxxl) var(--offset-l);
+    background-color: var(--primary-color-light-1);
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    right: 0;
+    font: var(--title-font-l);
+    text-align: center;
+    z-index: 1;
+  }
+  
+  .unauthorized .add__new__task .task__form {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .unauthorized .add__new__task__unauthorised__window {
+    opacity: 1;
+  }
+  
+  .unauthorized .task .standart__button {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  .unauthorized .task a {
+    pointer-events: none;
+  }

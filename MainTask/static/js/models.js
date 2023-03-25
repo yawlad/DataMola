@@ -170,9 +170,10 @@ class Task extends Model {
 }
 
 class User extends Model {
-  constructor(name) {
+  constructor(name, image) {
     super();
     this.name = name;
+    this.image = image;
   }
 
   get id() {

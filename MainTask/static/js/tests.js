@@ -4,9 +4,9 @@ enviroment.currentTaskId = '1';
 
 enviroment.currentUserId = '1';
 
-const um = new UserDBManager();
-const tm = new TaskDBManager();
-const cm = new CommentDBManager();
+const um = UserDBManager;
+const tm = TaskDBManager;
+const cm = CommentDBManager;
 
 // Valid tests
 

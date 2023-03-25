@@ -1,18 +1,16 @@
 class DBManager {
-  constructor(tableName, model) {
-    this.tableName = tableName;
-    this.db = simpleDataBaseModule.db;
-    this.model = model;
-    this.havePermissions = true;
-  }
+  static db = simpleDataBaseModule.db;
+  static havePermissions = true;
+  static tableName;
+  static model;
   
-  checkPermissions() {
+  static checkPermissions() {
     if (!this.havePermissions) {
       throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
     }
   }
 
-  create(record) {
+  static create(record) {
     try {
       this.checkPermissions();
       if (!this.db[this.tableName]) {
@@ -31,7 +29,7 @@ class DBManager {
     }
   }
 
-  getAll() {
+  static getAll() {
     try {
       this.checkPermissions();
       if (!this.db[this.tableName]) {
@@ -45,7 +43,7 @@ class DBManager {
     }
   }
 
-  get(id) {
+  static get(id) {
     try {
       this.checkPermissions();
       if (!this.db[this.tableName]) {
@@ -63,7 +61,7 @@ class DBManager {
     }
   }
 
-  update(id, updateData) {
+  static update(id, updateData) {
     try {
       this.checkPermissions();
       if (!this.db[this.tableName]) {
@@ -86,7 +84,7 @@ class DBManager {
     }
   }
 
-  delete(id) {
+  static delete(id) {
     try {
       this.checkPermissions();
       if (!this.db[this.tableName]) {
@@ -108,7 +106,7 @@ class DBManager {
     }
   }
 
-  _getLastRecordId() {
+  static _getLastRecordId() {
     const records = this.getAll();
     return records.reduce(
       (maxId, record) => Math.max(maxId, Number(record.id)),
@@ -118,38 +116,34 @@ class DBManager {
 }
 
 class UserDBManager extends DBManager {
-  constructor() {
-    super('users', User);
-  }
+  static tableName = 'users';
+  static model = User;
 
-  create(name) {
+  static create(name) {
     const user = new User(name);
     super.create(user);
   }
 }
 class CommentDBManager extends DBManager {
-  constructor() {
-    super('comments', Comment);
-  }
+  static tableName = 'comments';
+  static model = Comment;
 
-  create(text) {
+  static create(text) {
     const comment = new Comment(text);
     return super.create(comment);
   }
 
-  getByTaskId(taskIdToFind) {
+  static getByTaskId(taskIdToFind) {
     return this.getAll().filter(({taskId}) => taskId === taskIdToFind);
   }
 }
 
 class TaskDBManager extends DBManager {
-  constructor() {
-    super('tasks', Task);
-    this.commentManager = new CommentDBManager();
-  }
+  static tableName = 'tasks';
+  static model = Task;
 
   // Strange method, but it was in hometask requirements
-  addAll(array) {
+  static addAll(array) {
     const bad_tasks = [];
     for (const task of array) {
       if (!super.create(task)) {
@@ -159,7 +153,7 @@ class TaskDBManager extends DBManager {
     return bad_tasks;
   }
 
-  clear() {
+  static clear() {
     const tasks = this.getAll();
     const i = 0;
     let { length } = tasks;
@@ -172,7 +166,7 @@ class TaskDBManager extends DBManager {
     return true;
   }
 
-  create(name, description, priority, assignee, status, isPrivate) {
+  static create(name, description, priority, assignee, status, isPrivate) {
     const task = new Task(
       name,
       description,
@@ -184,28 +178,28 @@ class TaskDBManager extends DBManager {
     return super.create(task);
   }
 
-  addComment(id, text) {
+  static addComment(id, text) {
     enviroment.currentTaskId = this.get(id).id;
-    return this.commentManager.create(text);
+    return CommentDBManager.create(text);
   }
 
-  get(id) {
+  static get(id) {
     const task = super.get(id);
-    const comments = this.commentManager.getByTaskId(task.id);
+    const comments = CommentDBManager.getByTaskId(task.id);
     Object.assign(task, { comments });
     return task;
   }
 
-  getAll() {
+  static getAll() {
     const tasks = super.getAll();
     tasks.forEach((task) => {
-      const comments = this.commentManager.getByTaskId(task.id);
+      const comments = CommentDBManager.getByTaskId(task.id);
       Object.assign(task, { comments });
     });
     return tasks;
   }
 
-  update(id, updateData) {
+  static update(id, updateData) {
     const updated = this.get(id);
     if (enviroment.currentUserId !== updated.author) {
       this.havePermissions = false;
@@ -213,16 +207,15 @@ class TaskDBManager extends DBManager {
     return super.update(id, updateData);
   }
 
-  delete(id) {
+  static delete(id) {
     const deleted = this.get(id);
     if (enviroment.currentUserId !== deleted.author)
       this.havePermissions = false;
-    const cm = new CommentDBManager();
-    deleted.comments.forEach((comment) => cm.delete(comment.id));
+    deleted.comments.forEach((comment) => CommentDBManager.delete(comment.id));
     return super.delete(id);
   }
 
-  getPage(skip = 0, top = 10, filterConfig = {}) {
+  static getPage(skip = 0, top = 10, filterConfig = {}) {
     let filteredTasks = this.getAll();
     if (filterConfig.name) {
       filteredTasks = filteredTasks.filter((task) =>

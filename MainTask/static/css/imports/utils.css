@@ -1,0 +1,351 @@
+:root {
+    --white-color: #ffffff;
+    --black-color: #333333;
+    --grey-color: #f3f3f3;
+    --dark-grey-color: #999999;
+  
+    --primary-color-dark-1: #0b0c0e;
+    --primary-color: #181a20;
+    --primary-color-light-1: #2e2e2e;
+    --primary-color-light-2: #5e5e5e;
+  
+    /* --secondary-color: #545ead; 
+  
+      May be I'll add secondary color and change the color
+    of some blocks, but for now only primary
+  
+    */
+  
+    --confirm-button-color: #147dfa;
+    --low-priority-color: #00ad11;
+    --medium-priority-color: #d68d00;
+    --high-priority-color: #c60000;
+  
+    --primary-font-style: "DM Sans", sans-serif;
+  
+    --logo-font-m: 700 3rem var(--primary-font-style);
+    --title-font-xl: 700 2rem var(--primary-font-style);
+    --title-font-l: 700 1.75rem var(--primary-font-style);
+    --title-font-m: 700 1.5rem var(--primary-font-style);
+    --title-font-s: 700 1.25rem var(--primary-font-style);
+    --text-font-l: 400 1.125rem var(--primary-font-style);
+    --text-font-m: 400 1rem var(--primary-font-style);
+    --text-font-s: 400 0.875rem var(--primary-font-style);
+  
+    --offset-xxxxl: 3rem;
+    --offset-xxxl: 2.5rem;
+    --offset-xxl: 2rem;
+    --offset-xl: 1.5rem;
+    --offset-l: 1.25rem;
+    --offset-m: 1rem;
+    --offset-s: 0.75rem;
+    --offset-xs: 0.5rem;
+    --offset-xxs: 0.25rem;   
+  
+    --border-width: 0.0625rem;
+  
+    --logo-size: 4rem;
+    --avatar-size: 4.5rem;
+
+    --button-transform-scale: scale(1.07);
+  }
+  
+  html {
+    font-size: calc(12px + 6 * ((100vw - 370px)/(1440 - 370)));
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  a {
+    text-decoration: none;
+    color: var(--white-color);
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-color);
+    font: var(--text-font-m);
+    color: var(--white-color);
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+    padding: 0 var(--offset-l);
+    min-height: 100vh;
+  }
+  
+  ::-webkit-scrollbar {
+    width: var(--offset-xxs);
+  }
+  
+  ::-webkit-scrollbar-track {
+    border-radius: var(--offset-s);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--dark-grey-color);
+    border-radius: var(--offset-s);
+  }
+  
+  /**************************___ADDITIONAL___**************************/
+  
+  .low__prioprity {
+    color: var(--low-priority-color);
+  }
+  
+  .medium__prioprity {
+    color: var(--medium-priority-color);
+  }
+  
+  .high__prioprity {
+    color: var(--high-priority-color);
+  }
+  
+  .edit__button:hover {
+    transform: var(--button-transform-scale);
+    background-color: var(--dark-grey-color);
+  }
+  
+  .neutral__button:hover {
+    background-color: var(--primary-color);
+    transform: var(--button-transform-scale);
+  }
+  
+  .delete__button:hover {
+    background-color: var(--high-priority-color);
+    transform: var(--button-transform-scale);
+  }
+  
+  .add__button:hover {
+    transform: var(--button-transform-scale);
+    background-color: var(--low-priority-color);
+  }
+  
+  .invert__button:hover {
+    color: var(--black-color);
+    background-color: var(--white-color);
+    transform: var(--button-transform-scale);
+  }
+  
+  .standart__button {
+    padding: var(--offset-s) var(--offset-l);
+    border-radius: var(--offset-xxs);
+    border: var(--border-width) dotted var(--dark-grey-color);
+    background: none;
+    color: var(--white-color);
+    transition: 0.5s;
+    cursor: pointer;
+    text-align: center;
+    font: var(--text-font-s);
+  }
+  
+  .clickable__element {
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  
+  .inactive__element {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  .dangerous__icon:hover {
+    transform: var(--button-transform-scale);
+    color: var(--high-priority-color);
+  }
+  
+  .neutral__icon:hover {
+    transform: var(--button-transform-scale);
+    color: var(--low-priority-color);
+  }
+  
+  .friendly__icon:hover {
+    transform: var(--button-transform-scale);
+    color: var(--low-priority-color);
+  }
+  
+  .disabled__element {
+    display: none;
+  }
+  
+  .scrollable__element {
+    overflow-y: hidden;
+    padding-right: var(--offset-xs);
+    padding-left: var(--offset-xxs);
+  }
+  
+  .scrollable__element:hover {
+    overflow-y: scroll;
+    padding-right: var(--offset-xxs);
+  }
+  
+  .line {
+    opacity: 0.5;
+    width: 100%;
+  }
+  
+  /***************___INPUT_BLOCK___***************/
+  
+  .input__block {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input__block__name {
+    text-align: center;
+    font: var(--text-font-l);
+    margin: 0;
+    margin-bottom: var(--offset-xxs);
+  }
+  
+  .input__block__body {
+    font: var(--text-font-m);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-s);
+    flex-wrap: wrap;
+  }
+  
+  .help__message {
+    font: var(--text-font-s);
+    color: var(--dark-grey-color);
+  }
+  
+  /***********__INPUT__***********/
+  
+  .input__block__input {
+    padding: var(--offset-xxs) var(--offset-s);
+    border-radius: var(--offset-xxs);
+    border: none;
+    font: var(--text-font-m);
+    outline: none;
+    width: 100%;
+  }
+  
+  .input__block__input::-webkit-calendar-picker-indicator {
+    /* display: none; */
+  }
+  
+  /***********__TEXTAREA__***********/
+  
+  .input__block__textarea {
+    text-align: start;
+    height: calc(2*var(--offset-xxxl));
+    resize: none;
+  }
+  
+  /***********__CHECKBOX/RADIO__***********/
+  
+  .input__block__checkbox,
+  .input__block__radio {
+    padding: var(--offset-xs) var(--offset-m);
+    border: var(--border-width) dotted var(--grey-color);
+    border-radius: var(--offset-xxs);
+    display: block;
+    cursor: pointer;
+    transition: 0.5s;
+    text-align: center;
+  }
+  
+  .input__block__checkbox .input__block__input {
+    display: none;
+  }
+  
+  .input__block__radio .input__block__input {
+    display: none;
+  }
+  
+  .input__block__checkbox:hover,
+  .input__block__radio:hover {
+    color: var(--black-color);
+    background-color: var(--white-color);
+    transform: var(--button-transform-scale);
+  }
+  
+  /***********__SELECT__***********/
+  
+  .input__block__select {
+    appearance: none;
+    font: var(--text-font-m);
+    text-align: center;
+  }
+  
+  .input__block__select::-ms-expand {
+    display: none;
+  }
+  
+  .input__block__option {
+    font: var(--text-font-s);
+    text-align: left;
+    background-color: var(--grey-color);
+    text-align: center;
+  }
+  .input__block__option:hover {
+    background-color: var(--grey-color);
+  }
+  
+  /***********__File__***********/
+  
+  .file__input input {
+    display: none;
+  }
+  
+  .file__input {
+    text-align: center;
+  }
+  
+  /**************************___HEADER___**************************/
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--offset-l);
+  }
+  .logo__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-xxl);
+  }
+  .logo {
+    width: var(--logo-size);
+  }
+  .app__name {
+    font: var(--logo-font-m);
+  }
+  .user__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-s);
+    font: var(--title-font-l);
+  }
+  .username {
+    display: flex;
+    gap: var(--offset-m);
+    justify-content: center;
+    align-items: center;
+  }
+  .user__avatar {
+    width: var(--avatar-size);
+  }
+  
+  /**************************___MAIN___**************************/
+  
+  .main {
+    border-radius: var(--offset-xxs);
+    overflow: hidden;
+    background-color: var(--primary-color-dark-1);
+    margin: auto;
+    height: fit-content;
+  }
+  
+  

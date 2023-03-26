@@ -1,0 +1,12 @@
+@import url(./imports/utils.css);
+@import url(./imports/header.css);
+@import url(./imports/footer.css);
+@import url(./imports/filters.css);
+@import url(./imports/main_table.css);
+@import url(./imports/main_list.css);
+@import url(./imports/add_new_task.css);
+@import url(./imports/detailed_task.css);
+@import url(./imports/comments.css);
+@import url(./imports/detailed_user.css);
+@import url(./imports/unauthorized.css);
+@import url(./imports/adaptive.css);

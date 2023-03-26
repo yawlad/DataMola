@@ -1,0 +1,9 @@
+/**************************___FOOTER___**************************/
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    color: var(--dark-grey-color);
+    font: var(--text-font-s);
+    padding: var(--offset-xxxxl) 0 var(--offset-l) 0;
+  }

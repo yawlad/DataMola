@@ -1,0 +1,120 @@
+/**************************___MAIN_WINDOW_LIST___**************************/
+
+.main__window__list {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: var(--offset-s);
+    max-height: 60rem;
+  }
+  
+  .main__window__section__list {
+    width: 100%;
+    border: none;
+  }
+  
+  .section__header__list {
+    text-align: start;
+    padding-left: var(--offset-l);
+    background-color: var(--primary-color-light-1);
+    border-radius: var(--offset-xxs);
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .section__header__list::before,
+  .section__header__list::after {
+    content: "";
+    display: block;
+    height: var(--offset-l);
+    border-right: calc(3 * var(--border-width)) solid var(--dark-grey-color);
+    position: absolute;
+    top: 35%;
+    right: var(--offset-xxxl);
+    transform-origin: bottom center;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+  
+  .section__header__list::before {
+    rotate: 45deg;
+  }
+  
+  .section__header__list::after {
+    rotate: -45deg;
+  }
+  
+  .section__header__list__active::before,
+  .section__header__list__active::after {
+    height: var(--offset-xl);
+    transform-origin: center;
+  }
+  
+  .tasks__container__list {
+    padding: 0;
+    transform-origin: top;
+    transition: 0.5s;
+    opacity: 0;
+    display: none;
+    max-height: fit-content;
+  }
+  
+  .section__header__list__active + .tasks__container__list {
+    display: flex;
+    padding: var(--offset-m) var(--offset-l) 0 var(--offset-l);
+    opacity: 1;
+    height: fit-content;
+  }
+  
+  .task__list {
+    display: flex;
+    flex-direction: row;
+    gap: var(--offset-l);
+    position: relative;
+  }
+  
+  .task__additional__info__list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .task__additional__info__list > * {
+    position: absolute;
+    width: fit-content;
+    padding: var(--offset-s) var(--offset-m);
+  }
+  
+  .task__additional__info__list .task__priority {
+    top: 0;
+    left: 0;
+  }
+  
+  .task__additional__info__list .task__date {
+    top: 0;
+    right: 0;
+  }
+  
+  .task__additional__info__list .task__privacy {
+    bottom: 0;
+    left: 0;
+  }
+  
+  .task__additional__info__list .task__comments {
+    bottom: 0;
+    right: 0;
+  }
+  
+  .line__list {
+    display: none;
+  }
+  
+  .task__bottom__list {
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-xxs);
+  }
+  
+  .task__bottom__list .standart__button {
+    height: fit-content;
+    display: flex;
+    gap: var(--offset-xxs);
+  }

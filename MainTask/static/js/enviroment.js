@@ -1,6 +1,6 @@
 const enviroment = (() => {
-  currentUser = new User("Vlad", "#");
-  currentTask = '1';
+  let currentUser = undefined;
+  let currentTask = undefined;
 
   return {
     currentUser,

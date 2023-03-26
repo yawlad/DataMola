@@ -36,7 +36,7 @@ class Comment extends Model {
   constructor(text) {
     super();
     this._createdAt = new Date();
-    this._author = enviroment.currentUserId;
+    this._author = enviroment.currentUser.id;
     this.text = text;
     this._taskId = enviroment.currentTaskId;
   }
@@ -91,12 +91,12 @@ class Task extends Model {
   constructor(name, description, priority, assignee, status, isPrivate) {
     super();
     this._createdAt = new Date();
-    this._author = enviroment.currentUserId;
+    this._author = enviroment.currentUser.id;
     this.name = name || this.name;
     this.description = description || this.description;
     this.priority = priority || this.priority;
 
-    this.assignee = assignee || 'Guest';
+    this.assignee = assignee || enviroment.currentUser.name;
     this.status = status || constantsModule.STATUSES_DICT.TO_DO;
     this.isPrivate = isPrivate === undefined ? false : isPrivate;
   }
@@ -186,7 +186,7 @@ class User extends Model {
       if (typeof user.id !== 'string') {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_USER_ID);
       }
-      if (typeof user.name !== 'string' || user.name.length > 100) {
+      if (typeof user.name !== 'string' || user.name.length > 40) {
         throw new Error(constantsModule.ERRORS_DICT.INVALID_USER_NAME);
       }
     } catch (error) {

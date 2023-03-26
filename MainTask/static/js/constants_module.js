@@ -56,7 +56,7 @@ const constantsModule = (function () {
     INVALID_TASK_DESCRIPTION: 'Invalid task description',
     INVALID_TASK_DATE: 'Invalid task date',
     INVALID_TASK_ASSIGNEE: 'Invalid task assignee',
-    INVALID_TASK_STATUS: 'Invalid task assignee',
+    INVALID_TASK_STATUS: 'Invalid task status',
     INVALID_TASK_PRIORITY: 'Invalid task priority',
     INVALID_TASK_PRIVACY: 'Invalid task privacy',
     INVALID_TASK_COMMENTS_LIST: 'Invalid task comments list',

@@ -12,7 +12,6 @@
   .input__block[id="data_filter"] .input__block__body {
     text-align: center;
     flex-direction: column;
-    gap: 0;
   }
 
   .filters__part:first-of-type {

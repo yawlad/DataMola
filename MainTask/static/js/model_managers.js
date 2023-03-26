@@ -21,7 +21,7 @@ class DBManager {
         throw new Error(constantsModule.ERRORS_DICT.VALIDATION_ERROR);
       }
       this.db[this.tableName].push(record);
-      return true;
+      return record;
     } catch (error) {
       console.error(error);
       this.havePermissions = true;
@@ -119,9 +119,9 @@ class UserDBManager extends DBManager {
   static tableName = 'users';
   static model = User;
 
-  static create(name) {
-    const user = new User(name);
-    super.create(user);
+  static create(name, img) {
+    const user = new User(name, img);
+    return super.create(user);
   }
 }
 class CommentDBManager extends DBManager {
@@ -201,7 +201,7 @@ class TaskDBManager extends DBManager {
 
   static update(id, updateData) {
     const updated = this.get(id);
-    if (enviroment.currentUserId !== updated.author) {
+    if (enviroment.currentUser.id !== updated.author) {
       this.havePermissions = false;
     }
     return super.update(id, updateData);
@@ -209,7 +209,7 @@ class TaskDBManager extends DBManager {
 
   static delete(id) {
     const deleted = this.get(id);
-    if (enviroment.currentUserId !== deleted.author)
+    if (enviroment.currentUser.id !== deleted.author)
       this.havePermissions = false;
     deleted.comments.forEach((comment) => CommentDBManager.delete(comment.id));
     return super.delete(id);

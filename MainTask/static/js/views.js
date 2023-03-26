@@ -1,7 +1,7 @@
 class BaseView {
-  constructor(containerId) {
+  constructor(containerId, innerContainer) {
     this.container = document.getElementById(containerId);
-    this.innerContainer = "";
+    this.innerContainer = innerContainer;
     BaseView.validate(this);
   }
   static validate(view) {
@@ -9,382 +9,189 @@ class BaseView {
       throw new Error(constantsModule.ERRORS_DICT.VALIDATION_ERROR);
   }
   display() {
-    this.container.append(this.innerContainer);
+    let docInnerContainer = document.getElementById(
+      this.innerContainer.getAttribute("id")
+    );
+    if (docInnerContainer) {
+      docInnerContainer.innerHTML = this.innerContainer.innerHTML;
+      this.innerContainer.classList.forEach(cls => {
+        docInnerContainer.classList.add(cls)
+      });
+    } else {
+      this.container.append(this.innerContainer);
+    }
   }
 }
 
 class HeaderView extends BaseView {
   constructor(containerId) {
-    super(containerId);
-    this.innerContainer = document.createElement("header");
+    const header = document.createElement("header");
+    header.setAttribute("id", "header");
+    super(containerId, header);
   }
-
-  display() {
-    this.innerContainer.classList.add("header");
-
+  _addLogoContainer() {
     const logoContainer = document.createElement("div");
     logoContainer.classList.add("logo__container");
-    logoContainer.innerHTML = `
-        <img src="./static/img/Logo.svg" alt="logo" class="logo" />
-        <div class="app__name">Task Manager</div>
-    `;
+    logoContainer.innerHTML = htmlBlocksModule.createLogoContainerInnerHTML();
     this.innerContainer.append(logoContainer);
-
+  }
+  _addUserContainer() {
     const userContainer = document.createElement("div");
     userContainer.classList.add("user__container");
-    userContainer.innerHTML = enviroment.currentUser
-      ? `
-        <div class="username">
-            <a href="./user_page.html" class="link">${enviroment.currentUser.name} </a
-            ><i
-              class="fa-solid fa-right-from-bracket clickable__element dangerous__icon"
-            ></i>
-        </div>
-        <a href="./user_page.html" class="link">
-            <img
-              src="${enviroment.currentUser.image}"
-              alt="user__avatar"
-              class="user__avatar clickable__element"
-            />
-        </a>
-    `
-      : `
-        <a href="#" class="link">
-            <button class="standart__button invert__button">
-              SING IN <i class="fa fa-sign-in" aria-hidden="true"></i>
-            </button>
-        </a>
-        <a href="#" class="link">
-            <button class="standart__button invert__button">
-              SING UP <i class="fa fa-sign-in" aria-hidden="true"></i>
-            </button>
-        </a>
-    `;
+    userContainer.setAttribute("id", "user_container");
     this.innerContainer.append(userContainer);
+  }
+  updateUserContainer() {
+    const userContainer = this.innerContainer.querySelector("#user_container");
+    userContainer.innerHTML = enviroment.currentUser
+      ? htmlBlocksModule.createHeaderLoggedInnerHTML()
+      : htmlBlocksModule.createHeaderNonLoggedInnerHTML();
+  }
+  display() {
+    this.innerContainer.classList = ["header"];
+    this.innerContainer.innerHTML = "";
+
+    this._addLogoContainer();
+    this._addUserContainer();
+    this.updateUserContainer();
+
     super.display();
   }
 }
 
 class MainView extends BaseView {
   constructor(containerId) {
-    super(containerId);
-    this.innerContainer = document.createElement("main");
+    const main = document.createElement("main");
+    main.setAttribute("id", "main");
+    super(containerId, main);
   }
 
-  createUserSelectOptions() {
-     
+  updateUserSelectOptions() {
+    const filterSelect = this.innerContainer.querySelector(
+      ".filters .input__block__select"
+    );
+    const addNewTaskSelect = this.innerContainer.querySelector(
+      ".add__new__task .input__block__select"
+    );
+    filterSelect.innerHTML = htmlBlocksModule.createFilterUserSelectInnerHTML();
+    addNewTaskSelect.innerHTML = "";
+    for (const user of UserDBManager.getAll()) {
+      const innerHTML = htmlBlocksModule.createUserSelectOptionHTML(user);
+      addNewTaskSelect.innerHTML += innerHTML;
+      filterSelect.innerHTML += innerHTML;
+    }
   }
 
-  addFilters() {
+  updateMainWindow(skip=0, top=10, filterConfig={}) {
+    const toDoContainer = this.innerContainer.querySelector(
+      "#section_todo .tasks__container"
+    );
+    const inProgressContainer = this.innerContainer.querySelector(
+      "#section_in_progress .tasks__container"
+    );
+    const completedContainer = this.innerContainer.querySelector(
+      "#section_completed .tasks__container"
+    );
+    toDoContainer.innerHTML = htmlBlocksModule.createLoadMoreButtonHTML();
+    inProgressContainer.innerHTML = htmlBlocksModule.createLoadMoreButtonHTML();
+    completedContainer.innerHTML = htmlBlocksModule.createLoadMoreButtonHTML();
+    for (const statusVal of Object.values(constantsModule.STATUSES_DICT)) {
+      for (const task of TaskDBManager.getPage(
+        skip,
+        top,
+        Object.assign(filterConfig, {
+          status: statusVal,
+        })
+      )) {
+        const taskHTML = htmlBlocksModule.createTableTaskHTML(task);
+        switch (task.status) {
+          case constantsModule.STATUSES_DICT.TO_DO:
+            toDoContainer.innerHTML += taskHTML;
+            break;
+          case constantsModule.STATUSES_DICT.IN_PROGRESS:
+            inProgressContainer.innerHTML += taskHTML;
+            break;
+          case constantsModule.STATUSES_DICT.COMPLETED:
+            completedContainer.innerHTML += taskHTML;
+            break;
+        }
+      }
+    }
+  }
+
+  _addFilters() {
     const filters = document.createElement("section");
     filters.classList.add("filters");
 
-    filters.innerHTML = `
-        <div class="filters__part">
-        <div class="input__block" id="executor_filter">
-          <h3 class="input__block__name">Executor</h3>
-          <select
-            type=""
-            name="executor"
-            class="input__block__select input__block__input"
-          >
-            <option name="username" value="All" class="input__block__option">
-              All
-            </option>
-          </select>
-        </div>
-        <div class="input__block" id="data_filter">
-          <h3 class="input__block__name">Date</h3>
-          <div class="input__block__body">
-            <input
-              type="date"
-              name="date_from"
-              class="input__block__input"
-            />-<input type="date" name="date_to" class="input__block__input" />
-          </div>
-        </div>
-        <div class="input__block" id="inner_text_filter">
-          <h3 class="input__block__name">Inner Text</h3>
-          <div class="input__block__body">
-            <textarea
-              name="inner_text"
-              class="input__block__input input__block__textarea"
-            ></textarea>
-            <div class="help__message">max - 180</div>
-          </div>
-        </div>
-      </div>
-      <div class="filters__part">
-        <div class="input__block" id="priority_filter">
-          <h3 class="input__block__name">Priority</h3>
-          <div class="input__block__body">
-            <label class="input__block__checkbox"
-              ><input
-                type="checkbox"
-                name="priority"
-                value="low"
-                class="input__block__input"
-              />Low</label
-            >
-            <label class="input__block__checkbox"
-              ><input
-                type="checkbox"
-                name="priority"
-                value="medium"
-                class="input__block__input"
-              />Medium</label
-            >
-            <label class="input__block__checkbox"
-              ><input
-                type="checkbox"
-                name="priority"
-                value="high"
-                class="input__block__input"
-              />High</label
-            >
-          </div>
-        </div>
-        <div class="input__block" id="privacy_filter">
-          <h3 class="input__block__name">Privacy</h3>
-          <div class="input__block__body">
-            <label class="input__block__checkbox"
-              ><input
-                type="checkbox"
-                name="privacy"
-                value="private"
-                class="input__block__input"
-              />Private</label
-            >
-            <label class="input__block__checkbox"
-              ><input
-                type="checkbox"
-                name="privacy"
-                value="public"
-                class="input__block__input"
-              />Public</label
-            >
-          </div>
-        </div>
-        <div class="input__block" id="type_of_page_filter">
-          <label class="input__block__radio active__input"
-            ><input
-              type="radio"
-              name="type_of_page"
-              value="table"
-              checked
-              class="input__block__input"
-            />Table</label
-          >
-          <label class="input__block__radio"
-            ><input
-              type="radio"
-              name="type_of_page"
-              value="list"
-              class="input__block__input"
-            />List</label
-          >
-        </div>
-      </div>
-        `;
-        this.innerContainer.append(filters)
+    filters.innerHTML = htmlBlocksModule.createFiltersInnerHTML();
+    this.innerContainer.append(filters);
   }
-  addAppTable() {
+  _addAppTable() {
     const appTable = document.createElement("section");
     appTable.classList.add("app__table");
     const mainWindow = document.createElement("div");
     mainWindow.classList.add("main__window");
-    mainWindow.innerHTML = `
-        <article class="main__window__section" id="section_todo">
-            <div class="section__header">To Do</div>
-            <div class="tasks__container scrollable__element">
-              <button class="disabled__element standart__button neutral__button">
-                LOAD MORE <i class="fa-solid fa-angles-down"></i>
-              </button>
-            </div>
-          </article>
-          <article class="main__window__section" id="section_in_progress">
-            <div class="section__header">In Progress</div>
-            <div class="tasks__container scrollable__element">
-              <button class="disabled__element standart__button neutral__button">
-                LOAD MORE <i class="fa-solid fa-angles-down"></i>
-              </button>
-            </div>
-          </article>
-          <article class="main__window__section" id="section_completed">
-            <div class="section__header">Completed</div>
-            <div class="tasks__container scrollable__element">
-              <button class="disabled__element standart__button neutral__button">
-                LOAD MORE <i class="fa-solid fa-angles-down"></i>
-              </button>
-            </div>
-          </article>
-        `;
+    mainWindow.innerHTML = htmlBlocksModule.createMainWindowInnerHTML();
     appTable.append(mainWindow);
 
     const addNewTask = document.createElement("aside");
     addNewTask.classList.add("add__new__task");
-    addNewTask.innerHTML = `
-        <div class="section__header">Add New Task</div>
-        <form action="#" class="task__form">
-          <div class="task__form__part">
-            <div class="input__block">
-              <h3 class="input__block__name">Task Name*</h3>
-              <div class="input__block__body">
-                <input
-                  type="text"
-                  name="task_name"
-                  class="input__block__input"
-                />
-              </div>
-              <span class="help__message">max - 100</span>
-            </div>
-
-            <div class="input__block">
-              <h3 class="input__block__name">Executor</h3>
-              <select
-                type=""
-                name="task_executor"
-                class="input__block__select input__block__input"
-              >
-                <option
-                  name="username"
-                  value="User_01"
-                  class="input__block__option"
-                >
-                  User_01
-                </option>
-                <option
-                  name="username"
-                  value="User_02"
-                  class="input__block__option"
-                >
-                  User_02
-                </option>
-                <option
-                  name="username"
-                  value="User_03"
-                  class="input__block__option"
-                >
-                  User_03
-                </option>
-              </select>
-            </div>
-
-            <div class="input__block">
-              <h3 class="input__block__name">Description*</h3>
-              <div class="input__block__body">
-                <textarea
-                  name="task_decription"
-                  class="input__block__input input__block__textarea"
-                ></textarea>
-              </div>
-              <div class="help__message">max - 180</div>
-            </div>
-          </div>
-
-          <div class="task__form__part">
-            <div class="input__block">
-              <h3 class="input__block__name">Status</h3>
-              <div class="input__block__body">
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_status"
-                    value="in_progress"
-                    class="input__block__input"
-                  />In Progress</label
-                >
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="in_progress"
-                    value="completed"
-                    class="input__block__input"
-                  />Completed</label
-                >
-                <label class="active__input input__block__radio"
-                  ><input
-                    type="radio"
-                    name="in_progress"
-                    value="to_do"
-                    class="input__block__input"
-                  />To Do</label
-                >
-              </div>
-            </div>
-
-            <div class="input__block">
-              <h3 class="input__block__name">Priority*</h3>
-              <div class="input__block__body">
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_priority"
-                    value="low"
-                    class="input__block__input"
-                  />Low</label
-                >
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_priority"
-                    value="medium"
-                    class="input__block__input"
-                  />Medium</label
-                >
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_priority"
-                    value="high"
-                    class="input__block__input"
-                  />High</label
-                >
-              </div>
-            </div>
-
-            <div class="input__block">
-              <h3 class="input__block__name">Privacy</h3>
-              <div class="input__block__body">
-                <label class="input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_privacy"
-                    value="private"
-                    class="input__block__input"
-                  />Private</label
-                >
-                <label class="active__input input__block__radio"
-                  ><input
-                    type="radio"
-                    name="task_privacy"
-                    value="public"
-                    class="input__block__input"
-                  />Public</label
-                >
-              </div>
-            </div>
-          </div>
-
-          <hr class="line" />
-          <div class="form__buttons">
-            <button type="reset" class="standart__button delete__button">
-              CLEAR <i class="fa fa-undo" aria-hidden="true"></i>
-            </button>
-            <button type="submit" class="standart__button add__button">
-              ADD <i class="fa-solid fa-plus"></i>
-            </button>
-          </div>
-        </form>
-        `;
+    addNewTask.innerHTML = htmlBlocksModule.createAddTaskInnerHTML();
     appTable.append(addNewTask);
 
     this.innerContainer.append(appTable);
   }
   display() {
-    this.innerContainer.classList.add("main");
-    this.addFilters();
-    this.addAppTable();
+    this.innerContainer.classList = "main";
+    this.innerContainer.innerHTML = "";
+
+    this._addFilters();
+    this._addAppTable();
+    this.updateUserSelectOptions();
+    this.updateMainWindow();
+
+    super.display();
+  }
+}
+
+class TaskView extends BaseView {
+  constructor(containerId) {
+    const main = document.createElement("main");
+    main.setAttribute("id", "main");
+    super(containerId, main);
+  }
+  _addDetailedTask() {
+    const detailedTask = document.createElement("section");
+    detailedTask.classList.add("detailed__task");
+    detailedTask.innerHTML = htmlBlocksModule.createTaskDetailedHTML(
+      TaskDBManager.get(enviroment.currentTask.id)
+    );
+    this.innerContainer.append(detailedTask);
+  }
+
+  _addComments() {
+    const comments = document.createElement("section");
+    comments.classList.add("comments");
+    comments.innerHTML = htmlBlocksModule.createCommentsInnerHTML();
+    this.innerContainer.append(comments);
+  }
+
+  updateComments() {
+    const commentsList = this.innerContainer.querySelector(".comments__list");
+    commentsList.innerHTML = "";
+    for (const comment of TaskDBManager.get("1").comments) {
+      commentsList.innerHTML += htmlBlocksModule.createCommentHTML(comment);
+    }
+  }
+
+  display() {
+    this.innerContainer.classList = "main";
+    this.innerContainer.classList.add("main__task__page");
+    this.innerContainer.innerHTML = "";
+
+    this._addDetailedTask();
+    this._addComments();
+    this.updateComments();
 
     super.display();
   }

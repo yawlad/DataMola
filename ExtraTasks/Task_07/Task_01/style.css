@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+  color: #333;
+}
+
+html {
+  font-size: calc(12px + 24 * ((100vw - 370px) / (1920 - 370)));
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+span {
+  cursor: pointer;
+}
+
+.unactive span {
+  font-weight: 700;
+}
+
+.unactive ul{
+  height: 0;
+  overflow: hidden;
+  font-weight: 700;
+}

@@ -5,7 +5,7 @@ function createList(title, list) {
   }
   function createInnerList(innerList) {
     const ul = document.createElement('ul');
-    ul.style.fontSize = '90%';
+    ul.style.fontSize = '0.9em';
     innerList.forEach((item) => {
       const li = document.createElement('li');
       li.textContent = item.value;

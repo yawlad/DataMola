@@ -1,48 +1,53 @@
 /******__COMMENTS__******/
-  
+
 .comments {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .comments__body {
-    padding: var(--offset-m);
-    display: flex;
-    flex-direction: column;
-    gap: var(--offset-xxs);
-    flex-grow: 3;
-  }
-  
-  .comments__list {
-    max-height: 25rem;
-  }
-  
-  .comment {
-    position: relative;
-  }
-  
-  .commentator,
-  .comment__date {
-    font: var(--text-font-s);
-    color: var(--primary-color-light-2);
-  }
-  
-  .comment__text {
-    background-color: var(--primary-color);
-    padding: var(--offset-s) var(--offset-l);
-    border-radius: 0 var(--offset-s) 0 var(--offset-s);
-  }
-  
-  .comment__date {
-    display: block;
-    width: 100%;
-    text-align: right;
-  }
-  
-  .add__comment {
-    display: flex;
-    flex-direction: column;
-    gap: var(--offset-s);
-  }
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.comments__body {
+  padding: var(--offset-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--offset-xxs);
+  flex-grow: 3;
+}
+
+.comments__list {
+  max-height: 25rem;
+}
+
+.comment {
+  position: relative;
+  word-break: break-all;
+}
+
+.commentator,
+.comment__date {
+  font: var(--text-font-s);
+  color: var(--primary-color-light-2);
+}
+
+.comment__text {
+  background-color: var(--primary-color);
+  padding: var(--offset-s) var(--offset-l);
+  border-radius: 0 var(--offset-s) 0 var(--offset-s);
+}
+
+.comment__date {
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+
+.add__comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--offset-s);
+}
+
+.add__comment textarea {
+  width: 100%;
+}

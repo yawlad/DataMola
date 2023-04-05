@@ -1,9 +1,10 @@
 class DBManager {
   static db = simpleDataBaseModule.db;
+  static save = simpleDataBaseModule.save;
   static havePermissions = true;
   static tableName;
   static model;
-  
+
   static checkPermissions() {
     if (!this.havePermissions) {
       throw new Error(constantsModule.ERRORS_DICT.PERMISSION_ERROR);
@@ -16,11 +17,13 @@ class DBManager {
       if (!this.db[this.tableName]) {
         this.db[this.tableName] = [];
       }
-      Object.assign(record, { _id: String(this._getLastRecordId() + 1) });
+      Object.assign(record, { id: String(this._getLastRecordId() + 1) });
       if (!this.model.validate(record)) {
         throw new Error(constantsModule.ERRORS_DICT.VALIDATION_ERROR);
       }
       this.db[this.tableName].push(record);
+      this.save();
+      enviroment.save();
       return record;
     } catch (error) {
       console.error(error);
@@ -76,6 +79,8 @@ class DBManager {
         throw new Error(constantsModule.ERRORS_DICT.VALIDATION_ERROR);
       }
       Object.assign(record, updateData);
+      this.save();
+      enviroment.save();
       return true;
     } catch (error) {
       console.error(error);
@@ -98,6 +103,8 @@ class DBManager {
         return false;
       }
       this.db[this.tableName].splice(recordIndex, 1);
+      this.save();
+      enviroment.save();
       return true;
     } catch (error) {
       console.error(error);
@@ -116,16 +123,16 @@ class DBManager {
 }
 
 class UserDBManager extends DBManager {
-  static tableName = 'users';
+  static tableName = "users";
   static model = User;
 
-  static create(name, img) {
-    const user = new User(name, img);
+  static create(name, login, password, img) {
+    const user = new User(name, login, password, img);
     return super.create(user);
   }
 }
 class CommentDBManager extends DBManager {
-  static tableName = 'comments';
+  static tableName = "comments";
   static model = Comment;
 
   static create(text) {
@@ -134,12 +141,12 @@ class CommentDBManager extends DBManager {
   }
 
   static getByTaskId(taskIdToFind) {
-    return this.getAll().filter(({taskId}) => taskId === taskIdToFind);
+    return this.getAll().filter(({ taskId }) => taskId === taskIdToFind);
   }
 }
 
 class TaskDBManager extends DBManager {
-  static tableName = 'tasks';
+  static tableName = "tasks";
   static model = Task;
 
   // Strange method, but it was in hometask requirements
@@ -179,7 +186,7 @@ class TaskDBManager extends DBManager {
   }
 
   static addComment(id, text) {
-    enviroment.currentTaskId = this.get(id).id;
+    enviroment.currentTask.id = this.get(id).id;
     return CommentDBManager.create(text);
   }
 
@@ -223,8 +230,8 @@ class TaskDBManager extends DBManager {
       );
     }
     if (filterConfig.assignee) {
-      filteredTasks = filteredTasks.filter((task) =>
-        task.assignee.includes(filterConfig.assignee)
+      filteredTasks = filteredTasks.filter(
+        (task) => task.assignee === filterConfig.assignee
       );
     }
     if (filterConfig.dateFrom) {
@@ -242,14 +249,14 @@ class TaskDBManager extends DBManager {
         task.status.includes(filterConfig.status)
       );
     }
-    if (filterConfig.priority) {
+    if (filterConfig.priority && filterConfig.priority.length != 0) {
       filteredTasks = filteredTasks.filter((task) =>
-        task.priority.includes(filterConfig.priority)
+        filterConfig.priority.includes(task.priority)
       );
     }
-    if (filterConfig.isPrivate !== undefined) {
-      filteredTasks = filteredTasks.filter(
-        (task) => task.isPrivate === filterConfig.isPrivate
+    if (filterConfig.isPrivate && filterConfig.isPrivate.length != 0) {
+      filteredTasks = filteredTasks.filter((task) =>
+        filterConfig.isPrivate.includes(task.isPrivate)
       );
     }
     if (filterConfig.description) {
@@ -257,6 +264,8 @@ class TaskDBManager extends DBManager {
         task.description.includes(filterConfig.description)
       );
     }
+    if (skip === 0 && top === -1) return filteredTasks;
+
     filteredTasks = filteredTasks.slice(skip, skip + top);
     return filteredTasks;
   }

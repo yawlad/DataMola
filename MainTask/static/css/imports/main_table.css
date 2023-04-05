@@ -1,3 +1,13 @@
+/**************************___MAIN___**************************/
+
+.main {
+  border-radius: var(--offset-xxs);
+  overflow: hidden;
+  background-color: var(--primary-color-dark-1);
+  margin: auto;
+  height: fit-content;
+}
+
 /*********************___APP___*********************/
 
 .app__table {
@@ -40,7 +50,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--offset-m);
-  max-height: 60rem;
 }
 
 .tasks__container > button {
@@ -57,6 +66,7 @@
   padding: var(--offset-m);
   background-color: var(--primary-color);
   border-radius: var(--offset-xxs);
+  word-break: break-all;
 }
 
 .task__additional__info {
@@ -67,6 +77,9 @@
 .task__main {
   display: block;
   padding: var(--offset-l);
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .task__main__content__item {
@@ -82,6 +95,9 @@
   display: flex;
   justify-content: space-around;
   padding-top: var(--offset-s);
+  position: relative;
+  z-index: 1;
+  gap: var(--offset-s);;
 }
 
 .task__date,

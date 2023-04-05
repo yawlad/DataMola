@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/36ed5ed2fc.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="logo__container">
+          <img src="./static/img/Logo.svg" alt="logo" class="logo" />
+          <div class="app__name">Task Manager</div>
+        </div>
+        <div class="user__container">
+          <div class="username">
+            <a href="./user_page.html" class="link">User_01 </a
+            ><i
+              class="fa-solid fa-right-from-bracket clickable__element dangerous__icon"
+            ></i>
+          </div>
+          <a href="./user_page.html" class="link">
+            <img
+              src="./static/img/Avata.png"
+              alt="user__avatar"
+              class="user__avatar clickable__element"
+            />
+          </a>
+        </div>
+      </header>
+
+      <div class="modal">
+        <h3 class="modal__header">Message</h3>
+        <div class="modal__buttons">
+            <button class="standart__button neutral__button" id="cancel__button">Cancel</button>
+            <button class="standart__button neutral__button" id="confirm__button">Confirm</button>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="contact__email">y.yawlad@gmail.com</div>
+        <div class="footer__info">Task Manager v 1.0.0 © y.yawlad</div>
+      </footer>
+    </div>
+  </body>
+</html>

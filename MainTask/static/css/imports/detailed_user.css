@@ -8,7 +8,7 @@
   }
   
   .main__user__page .section__header {
-    border-bottom: calc(2 * var(--border-width)) dotted var(--dark-grey-color);
+    border-bottom: var(--border-main-style);
     font: var(--title-font-xl);
   }
   

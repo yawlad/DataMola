@@ -11,6 +11,7 @@ const htmlBlocksModule = (() => {
   }
 
   function getFormatedDate(date) {
+    date = new Date(date);
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear();
@@ -33,33 +34,33 @@ const htmlBlocksModule = (() => {
   function createHeaderLoggedInnerHTML() {
     return `
     <div class="username">
-        <a href="./user_page.html" class="link">${enviroment.currentUser.name} </a
+        <span class="link">${enviroment.currentUser.name} </span
         ><i
           class="fa-solid fa-right-from-bracket clickable__element dangerous__icon"
         ></i>
     </div>
-    <a href="./user_page.html" class="link">
+    <span class="link">
         <img
           src="${enviroment.currentUser.image}"
           alt="user__avatar"
           class="user__avatar clickable__element"
         />
-    </a>
+    </span>
     `;
   }
 
   function createHeaderNonLoggedInnerHTML() {
     return `
-    <a href="#" class="link">
-        <button class="standart__button invert__button">
+    
+        <button class="standart__button invert__button" id="sign_in">
           SING IN <i class="fa fa-sign-in" aria-hidden="true"></i>
         </button>
-    </a>
-    <a href="#" class="link">
-        <button class="standart__button invert__button">
+    
+    
+        <button class="standart__button invert__button" id="sign_up">
           SING UP <i class="fa fa-sign-in" aria-hidden="true"></i>
         </button>
-    </a>
+    
 `;
   }
 
@@ -95,7 +96,7 @@ const htmlBlocksModule = (() => {
           name="inner_text"
           class="input__block__input input__block__textarea"
         ></textarea>
-        <div class="help__message">max - 180</div>
+        <div class="help__message"></div>
       </div>
     </div>
   </div>
@@ -107,7 +108,7 @@ const htmlBlocksModule = (() => {
           ><input
             type="checkbox"
             name="priority"
-            value="low"
+            value="Low"
             class="input__block__input"
           />Low</label
         >
@@ -115,7 +116,7 @@ const htmlBlocksModule = (() => {
           ><input
             type="checkbox"
             name="priority"
-            value="medium"
+            value="Medium"
             class="input__block__input"
           />Medium</label
         >
@@ -123,7 +124,7 @@ const htmlBlocksModule = (() => {
           ><input
             type="checkbox"
             name="priority"
-            value="high"
+            value="High"
             class="input__block__input"
           />High</label
         >
@@ -135,28 +136,27 @@ const htmlBlocksModule = (() => {
         <label class="input__block__checkbox"
           ><input
             type="checkbox"
-            name="privacy"
-            value="private"
+            name="isPrivate"
+            value="1"
             class="input__block__input"
           />Private</label
         >
         <label class="input__block__checkbox"
           ><input
             type="checkbox"
-            name="privacy"
-            value="public"
+            name="isPrivate"
+            value=""
             class="input__block__input"
           />Public</label
         >
       </div>
     </div>
     <div class="input__block" id="type_of_page_filter">
-      <label class="input__block__radio active__input"
+      <label class="input__block__radio active__filter"
         ><input
           type="radio"
           name="type_of_page"
           value="table"
-          checked
           class="input__block__input"
         />Table</label
       >
@@ -204,6 +204,9 @@ const htmlBlocksModule = (() => {
 
   function createAddTaskInnerHTML() {
     return `
+    <div class="add__new__task__unauthorised__window">
+      AUTHORIZE TO USE TASK MANAGER
+    </div>
     <div class="section__header">Add New Task</div>
     <form action="#" class="task__form">
       <div class="task__form__part">
@@ -249,25 +252,25 @@ const htmlBlocksModule = (() => {
               ><input
                 type="radio"
                 name="task_status"
-                value="in_progress"
+                value="${constantsModule.STATUSES_DICT.IN_PROGRESS}"
                 class="input__block__input"
-              />In Progress</label
+              />${constantsModule.STATUSES_DICT.IN_PROGRESS}</label
             >
             <label class="input__block__radio"
               ><input
                 type="radio"
-                name="in_progress"
-                value="completed"
+                name="task_status"
+                value="${constantsModule.STATUSES_DICT.COMPLETED}"
                 class="input__block__input"
-              />Completed</label
+              />${constantsModule.STATUSES_DICT.COMPLETED}</label
             >
             <label class="active__input input__block__radio"
               ><input
                 type="radio"
-                name="in_progress"
-                value="to_do"
+                name="task_status"
+                value="${constantsModule.STATUSES_DICT.TO_DO}"
                 class="input__block__input"
-              />To Do</label
+              />${constantsModule.STATUSES_DICT.TO_DO}</label
             >
           </div>
         </div>
@@ -279,25 +282,25 @@ const htmlBlocksModule = (() => {
               ><input
                 type="radio"
                 name="task_priority"
-                value="low"
+                value="${constantsModule.PRIORITIES_DICT.LOW}"
                 class="input__block__input"
-              />Low</label
+              />${constantsModule.PRIORITIES_DICT.LOW}</label
             >
             <label class="input__block__radio"
               ><input
                 type="radio"
                 name="task_priority"
-                value="medium"
+                value="${constantsModule.PRIORITIES_DICT.MEDIUM}"
                 class="input__block__input"
-              />Medium</label
+              />${constantsModule.PRIORITIES_DICT.MEDIUM}</label
             >
             <label class="input__block__radio"
               ><input
                 type="radio"
                 name="task_priority"
-                value="high"
+                value="${constantsModule.PRIORITIES_DICT.HIGH}"
                 class="input__block__input"
-              />High</label
+              />${constantsModule.PRIORITIES_DICT.HIGH}</label
             >
           </div>
         </div>
@@ -309,7 +312,7 @@ const htmlBlocksModule = (() => {
               ><input
                 type="radio"
                 name="task_privacy"
-                value="private"
+                value="1"
                 class="input__block__input"
               />Private</label
             >
@@ -317,7 +320,7 @@ const htmlBlocksModule = (() => {
               ><input
                 type="radio"
                 name="task_privacy"
-                value="public"
+                value=""
                 class="input__block__input"
               />Public</label
             >
@@ -352,7 +355,7 @@ const htmlBlocksModule = (() => {
     return `
     <option
         name="username"
-        value="${user.id}"
+        value="${user.name}"
         class="input__block__option"
     >${user.name}</option>`;
   }
@@ -366,7 +369,7 @@ const htmlBlocksModule = (() => {
       </div>
       <div class="task__date">${getFormatedDate(task.createdAt)}</div>
     </div>
-    <a class="task__main" href="./task_page.html">
+    <div class="task__main">
       <div class="task__main__content__item">
         Task Name: <span id="task__name">${task.name}</span>
       </div>
@@ -382,20 +385,18 @@ const htmlBlocksModule = (() => {
           >${task.description}</span
         >
       </div>
-    </a>
+    </div>
     <div class="task__additional__info">
-      <div class="task__privacy">${getPrivacy(task.privacy)}</div>
+      <div class="task__privacy">${getPrivacy(task.isPrivate)}</div>
       <div class="task__comments">
       ${task.comments.length} <i class="fa fa-comment" aria-hidden="true"></i>
       </div>
     </div>
     <hr class="line" />
     <div class="task__bottom">
-      <a href="./task_page_update.html" class="link">
         <button class="standart__button edit__button">
           EDIT <i class="fa-solid fa-pen"></i>
         </button>
-      </a>
       <button class="standart__button delete__button">
         DELETE <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
@@ -405,7 +406,7 @@ const htmlBlocksModule = (() => {
 
   function createLoadMoreButtonHTML() {
     return `
-    <button class="disabled__element standart__button neutral__button">
+    <button class="standart__button neutral__button load__more__button">
         LOAD MORE <i class="fa-solid fa-angles-down"></i>
     </button>
     `;
@@ -418,7 +419,7 @@ const htmlBlocksModule = (() => {
       <div class="task__main__content__item">
         Priority:
         <span id="task__priority" class="${getPriorityClass(task.priority)}"
-          >Low priority</span
+          >${task.priority} priority</span
         >
       </div>
       <div class="task__main__content__item">
@@ -441,7 +442,9 @@ const htmlBlocksModule = (() => {
         >
       </div>
       <div class="task__additional__info">
-        <div class="task__date" id="task__date">${getFormatedDate(task.createdAt)}</div>
+        <div class="task__date" id="task__date">${getFormatedDate(
+          task.createdAt
+        )}</div>
 
         <div class="task__comments" id="task__comments">
         ${task.comments.length} <i class="fa fa-comment" aria-hidden="true"></i>
@@ -450,18 +453,16 @@ const htmlBlocksModule = (() => {
 
       <hr class="line" />
       <div class="task__bottom">
-        <a
-          href="./task_page_update.html"
+        <button
           class="standart__button edit__button"
         >
           EDIT <i class="fa-solid fa-pen"></i>
-        </a>
-        <a
-          href="./main_table.html"
-          class="standart__button invert__button"
+        </button>
+        <button
+          class="standart__button invert__button main__page__button"
         >
           MAIN PAGE <i class="fa-solid fa-house"></i>
-        </a>
+        </button>
         <button class="standart__button delete__button">
           DELETE <i class="fa fa-trash" aria-hidden="true"></i>
         </button>
@@ -469,7 +470,7 @@ const htmlBlocksModule = (() => {
     </div>
     `;
   }
-  function createCommentsInnerHTML(){
+  function createCommentsInnerHTML() {
     return `
     <h2 class="section__header">Comments</h2>
     <div class="comments__body">
@@ -494,7 +495,7 @@ const htmlBlocksModule = (() => {
         </div>
       </form>
     </div>
-    `
+    `;
   }
 
   function createCommentHTML(comment) {
@@ -507,6 +508,372 @@ const htmlBlocksModule = (() => {
       <span class="comment__date">${getFormatedDate(comment.createdAt)}</span>
     </div>        
     `;
+  }
+
+  function createFooterInnerHTML() {
+    return `
+    <div class="contact__email">y.yawlad@gmail.com</div>
+          <div class="footer__info">Task Manager v 1.0.0 © y.yawlad</div>
+          `;
+  }
+
+  function createUpdateTaskHTML(task) {
+    return `
+    <form class="detailed__task__form detailed__task">
+          <h2 class="section__header">${task.name}</h2>
+          <div class="task">
+            <div class="input__block">
+              <h3 class="input__block__name">Priority:</h3>
+              <select
+                type=""
+                name="task_priority"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="task_priority"
+                  value="${constantsModule.PRIORITIES_DICT.LOW}"
+                  class="input__block__option low__prioprity"
+                  ${
+                    task.priority === constantsModule.PRIORITIES_DICT.LOW
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.PRIORITIES_DICT.LOW}
+                </option>
+                <option
+                  name="task_priority"
+                  value="${constantsModule.PRIORITIES_DICT.MEDIUM}"
+                  class="input__block__option medium__prioprity"
+                  ${
+                    task.priority === constantsModule.PRIORITIES_DICT.MEDIUM
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.PRIORITIES_DICT.MEDIUM}
+                </option>
+                <option
+                  name="task_priority"
+                  value="${constantsModule.PRIORITIES_DICT.HIGH}"
+                  class="input__block__option high__prioprity"
+                  ${
+                    task.priority === constantsModule.PRIORITIES_DICT.HIGH
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.PRIORITIES_DICT.HIGH}
+                </option>
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Task Name:</h3>
+              <div class="input__block__body">
+                <input type="text" name="task_name" class="input__block__input" value="${
+                  task.name
+                }"/>
+                <span class="help__message">max - 100</span>
+              </div>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Executor:</h3>
+              <select
+                type=""
+                name="task_executor"
+                class="input__block__select input__block__input"
+              >
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Privacy:</h3>
+              <select
+                type=""
+                name="task_privacy"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="task_privacy"
+                  value=""
+                  class="input__block__option"
+                  ${task.isPrivate == false ? "selected" : ""}
+                >
+                  Public
+                </option>
+                <option
+                  name="task_privacy"
+                  value="1"
+                  class="input__block__option"
+                  ${task.isPrivate == true ? "selected" : ""}
+                >
+                  Private
+                </option>
+              </select>
+            </div>
+
+            <div class="input__block">
+              <h3 class="input__block__name">Status:</h3>
+              <select
+                type=""
+                name="task_status"
+                class="input__block__select input__block__input"
+              >
+                <option
+                  name="task_status"
+                  value="${constantsModule.STATUSES_DICT.TO_DO}"
+                  class="input__block__option"
+                  ${
+                    task.status === constantsModule.STATUSES_DICT.TO_DO
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.STATUSES_DICT.TO_DO}
+                </option>
+                <option
+                  name="task_status"
+                  value="${constantsModule.STATUSES_DICT.IN_PROGRESS}"
+                  class="input__block__option"
+                  ${
+                    task.status === constantsModule.STATUSES_DICT.IN_PROGRESS
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.STATUSES_DICT.IN_PROGRESS}
+                </option>
+                <option
+                  name="task_status"
+                  value="${constantsModule.STATUSES_DICT.COMPLETED}"
+                  class="input__block__option"
+                  ${
+                    task.status === constantsModule.STATUSES_DICT.COMPLETED
+                      ? "selected"
+                      : ""
+                  }
+                >
+                ${constantsModule.STATUSES_DICT.COMPLETED}
+                </option>
+              </select>
+            </div>
+            <div class="input__block">
+              <h3 class="input__block__name">Description:</h3>
+              <div class="input__block__body">
+                <textarea
+                  name="task_description"
+                  class="input__block__input input__block__textarea"
+                >${task.description}</textarea
+                ><span class="help__message">max - 180</span>
+              </div>
+            </div>
+            <div class="task__additional__info">
+              <div class="task__date">${getFormatedDate(task.createdAt)}</div>
+
+              <div class="task__comments">
+              ${
+                task.comments.length
+              } <i class="fa fa-comment" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <hr class="line" />
+            <div class="task__bottom">
+              <button class="standart__button back__button">
+                BACK <i class="fa fa-backward" aria-hidden="true"></i
+              ></button>
+
+              <button type="reset" class="standart__button delete__button">
+                UNDO CHANGES <i class="fa fa-undo" aria-hidden="true"></i>
+              </button>
+              <button type="submit" class="standart__button add__button">
+                CONFIRM <i class="fa-solid fa-check-double"></i>
+              </button>
+            </div>
+          </div>
+        </form>`;
+  }
+
+  function createUserDetailedHTML(user) {
+    return `
+    <h2 class="section__header">ACCOUNT SETTINGS</h2>
+          <div class="user__image__container">
+            <div class="user__main__content__item">
+              <img src="${
+                user.image
+              }" alt="" class="main__user__page__avatar" />
+            </div>
+            <div class="user">
+              <div class="user__main__content__item">
+                USERNAME:
+                <span id="username">${user.name}</span>
+              </div>
+              <div class="user__main__content__item">
+                LOGIN: <span id="login">${user.login}</span>
+              </div>
+              <div class="user__main__content__item">
+                PASSWORD: <span id="password" data-original-text="${
+                  user.password
+                }">${"*".repeat(user.password.length)}</span>
+              </div>
+              <button class="standart__button neutral__button show__password">
+                SHOW PASSWORD <i class="fa fa-eye" aria-hidden="true"></i>
+              </button>
+              <hr class="line" />
+              <div class="user__bottom">
+                <button class="standart__button edit__button">
+                    EDIT <i class="fa-solid fa-pen"></i></button
+                >
+                <button class="standart__button invert__button main__page__button">
+                    Main Page <i class="fa-solid fa-house"></i></button
+                >
+                <button
+                  class="standart__button delete__button"
+                  control-id="ControlID-15"
+                >
+                  SIGN OUT <i class="fa fa-sign-out" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+    `;
+  }
+
+  function createUpdateUserDetailedHTML(user) {
+    return `
+    <h2 class="section__header">ACCOUNT SETTINGS</h2>
+          <form action="#" class="user__form">
+            <div class="user__main__content__item">
+              <img src="${user.image}" alt="" class="main__user__page__avatar" />
+              <label
+                class="file__input input__block standart__button neutral__button"
+              >
+                <input
+                  type="file"
+                  name="user_avatar"
+                  class="input__block__input"
+                  value="${user.image}"
+                />
+                IMAGE <i class="fa fa-image" aria-hidden="true"></i>
+              </label>
+            </div>
+            <div class="user">
+              <div class="input__block">
+                <h3 class="input__block__name">USERNAME:</h3>
+                <div class="input__block__body">
+                  <input
+                    type="text"
+                    name="username"
+                    value="${user.name}"
+                    class="input__block__input"
+                  />
+                  <span class="help__message">max - 100</span>
+                </div>
+              </div>
+              <div class="input__block">
+                <h3 class="input__block__name">PASSWORD:</h3>
+                <div class="input__block__body">
+                  <input
+                    type="password"
+                    name="password"
+                    value="${user.password}"
+                    class="input__block__input"
+                  />
+                  <span class="help__message"></span>
+                </div>
+              </div>
+              <div class="input__block">
+                <h3 class="input__block__name">PASSWORD REPEAT:</h3>
+                <div class="input__block__body">
+                  <input
+                    type="password"
+                    name="password_repeat"
+                    value="${user.password}"
+                    class="input__block__input"
+                  />
+                  <span class="help__message"></span>
+                </div>
+              </div>
+              <button class="standart__button neutral__button show__password">
+                SHOW PASSWORD <i class="fa fa-eye" aria-hidden="true"></i>
+              </button>
+              <hr class="line" />
+              <div class="user__bottom">
+
+                <button 
+                  class="standart__button back__button"
+                >
+                  BACK
+                  <i class="fa fa-backward" aria-hidden="true"></i
+                ></button>
+
+                <button type="reset" class="standart__button delete__button">
+                  UNDO CHANGES <i class="fa fa-undo" aria-hidden="true"></i>
+                </button>
+                <button type="submit" class="standart__button add__button">
+                  CONFIRM <i class="fa-solid fa-check-double"></i>
+                </button>
+              </div>
+            </div>
+          </form>`;
+  }
+
+  function createSignInFormHTML() {
+    return `
+    <form action="#" class="sign__form">
+    <h2 class="sign__form__header">SIGN IN</h2>
+    <div class="input__block">
+        <h3 class="input__block__name">Login</h3>
+        <div class="input__block__body">
+          <input type="text" class="input__block__input" name="login"/>
+        </div>
+        <span class="help__message"></span>
+    </div>
+    <div class="input__block">
+        <h3 class="input__block__name">Passwod</h3>
+        <div class="input__block__body">
+          <input type="password" class="input__block__input" name="password"/>
+        </div>
+        <span class="help__message"></span>
+    </div>
+    <div class="form__buttons">
+        <button class="standart__button neutral__button sign__up__button">SIGN UP <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+        <button type="submit" class="standart__button neutral__button confirm__button">LOG IN <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+        <button class="standart__button neutral__button main__page__button" >MAIN PAGE <i class="fa-solid fa-house"></i></button>
+    </div>
+</form>`;
+  }
+
+  function createSignUpFormHTML() {
+    return `
+    <form action="#" class="sign__form">
+                    <h2 class="sign__form__header">SIGN UP</h2>
+                    <div class="input__block">
+                        <h3 class="input__block__name">Login</h3>
+                        <div class="input__block__body">
+                          <input type="text" class="input__block__input" name="login">
+                        </div>
+                        <span class="help__message"></span>
+                    </div>
+                    <div class="input__block">
+                        <h3 class="input__block__name">Password</h3>
+                        <div class="input__block__body">
+                          <input type="password" class="input__block__input" name="password">
+                        </div>
+                        <span class="help__message"></span>
+                    </div>
+                    <div class="input__block">
+                        <h3 class="input__block__name">Password repeat</h3>
+                        <div class="input__block__body">
+                          <input type="password" class="input__block__input" name="password_repeat">
+                        </div>
+                        <span class="help__message"></span>
+                    </div>
+                    <div class="form__buttons">
+                        <button class="standart__button neutral__button sign__in__button" control-id="ControlID-4">SIGN IN <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        <button type="submit" class="standart__button neutral__button confirm__button" control-id="ControlID-5">CONFIRM <i class="fa-solid fa-check-double"></i></button>
+                        <button class="standart__button neutral__button main__page__button">MAIN PAGE <i class="fa-solid fa-house"></i></button>
+                    </div>
+                </form>`;
   }
 
   return {
@@ -523,5 +890,11 @@ const htmlBlocksModule = (() => {
     createTaskDetailedHTML,
     createCommentsInnerHTML,
     createCommentHTML,
+    createFooterInnerHTML,
+    createUpdateTaskHTML,
+    createUserDetailedHTML,
+    createUpdateUserDetailedHTML,
+    createSignInFormHTML,
+    createSignUpFormHTML,
   };
 })();

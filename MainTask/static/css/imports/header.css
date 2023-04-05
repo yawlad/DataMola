@@ -1,0 +1,35 @@
+/**************************___HEADER___**************************/
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--offset-l);
+  }
+  .logo__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-xxl);
+  }
+  .logo {
+    width: var(--logo-size);
+  }
+  .app__name {
+    font: var(--logo-font-m);
+  }
+  .user__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--offset-s);
+    font: var(--title-font-l);
+  }
+  .username {
+    display: flex;
+    gap: var(--offset-m);
+    justify-content: center;
+    align-items: center;
+  }
+  .user__avatar {
+    width: var(--avatar-size);
+  }

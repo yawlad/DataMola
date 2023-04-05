@@ -10,16 +10,18 @@
     right: 0;
     font: var(--title-font-l);
     text-align: center;
-    z-index: 1;
+    z-index: -1;
   }
   
   .unauthorized .add__new__task .task__form {
     opacity: 0.5;
     pointer-events: none;
+    filter: blur(var(--offset-xxs));
   }
   
   .unauthorized .add__new__task__unauthorised__window {
     opacity: 1;
+    z-index: 1;
   }
   
   .unauthorized .task .standart__button {
@@ -28,5 +30,9 @@
   }
   
   .unauthorized .task a {
+    pointer-events: none;
+  }
+
+  .unauthorized .task__main {
     pointer-events: none;
   }

@@ -1,0 +1,19 @@
+.modal {
+    background-color: var(--primary-color-dark-1);
+    width: fit-content;
+    padding: var(--offset-m);
+    border-radius: var(--offset-xxs);
+    position: fixed;
+    top: 40%;
+    left: 44%;
+
+}
+
+.modal__header {
+    text-align: center;
+}
+
+.modal__buttons {
+    display: flex;
+    gap: var(--offset-s);
+}

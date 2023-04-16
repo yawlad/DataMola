@@ -490,7 +490,7 @@ class MainAppView extends BaseView {
         .filter(
           (task) =>
             task.status === status &&
-            !(task.isPrivate == true && task.assignee.id !== user.id)
+            (task.isPrivate == false || task.assignee.id == user.id || task.creator.id == user.id)
         )
         .splice(0, taskSizePool + 1);
       container.innerHTML = "";

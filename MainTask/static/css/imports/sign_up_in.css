@@ -25,3 +25,19 @@
   text-align: center;
   border-bottom: var(--border-width) dotted var(--dark-grey-color);
 }
+
+.sign__form img {
+  width: 15rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: var(--offset-s);
+}
+
+.sign__form .file__input {
+  position: absolute;
+  background-color: var(--primary-color);
+  opacity: 0.3;
+  align-items: center;
+  flex-direction: row;
+  gap: var(--offset-s);
+}

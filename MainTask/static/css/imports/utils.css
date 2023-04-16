@@ -54,6 +54,10 @@
   --transition-time: 0.5s;
 }
 
+img {
+  object-fit: cover;
+}
+
 html {
   font-size: calc(12px + 2 * ((100vw - 370px) / (1440 - 370)));
 }

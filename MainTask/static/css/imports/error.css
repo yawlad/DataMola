@@ -1,0 +1,17 @@
+/* ERROR_PAGE */
+
+.error__main {
+    width: 50rem;
+}
+
+.error__container {
+    padding: var(--offset-xxl);
+    border-radius: var(--offset-xs);
+}
+
+.error__text {
+    background-color: var(--white-color);
+    color: var(--black-color);
+    padding: var(--offset-l);
+    border-radius: var(--offset-xs);
+}

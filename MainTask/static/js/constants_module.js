@@ -38,7 +38,7 @@ const constantsModule = (function () {
   const STATUSES_DICT = {
     TO_DO: 'To Do',
     IN_PROGRESS: 'In progress',
-    COMPLETED: 'Completed',
+    COMPLETED: 'Complete',
   };
 
   const PRIORITIES_DICT = {

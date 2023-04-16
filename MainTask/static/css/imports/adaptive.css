@@ -178,9 +178,6 @@
 
   .user__form .file__input {
     flex-direction: row;
-    top: 40%;
-    left: 50%;
-    margin-left: calc(-2 * var(--offset-xxl));
   }
 
   /***********************************/

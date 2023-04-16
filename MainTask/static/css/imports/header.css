@@ -10,6 +10,7 @@
     justify-content: center;
     align-items: center;
     gap: var(--offset-xxl);
+    cursor: pointer;
   }
   .logo {
     width: var(--logo-size);
@@ -30,6 +31,11 @@
     justify-content: center;
     align-items: center;
   }
+  .username span{
+    cursor: pointer;
+  }
   .user__avatar {
     width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: 50%;
   }

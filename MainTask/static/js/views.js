@@ -1,352 +1,476 @@
-class BaseView {
-  constructor(containerId, innerContainer) {
-    this.container = document.getElementById(containerId);
-    this.innerContainer = innerContainer;
-    BaseView.validate(this);
+class TaskFeedApiService {
+  constructor(apiUrl) {
+    this.apiUrl = apiUrl;
+    this.token = localStorage.getItem("token");
   }
-  static validate(view) {
-    if (typeof view.container !== "object")
-      throw new Error(constantsModule.ERRORS_DICT.VALIDATION_ERROR);
-  }
-  display() {
-    if (!enviroment.currentUser) this.container.classList.add("unauthorized");
-    else this.container.classList.remove("unauthorized");
-    const docContainer = this.container.querySelector(
-      `${this.innerContainer.id}`
-    );
-    if (docContainer) docContainer.remove();
 
-    this.container.append(this.innerContainer);
+  async _fetch(url, options) {
+    const response = await fetch(url, options);
+    console.log(response);
+    if (!response.ok) {
+      const error = {
+        status: response.status,
+        statusText: response.statusText,
+        message: response.message,
+      };
+      MainErrorView.display("wrapper", error);
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async register(data) {
+    const url = `${this.apiUrl}user/register/`;
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    return this._fetch(url, options);
+  }
+
+  async login(data) {
+    const url = `${this.apiUrl}auth/login/`;
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    return this._fetch(url, options);
+  }
+
+  async getMyProfile() {
+    const url = `${this.apiUrl}user/myProfile/`;
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async getComments(taskId) {
+    const url = `${this.apiUrl}tasks/${taskId}/comments`;
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async postComment(taskId, data) {
+    const url = `${this.apiUrl}tasks/${taskId}/comments`;
+    const options = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async getUsers() {
+    const url = `${this.apiUrl}user/allUsers/`;
+    const options = {
+      method: "GET",
+    };
+    return this._fetch(url, options);
+  }
+
+  async getTasks(skip, top, status) {
+    const url = new URL(`${this.apiUrl}tasks/`);
+    url.search = new URLSearchParams({ skip, top, status }).toString();
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async postTask(data) {
+    const url = `${this.apiUrl}tasks/`;
+    const options = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async patchTask(taskId, data) {
+    const url = `${this.apiUrl}tasks/${taskId}/`;
+    const options = {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async deleteTask(taskId) {
+    const url = `${this.apiUrl}tasks/${taskId}/`;
+    const options = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async patchUser(data) {
+    const url = `${this.apiUrl}user/${
+      JSON.parse(localStorage.getItem("user")).id
+    }/`;
+    console.log(data);
+    const options = {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+
+  async getTask(id) {
+    const url = `${this.apiUrl}tasks/${id}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    return this._fetch(url, options);
+  }
+}
+
+class BaseView {
+  static root = document.createElement("div");
+  static dynamicElements = {};
+
+  static makeStaticContent() {}
+  static collectDynamic() {}
+
+  static display(containerId, detailed) {
+    this.makeStaticContent(detailed);
+    this.outer_container = document.getElementById(containerId);
+    const documentContainer = document.getElementById(this.root.id);
+    if (documentContainer) {
+      documentContainer.replaceWith(this.root);
+    } else {
+      this.outer_container.append(this.root);
+    }
+    this.collectDynamic();
   }
 }
 
 class HeaderView extends BaseView {
-  constructor(containerId) {
-    const header = document.createElement("header");
-    header.setAttribute("id", "header");
-    super(containerId, header);
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createHeaderStatic();
   }
-  _addLogoContainer() {
-    const logoContainer = document.createElement("div");
-    logoContainer.classList.add("logo__container");
-    logoContainer.innerHTML = htmlBlocksModule.createLogoContainerInnerHTML();
-    this.innerContainer.append(logoContainer);
+
+  static collectDynamic() {
+    this.dynamicElements.userContainer =
+      this.root.querySelector("#user_container");
+    this.dynamicElements.logoContainer =
+      this.root.querySelector(".logo__container");
   }
-  _addUserContainer() {
-    const userContainer = document.createElement("div");
-    userContainer.classList.add("user__container");
-    userContainer.setAttribute("id", "user_container");
-    this.innerContainer.append(userContainer);
+
+  static _updateUserContainer() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      this.dynamicElements.userContainer.replaceChildren(
+        ...htmlBlocksModule.createUserContainerAuthorized(user).children
+      );
+      this.outer_container.classList.remove("unauthorized");
+    } else {
+      this.dynamicElements.userContainer.replaceChildren(
+        ...htmlBlocksModule.createUserContainerUnauthorized().children
+      );
+      this.outer_container.classList.add("unauthorized");
+    }
   }
-  updateUserContainer() {
-    const userContainer = this.innerContainer.querySelector("#user_container");
-    userContainer.innerHTML = enviroment.currentUser
-      ? htmlBlocksModule.createHeaderLoggedInnerHTML()
-      : htmlBlocksModule.createHeaderNonLoggedInnerHTML();
-  }
-  _addHandlers() {
-    const userContainer = this.innerContainer.querySelector("#user_container");
-    userContainer.addEventListener("click", (event) => {
-      const exit = event.target.closest(".dangerous__icon");
-      if (exit) {
-        confirmStep("Are you sure want to exit?", () => {
-          enviroment.currentUser = undefined;
-          this.updateUserContainer();
-          enviroment.save();
-          MAIN.display();
-        });
+
+  static _addHandlers() {
+    this.dynamicElements.userContainer.addEventListener("click", (event) => {
+      const signInButton = event.target.closest("#sign_in");
+      const signUpButton = event.target.closest("#sign_up");
+
+      const userLinkImg = event.target.closest("img");
+      const userLinkSpan = event.target.closest(".link");
+
+      const logutButton = event.target.closest("i");
+
+      const logoContainer = event.target.closest(".logo__container");
+
+      if (signInButton) MainSignInView.display();
+      if (signUpButton) MainSignUpView.display();
+      if (userLinkImg || userLinkSpan) {
+        MainUserDetailedView.display("wrapper");
       }
-      const name = event.target.closest("span");
-      const image = event.target.closest("img");
-      if (name || image) USER.display();
-      const button = event.target.closest("button");
-      if (button) {
-        switch (button.id) {
-          case "sign_in":
-            SIGN_IN.display();
-            break;
-          case "sign_up":
-            SIGN_UP.display();
-            break;
-        }
+      if (logutButton) {
+        localStorage.clear();
+        MainAppView.display("wrapper");
+        HeaderView.display("wrapper");
       }
     });
+    this.dynamicElements.logoContainer.addEventListener("click", (event) => {
+      MainAppView.display("wrapper");
+    });
   }
-  display() {
-    this.innerContainer.classList = ["header"];
-    this.innerContainer.innerHTML = "";
-    super.display();
 
-    this._addLogoContainer();
-    this._addUserContainer();
-    this.updateUserContainer();
+  static display(containerId) {
+    super.display(containerId);
+    this._updateUserContainer();
     this._addHandlers();
   }
 }
 
-class FooterView extends BaseView {
-  constructor(containerId) {
-    const header = document.createElement("footer");
-    header.setAttribute("id", "footer");
-    super(containerId, header);
+class MainAppView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createMainAppStatic();
   }
 
-  _addFooterContent() {
-    this.innerContainer.innerHTML = htmlBlocksModule.createFooterInnerHTML();
+  static collectDynamic() {
+    this.dynamicElements.executorFilter =
+      this.root.querySelector("#executor_filter");
+
+    this.dynamicElements.executorAddTaskSelect = this.root.querySelector(
+      '.task__form select[name="task_executor"]'
+    );
+    this.dynamicElements.sectionToDo = this.root.querySelector("#section_todo");
+    this.dynamicElements.sectionInProgress = this.root.querySelector(
+      "#section_in_progress"
+    );
+    this.dynamicElements.sectionCompleted =
+      this.root.querySelector("#section_completed");
+    this.dynamicElements.addTaskForm = this.root.querySelector(".task__form");
+    this.dynamicElements.filters = this.root.querySelector(".filters");
   }
 
-  display() {
-    this.innerContainer.classList = ["footer"];
-    this.innerContainer.innerHTML = "";
-    super.display();
+  static _addHandlers() {
+    this.dynamicElements.addTaskForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let inputs = {
+        taskName: event.target.task_name,
+        taskExecutor: event.target.task_executor,
+        taskDescription: event.target.task_decription,
+        taskStatus: event.target.task_status,
+        taskPriority: event.target.task_priority,
+        taskPrivacy: event.target.task_privacy,
+      };
 
-    this._addFooterContent();
-  }
-}
+      for (const input of [inputs.taskName, inputs.taskDescription]) {
+        const message =
+          input.parentElement.parentElement.querySelector(".help__message");
+        message.textContent = "";
+      }
 
-class MainView extends BaseView {
-  constructor(containerId) {
-    const main = document.createElement("main");
-    main.setAttribute("id", "main");
-    super(containerId, main);
-  }
-
-  updateUserSelectOptions() {
-    const filterSelect = this.innerContainer.querySelector(
-      ".filters .input__block__select"
-    );
-    const addNewTaskSelect = this.innerContainer.querySelector(
-      ".add__new__task .input__block__select"
-    );
-    filterSelect.innerHTML = htmlBlocksModule.createFilterUserSelectInnerHTML();
-    addNewTaskSelect.innerHTML = "";
-    for (const user of UserDBManager.getAll()) {
-      const innerHTML = htmlBlocksModule.createUserSelectOptionHTML(user);
-      addNewTaskSelect.innerHTML += innerHTML;
-      filterSelect.innerHTML += innerHTML;
-    }
-  }
-
-  updateMainWindow(skip = 0, top = 10, filterConfig = {}) {
-    const toDoContainer = this.innerContainer.querySelector(
-      "#section_todo .tasks__container"
-    );
-    const inProgressContainer = this.innerContainer.querySelector(
-      "#section_in_progress .tasks__container"
-    );
-    const completedContainer = this.innerContainer.querySelector(
-      "#section_completed .tasks__container"
-    );
-
-    toDoContainer.innerHTML = "";
-    inProgressContainer.innerHTML = "";
-    completedContainer.innerHTML = "";
-
-    for (const statusVal of Object.values(constantsModule.STATUSES_DICT)) {
-      const querry = TaskDBManager.getPage(
-        skip,
-        top,
-        Object.assign(filterConfig, {
-          status: statusVal,
-        })
-      );
-      const maxItems = TaskDBManager.getPage(
-        0,
-        -1,
-        Object.assign(filterConfig, {
-          status: statusVal,
-        })
-      ).length;
-      for (const task of querry) {
-        const taskHTML = htmlBlocksModule.createTableTaskHTML(task);
-        const tempElement = document.createElement("div");
-        tempElement.innerHTML = taskHTML;
-        const taskElement = tempElement.firstElementChild;
-        switch (task.status) {
-          case constantsModule.STATUSES_DICT.TO_DO:
-            toDoContainer.append(taskElement);
-            break;
-          case constantsModule.STATUSES_DICT.IN_PROGRESS:
-            inProgressContainer.append(taskElement);
-            break;
-          case constantsModule.STATUSES_DICT.COMPLETED:
-            completedContainer.append(taskElement);
-            break;
+      if (
+        [inputs.taskName, inputs.taskDescription].some((input) => !input.value)
+      ) {
+        for (const input of [inputs.taskName, inputs.taskDescription]) {
+          const message =
+            input.parentElement.parentElement.querySelector(".help__message");
+          message.textContent = "";
+          if (!input.value) {
+            message.textContent = "Required Field";
+            message.classList.add("high__prioprity");
+          }
+          return;
         }
       }
-      switch (statusVal) {
-        case constantsModule.STATUSES_DICT.TO_DO:
-          toDoContainer.innerHTML +=
-            querry.length < maxItems
-              ? htmlBlocksModule.createLoadMoreButtonHTML()
-              : "";
-          this._addLoadMoreButtonsHandler(
-            toDoContainer,
-            constantsModule.STATUSES_DICT.TO_DO
-          );
-          break;
-        case constantsModule.STATUSES_DICT.IN_PROGRESS:
-          inProgressContainer.innerHTML +=
-            querry.length < maxItems
-              ? htmlBlocksModule.createLoadMoreButtonHTML()
-              : "";
-          this._addLoadMoreButtonsHandler(
-            inProgressContainer,
-            constantsModule.STATUSES_DICT.IN_PROGRESS
-          );
-          break;
-        case constantsModule.STATUSES_DICT.COMPLETED:
-          completedContainer.innerHTML +=
-            querry.length < maxItems
-              ? htmlBlocksModule.createLoadMoreButtonHTML()
-              : "";
-          this._addLoadMoreButtonsHandler(
-            completedContainer,
-            constantsModule.STATUSES_DICT.COMPLETED
-          );
-          break;
-      }
-    }
-  }
 
-  _addLoadMoreButtonsHandler(container, status) {
-    const button = container.querySelector(".load__more__button");
-    if (!button) return;
-    button.addEventListener("click", (event) => {
-      this.updateMainWindow(
-        0,
-        container.children.length + 10,
-        Object.assign(this.currentFilters, {
-          status: status,
+      if (inputs.taskName.value.length > 100) {
+        const message =
+          inputs.taskName.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 100";
+        message.classList.add("high__prioprity");
+        return;
+      }
+
+      if (inputs.taskDescription.value.length > 180) {
+        const message =
+          inputs.taskDescription.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 180";
+        message.classList.add("high__prioprity");
+        return;
+      }
+      const data = {
+        name: inputs.taskName.value,
+        description: inputs.taskDescription.value,
+        assignee:
+          inputs.taskExecutor.value !== "---"
+            ? inputs.taskExecutor.value
+            : JSON.parse(localStorage.getItem("user")).id,
+        status: inputs.taskStatus.value,
+        priority: inputs.taskPriority.value,
+        isPrivate: inputs.taskPrivacy.value ? true : false,
+      };
+
+      API.postTask(data)
+        .then((res) => {
+          MainAppView.display("wrapper");
         })
-      );
+        .catch((res) => {});
+    });
+
+    this.dynamicElements.addTaskForm.addEventListener("click", (event) => {
+      const button = event.target.closest(".input__block__radio");
+      if (!button) return;
+      const inputBlockBody = event.target.closest(".input__block__body");
+      for (const item of inputBlockBody.children)
+        item.classList.remove("active__filter");
+      button.classList.add("active__filter");
+    });
+
+    this.dynamicElements.addTaskForm.addEventListener("reset", (event) => {
+      const buttons = event.target.querySelectorAll(".input__block__radio");
+      for (const button of buttons) {
+        button.classList.remove("active__filter");
+        const input = button.querySelector("input");
+        if (
+          input.value === constantsModule.STATUSES_DICT.TO_DO ||
+          input.value == "" ||
+          input.value === constantsModule.PRIORITIES_DICT.LOW
+        ) {
+          button.classList.add("active__filter");
+        }
+      }
     });
   }
 
-  _activateFilter(filter) {
-    filter.classList.add("active__filter");
+  static updateExecutorFilter() {
+    const select = this.dynamicElements.executorFilter.querySelector("select");
+    API.getUsers().then((users) => {
+      select.innerHTML = "";
+      select.append(htmlBlocksModule.createExecutorSelectorOptionALL());
+      for (const user of users) {
+        select.append(htmlBlocksModule.createExecutorSelectorOption(user));
+      }
+    });
   }
-  _deactivateFilter(filter) {
-    filter.classList.remove("active__filter");
-  }
-  _addFilters() {
-    this.currentFilters = {};
-    const filters = document.createElement("section");
-    filters.classList.add("filters");
 
-    filters.innerHTML = htmlBlocksModule.createFiltersInnerHTML();
-    this.innerContainer.append(filters);
-    this._addFiltertsHandlers(filters);
+  static updateExecutorAddTaskSelect() {
+    const select = this.dynamicElements.executorAddTaskSelect;
+    API.getUsers().then((users) => {
+      select.innerHTML = "";
+      select.append(htmlBlocksModule.createExecutorSelectorOptionALL());
+      for (const user of users) {
+        select.append(htmlBlocksModule.createExecutorSelectorOption(user));
+      }
+    });
   }
-  _addFiltertsHandlers() {
-    const filters = this.innerContainer.querySelector(".filters");
+
+  static filterTasks() {
+    const filters = this.dynamicElements.filters;
+    const executorFilterSelect = filters.querySelector(
+      "#executor_filter select"
+    );
+    const executorFilterValue =
+      executorFilterSelect.options[executorFilterSelect.selectedIndex].text;
+    const dateFromFilterValueArr = filters
+      .querySelector(`#data_filter input[name="date_from"]`)
+      .value.split("-");
+    dateFromFilterValueArr[1]--;
+    const dateFrom = new Date(...dateFromFilterValueArr);
+
+    const dateToFilterValueArr = filters
+      .querySelector(`#data_filter input[name="date_to"]`)
+      .value.split("-");
+    dateToFilterValueArr[1]--;
+    const dateTo = new Date(...dateFromFilterValueArr);
+
+    const taskNameFilterValue = filters.querySelector(
+      "#task_name_filter input"
+    ).value;
+    const priorityFilters = Array.from(
+      filters.querySelectorAll("#priority_filter input:checked")
+    ).map((input) => input.value);
+    const PrivacyFilters = Array.from(
+      filters.querySelectorAll("#privacy_filter input:checked")
+    ).map((input) => (input.value ? "Private" : "Public"));
+
+    for (const section of [
+      this.dynamicElements.sectionToDo,
+      this.dynamicElements.sectionInProgress,
+      this.dynamicElements.sectionCompleted,
+    ]) {
+      for (const task of section.querySelectorAll(".task")) {
+        const executor = task.querySelector("#task__executor").textContent;
+        const dateArr = task
+          .querySelector(".task__date")
+          .textContent.split(" ")[0]
+          .split(".")
+          .reverse();
+        dateArr[1]--;
+        const date = new Date(...dateArr);
+
+        const taskName = task.querySelector("#task__name").textContent;
+        const priority = task.querySelector(".task__priority").textContent;
+        const isPrivate = task.querySelector(".task__privacy").textContent;
+        task.style.display =
+          (executorFilterValue === "---" || executor === executorFilterValue) &&
+          (!dateFrom.toJSON() || date >= dateFrom) &&
+          (!dateTo.toJSON() || date <= dateTo) &&
+          (!taskNameFilterValue || taskName.includes(taskNameFilterValue)) &&
+          (priorityFilters.length === 0 ||
+            priorityFilters.includes(priority)) &&
+          (PrivacyFilters.length === 0 || PrivacyFilters.includes(isPrivate))
+            ? "block"
+            : "none";
+      }
+    }
+  }
+
+  static addFilterTasksHandler() {
+    const filters = this.dynamicElements.filters;
+    filters.addEventListener("change", (event) => {
+      this.filterTasks();
+    });
     filters.addEventListener("click", (event) => {
-      event.preventDefault();
-      const inputBlock = event.target.closest(".input__block");
-      if (!inputBlock) return;
-      const label = event.target.closest("label");
-      if (!label) return;
-      switch (inputBlock.id) {
-        case "type_of_page_filter":
-          this._typeOfPageFilterHandler(
-            inputBlock,
-            label.querySelector("input")
-          );
-          break;
-        case "privacy_filter":
-          this._privacyFilterHandler(label.querySelector("input"));
-          break;
-        case "priority_filter":
-          this._priorityFilterHandler(label.querySelector("input"));
-          break;
-      }
-      this.updateMainWindow(undefined, undefined, this.currentFilters);
+      const checkBox = event.target.closest(`input[type="checkbox"]`);
+      if (!checkBox) return;
+      checkBox.parentElement.classList.toggle("active__filter");
     });
-    filters.addEventListener("input", (event) => {
+
+    const typeOfPageBlock = filters.querySelector("#type_of_page_filter");
+    typeOfPageBlock.addEventListener("click", (event) => {
       event.preventDefault();
-      const inputBlock = event.target.closest(".input__block");
-      if (!inputBlock) return;
-      switch (inputBlock.id) {
-        case "inner_text_filter":
-          this._descriptionFilterHandler(event.target);
-          break;
-        case "data_filter":
-          this._dateFilterHandler(event.target);
-          break;
-        case "executor_filter":
-          this._executorFilterHandle(event.target);
-          break;
-      }
-
-      this.updateMainWindow(undefined, undefined, this.currentFilters);
+      const inputs = typeOfPageBlock.querySelectorAll("input");
+      const button = event.target.closest("label");
+      if (!button) return;
+      for (const input of inputs)
+        input.parentElement.classList.toggle("active__filter");
+      this.root
+        .querySelector(".main__window")
+        .classList.toggle("main__window__list");
     });
-  }
-  _typeOfPageFilterHandler(inputBlock, targetInput) {
-    const inputs = inputBlock.querySelectorAll("input");
-    const tableInput = inputs[0];
-    const listInput = inputs[1];
-    if (targetInput.value === tableInput.value) {
-      this._activateFilter(tableInput.parentElement);
-      this._deactivateFilter(listInput.parentElement);
-      this.innerContainer
-        .querySelector(".main__window")
-        .classList.remove("main__window__list");
-    }
-    if (targetInput.value === listInput.value) {
-      this._activateFilter(listInput.parentElement);
-      this._deactivateFilter(tableInput.parentElement);
-      this.innerContainer
-        .querySelector(".main__window")
-        .classList.add("main__window__list");
-    }
-  }
-  _privacyFilterHandler(targetInput) {
-    const input = Boolean(targetInput.value);
-    if (targetInput.parentElement.classList.contains("active__filter")) {
-      this.currentFilters.isPrivate.splice(
-        this.currentFilters.isPrivate.indexOf(input),
-        1
-      );
-      this._deactivateFilter(targetInput.parentElement);
-    } else {
-      if (!this.currentFilters.isPrivate) this.currentFilters.isPrivate = [];
-      this.currentFilters.isPrivate.push(input);
-      this._activateFilter(targetInput.parentElement);
-    }
-  }
-  _priorityFilterHandler(targetInput) {
-    const input = targetInput.value;
-    if (targetInput.parentElement.classList.contains("active__filter")) {
-      this.currentFilters.priority.splice(
-        this.currentFilters.priority.indexOf(input),
-        1
-      );
-      this._deactivateFilter(targetInput.parentElement);
-    } else {
-      if (!this.currentFilters.priority) this.currentFilters.priority = [];
-      this.currentFilters.priority.push(input);
-      this._activateFilter(targetInput.parentElement);
-    }
-  }
-  _descriptionFilterHandler(targetInput) {
-    const input = targetInput.value;
-    this.currentFilters.description = input;
-  }
-  _dateFilterHandler(targetInput) {
-    const input = targetInput.value;
-    if (targetInput.name === "date_from")
-      this.currentFilters.dateFrom = new Date(input);
-    if (targetInput.name === "date_to")
-      this.currentFilters.dateTo = new Date(input);
-  }
-  _executorFilterHandle(targetInput) {
-    const input = targetInput.value;
-    if (input === "All") delete this.currentFilters.assignee;
-    else this.currentFilters.assignee = input;
-  }
-
-  _addListHandlers() {
-    const listView = this.innerContainer.querySelector(".main__window");
+    const listView = this.root.querySelector(".main__window");
     if (!listView) return;
     listView.addEventListener("click", (event) => {
       const header = event.target.closest(".section__header");
@@ -355,633 +479,723 @@ class MainView extends BaseView {
     });
   }
 
-  _addAppTable() {
-    const appTable = document.createElement("section");
-    appTable.classList.add("app__table");
-    const mainWindow = document.createElement("div");
-    mainWindow.classList.add("main__window");
-    mainWindow.innerHTML = htmlBlocksModule.createMainWindowInnerHTML();
-    appTable.append(mainWindow);
+  static updateTaskSection(section, status) {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) user = { id: "-1" };
+    const container = section.querySelector(".tasks__container");
+    const taskSizePool = container.children.length + 9;
 
-    const addNewTask = document.createElement("aside");
-    addNewTask.classList.add("add__new__task");
-    addNewTask.innerHTML = htmlBlocksModule.createAddTaskInnerHTML();
-    appTable.append(addNewTask);
-
-    this.innerContainer.append(appTable);
-  }
-
-  _taskHandlers() {
-    const mainWindow = this.innerContainer.querySelector(".main__window");
-    if (!mainWindow) return;
-    mainWindow.addEventListener("click", (event) => {
-      const mainTask = event.target.closest(".task__main");
-      const editButton = event.target.closest(".edit__button");
-      const deleteButton = event.target.closest(".delete__button");
-      const task = TaskDBManager.get(
-        event.target.closest(".task").id.replace("task-", "")
-      );
-      if (mainTask) {
-        enviroment.currentTask = task;
-        TASK_PAGE.display();
-        return;
+    API.getTasks(0, taskSizePool, 0).then((tasks) => {
+      tasks = tasks
+        .filter(
+          (task) =>
+            task.status === status &&
+            !(task.isPrivate == true && task.assignee.id !== user.id)
+        )
+        .splice(0, taskSizePool + 1);
+      container.innerHTML = "";
+      let buttonFlag = false;
+      if (tasks.length > taskSizePool) {
+        buttonFlag = true;
       }
-      if (editButton) {
-        if (enviroment.currentUser.id !== task.author) {
-          message("You are not the author of this task");
-          return;
-        }
-        enviroment.currentTask = TaskDBManager.get(
-          editButton.parentElement.parentElement.id.replace("task-", "")
-        );
-        TASK_PAGE_UPDATE.display();
-        enviroment.currentTask = TaskDBManager.get(
-          editButton.parentElement.parentElement.id.replace("task-", "")
-        );
-        TASK_PAGE_UPDATE.display();
-        return;
-      }
-      if (deleteButton) {
-        if (enviroment.currentUser.id !== task.author) {
-          message("You are not the author of this task");
-          return;
-        }
-        confirmStep(`Are you sure to delete task ${task.name}`, () => {
-          TaskDBManager.delete(task.id);
-          MAIN.display();
-        });
-        return;
-      }
-    });
-  }
-
-  _addTaskHandlers() {
-    const bottomPart =
-      this.innerContainer.querySelectorAll(".task__form__part")[1];
-    bottomPart.addEventListener("click", (event) => {
-      event.preventDefault();
-      const label = event.target.closest("label");
-      if (!label) return;
-      const inputBlock = event.target.closest(".input__block");
-      for (let item of inputBlock.querySelectorAll(
-        ".input__block__radio input"
-      )) {
-        item.removeAttribute("checked");
-        item.parentElement.classList.remove("active__filter");
-      }
-      label.querySelector("input").setAttribute("checked", true);
-      label.classList.add("active__filter");
-    });
-    const taskForm = this.innerContainer.querySelector(".task__form");
-    const clearButton = taskForm.querySelector('.delete__button[type="reset"]');
-    clearButton.addEventListener("click", (event) => {
-      for (const label of bottomPart.querySelectorAll("label")) {
-        label.classList.remove("active__filter");
-      }
-    });
-
-    if (taskForm)
-      taskForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const data = {
-          priority: event.target.task_priority.value,
-          name: event.target.task_name.value,
-          assignee: event.target.task_executor.value,
-          isPrivate: Boolean(event.target.task_privacy.value),
-          status: event.target.task_status.value,
-          description: event.target.task_decription.value,
-        };
-        const validationResult = Task.validate(
-          new Task(
-            data.name,
-            data.description,
-            data.priority,
-            data.assignee,
-            data.status,
-            data.isPrivate
-          )
-        );
-        if (typeof validationResult === "string") {
-          let message;
-          switch (validationResult) {
-            case constantsModule.ERRORS_DICT.INVALID_TASK_NAME:
-              message =
-                event.target.task_name.parentElement.parentElement.querySelector(
-                  ".help__message"
-                );
-              break;
-            case constantsModule.ERRORS_DICT.INVALID_TASK_DESCRIPTION:
-              message =
-                event.target.task_decription.parentElement.parentElement.querySelector(
-                  ".help__message"
-                );
-              break;
-          }
-          message.classList.add("high__prioprity");
-          return;
-        }
-
-        TaskDBManager.create(
-          data.name,
-          data.description,
-          data.priority,
-          data.assignee,
-          data.status,
-          data.isPrivate
-        );
-
-        MAIN.display();
-      });
-  }
-
-  display() {
-    this.innerContainer.classList = "main";
-    this.innerContainer.innerHTML = "";
-    super.display();
-
-    this._addFilters();
-    this._addAppTable();
-    this.updateUserSelectOptions();
-    this.updateMainWindow();
-    this._addListHandlers();
-    this._taskHandlers();
-    this._addTaskHandlers();
-    FOOT.display();
-  }
-}
-class TaskView extends BaseView {
-  constructor(containerId) {
-    const main = document.createElement("main");
-    main.setAttribute("id", "main");
-    super(containerId, main);
-  }
-  _addDetailedTask() {
-    const detailedTask = document.createElement("section");
-    detailedTask.classList.add("detailed__task");
-    detailedTask.innerHTML = htmlBlocksModule.createTaskDetailedHTML(
-      TaskDBManager.get(enviroment.currentTask.id)
-    );
-    this.innerContainer.append(detailedTask);
-  }
-
-  _addComments() {
-    const comments = document.createElement("section");
-    comments.classList.add("comments");
-    comments.innerHTML = htmlBlocksModule.createCommentsInnerHTML();
-    this.innerContainer.append(comments);
-  }
-
-  updateComments() {
-    const commentsList = this.innerContainer.querySelector(".comments__list");
-    commentsList.innerHTML = "";
-    for (const comment of TaskDBManager.get(enviroment.currentTask.id)
-      .comments) {
-      commentsList.innerHTML += htmlBlocksModule.createCommentHTML(comment);
-    }
-  }
-
-  _addButtonsHandlers() {
-    const editButton = this.innerContainer.querySelector(".edit__button");
-    const mainButton = this.innerContainer.querySelector(".main__page__button");
-    const deleteButton = this.innerContainer.querySelector(".delete__button");
-    !editButton
-      ? 0
-      : editButton.addEventListener("click", (event) => {
-          if (enviroment.currentUser.id !== enviroment.currentTask.author) {
-            message("You are not the author of this task");
-            return;
-          }
-          TASK_PAGE_UPDATE.display();
-        });
-    !mainButton
-      ? 0
-      : mainButton.addEventListener("click", (event) => {
-          MAIN.display();
-        });
-    !deleteButton
-      ? 0
-      : deleteButton.addEventListener("click", (event) => {
-          if (enviroment.currentUser.id !== enviroment.currentTask.author) {
-            message("You are not the author of this task");
-            return;
-          }
-          confirmStep(
-            `Are you sure to delete task ${enviroment.currentTask.name}`,
-            () => {
-              TaskDBManager.delete(enviroment.currentTask.id);
-              MAIN.display();
-            }
+      for (const task of tasks) {
+        const taskDiv = htmlBlocksModule.createTask(task);
+        taskDiv
+          .querySelector(".task__main")
+          .addEventListener("click", () =>
+            MainTaskDetailedView.display("wrapper", task)
           );
-        });
-    const commentForm = this.innerContainer.querySelector(".add__comment");
-    !commentForm
-      ? 0
-      : commentForm.addEventListener("submit", (event) => {
-          event.preventDefault();
-          const data = {
-            text: event.target.inner_text.value,
-          };
-          const validationResult = Comment.validate(new Comment(data.text));
-          if (typeof validationResult === "string") {
-            let message;
-            switch (validationResult) {
-              case constantsModule.ERRORS_DICT.INVALID_COMMENT_TEXT:
-                message =
-                  event.target.inner_text.parentElement.parentElement.querySelector(
-                    ".help__message"
-                  );
-                break;
+        taskDiv
+          .querySelector(".edit__button")
+          .addEventListener("click", (event) => {
+            if (
+              task.creator.id !== JSON.parse(localStorage.getItem("user")).id
+            ) {
+              message("You are not the creator of this task");
+              return;
             }
-            message.classList.add("high__prioprity");
-            return;
-          }
-          CommentDBManager.create(event.target.inner_text.value);
-          TASK_PAGE.display();
-        });
-  }
-
-  display() {
-    this.innerContainer.classList = ["main"];
-    this.innerContainer.classList.add("main__task__page");
-    this.innerContainer.innerHTML = "";
-
-    this._addDetailedTask();
-    this._addComments();
-    this.updateComments();
-    super.display();
-    this._addButtonsHandlers();
-    FOOT.display();
-  }
-}
-
-class UpdateTaskView extends TaskView {
-  constructor(id) {
-    super(id);
-  }
-
-  _addDetailedTask() {
-    const updateTaskForm = htmlBlocksModule.createUpdateTaskHTML(
-      TaskDBManager.get(enviroment.currentTask.id)
-    );
-    this.innerContainer.insertAdjacentHTML("afterbegin", updateTaskForm);
-
-    const userChoice = this.innerContainer.querySelector(
-      'select[name="task_executor"]'
-    );
-    for (const user of UserDBManager.getAll()) {
-      const innerHTML = htmlBlocksModule.createUserSelectOptionHTML(user);
-      userChoice.innerHTML += innerHTML;
-    }
-  }
-  _addButtonsHandlers() {
-    super._addButtonsHandlers();
-    const backButton = this.innerContainer.querySelector(".back__button");
-    const addForm = this.innerContainer.querySelector(".detailed__task__form");
-    !backButton
-      ? 0
-      : backButton.addEventListener("click", (event) => {
-          TASK_PAGE.display();
-        });
-    !addForm
-      ? 0
-      : addForm.addEventListener("submit", (event) => {
-          event.preventDefault();
-          const data = {
-            priority: event.target.task_priority.value,
-            name: event.target.task_name.value,
-            assignee: event.target.task_executor.value,
-            isPrivate: Boolean(event.target.task_privacy.value),
-            status: event.target.task_status.value,
-            description: event.target.task_description.value,
-          };
-          const validationResult = Task.validate(
-            new Task(
-              data.name,
-              data.description,
-              data.priority,
-              data.assignee,
-              data.status,
-              data.isPrivate
-            )
-          );
-          if (typeof validationResult === "string") {
-            let message;
-            switch (validationResult) {
-              case constantsModule.ERRORS_DICT.INVALID_TASK_NAME:
-                message =
-                  event.target.task_name.parentElement.parentElement.querySelector(
-                    ".help__message"
-                  );
-                break;
-              case constantsModule.ERRORS_DICT.INVALID_TASK_DESCRIPTION:
-                message =
-                  event.target.task_description.parentElement.parentElement.querySelector(
-                    ".help__message"
-                  );
-                break;
-            }
-            message.classList.add("high__prioprity");
-            return;
-          }
-
-          TaskDBManager.update(enviroment.currentTask.id, data);
-          TASK_PAGE.display();
-        });
-  }
-
-  display() {
-    super.display();
-    FOOT.display();
-  }
-}
-
-class UserView extends BaseView {
-  constructor(containerId) {
-    const main = document.createElement("main");
-    main.setAttribute("id", "main");
-    super(containerId, main);
-  }
-  _addDetailedUser() {
-    const detailedUser = document.createElement("section");
-    detailedUser.classList.add("detailed__user");
-    detailedUser.innerHTML = htmlBlocksModule.createUserDetailedHTML(
-      UserDBManager.get(enviroment.currentUser.id)
-    );
-    this.innerContainer.append(detailedUser);
-  }
-
-  _addButtonsHandlers() {
-    const editButton = this.innerContainer.querySelector(".edit__button");
-    const mainButton = this.innerContainer.querySelector(".main__page__button");
-    const signOutButton = this.innerContainer.querySelector(".delete__button");
-    const showPasswordButton =
-      this.innerContainer.querySelector(".show__password");
-    !editButton
-      ? 0
-      : editButton.addEventListener("click", (event) => {
-          USER_UPDATE.display();
-        });
-    !mainButton
-      ? 0
-      : mainButton.addEventListener("click", (event) => {
-          MAIN.display();
-        });
-    !signOutButton
-      ? 0
-      : signOutButton.addEventListener("click", (event) => {
-          confirmStep("Are you sure want to exit?", () => {
-            enviroment.currentUser = undefined;
-            HEAD.updateUserContainer();
-            enviroment.save();
-            MAIN.display();
+            MainTaskDetailedUpdateView.display("wrapper", task);
           });
-        });
-    !showPasswordButton
-      ? 0
-      : showPasswordButton.addEventListener("click", (event) => {
-          event.preventDefault();
-          const password = this.innerContainer.querySelector("#password");
-          if (password) {
-            if (password.innerText.includes("*")) {
-              password.innerText = password.dataset.originalText;
-            } else {
-              password.dataset.originalText = password.innerText;
-              password.innerText = "*".repeat(password.innerText.length);
+        taskDiv
+          .querySelector(".delete__button")
+          .addEventListener("click", () => {
+            if (
+              task.creator.id !== JSON.parse(localStorage.getItem("user")).id
+            ) {
+              message("You are not the creator of this task");
+              return;
             }
+            confirmStep("Are you sure to delete this task?", () => {
+              API.deleteTask(task.id).then((res) => MainAppView.display());
+            });
+          });
+        container.append(taskDiv);
+      }
+      const loadMoreButton = htmlBlocksModule.createLoadMoreButton();
+      loadMoreButton.addEventListener("click", () =>
+        this.updateTaskSection(section, status)
+      );
+      if (buttonFlag) container.append(loadMoreButton);
+      this.filterTasks();
+    });
+  }
+
+  static updateToDoSection() {
+    this.updateTaskSection(
+      this.dynamicElements.sectionToDo,
+      constantsModule.STATUSES_DICT.TO_DO
+    );
+  }
+
+  static updateInProgressSection() {
+    this.updateTaskSection(
+      this.dynamicElements.sectionInProgress,
+      constantsModule.STATUSES_DICT.IN_PROGRESS
+    );
+  }
+
+  static updateCompletedSection() {
+    this.updateTaskSection(
+      this.dynamicElements.sectionCompleted,
+      constantsModule.STATUSES_DICT.COMPLETED
+    );
+  }
+
+  static display(containerId) {
+    super.display(containerId);
+    this.updateExecutorFilter();
+    this.updateExecutorAddTaskSelect();
+    this.updateToDoSection();
+    this.updateInProgressSection();
+    this.updateCompletedSection();
+    this._addHandlers();
+    this.addFilterTasksHandler();
+  }
+}
+
+class FooterView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createFooterStatic();
+  }
+}
+
+class MainTaskDetailedView extends BaseView {
+  static makeStaticContent(task) {
+    this.root = htmlBlocksModule.createTaskDetailed(task);
+  }
+  static collectDynamic() {
+    this.dynamicElements.commentsList =
+      this.root.querySelector(".comments__list");
+    this.dynamicElements.task = this.root.querySelector(".task");
+    this.dynamicElements.commentForm = this.root.querySelector(".add__comment");
+  }
+
+  static _addHandlers(task) {
+    this.dynamicElements.task.addEventListener("click", (event) => {
+      const button = event.target.closest(".standart__button");
+      if (button) {
+        event.preventDefault();
+        if (button.classList.contains("main__page__button"))
+          MainAppView.display("wrapper");
+        if (button.classList.contains("delete__button")) {
+          if (task.creator.id !== JSON.parse(localStorage.getItem("user")).id) {
+            message("You are not the creator of this task");
+            return;
           }
-          const passwords = this.innerContainer.querySelectorAll(
+          confirmStep("Are you sure to delete this task?", (res) =>
+            API.deleteTask(task.id).then(MainAppView.display("wrapper"))
+          );
+        }
+        if (button.classList.contains("edit__button")) {
+          if (task.creator.id !== JSON.parse(localStorage.getItem("user")).id) {
+            message("You are not the creator of this task");
+            return;
+          }
+          MainTaskDetailedUpdateView.display("wrapper", task);
+        }
+      }
+    });
+
+    this.dynamicElements.commentForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (event.target.inner_text.value.length > 280) {
+        const message =
+          event.target.inner_text.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 280";
+        message.classList.add("high__priority");
+        return;
+      }
+      const data = {
+        text: event.target.inner_text.value,
+      };
+
+      API.postComment(task.id, data).then(
+        MainTaskDetailedView.display("wrapper", task)
+      );
+    });
+  }
+
+  static _updateCommentsList(task) {
+    API.getComments(task.id).then((comments) => {
+      for (const comment of comments) {
+        this.dynamicElements.commentsList.append(
+          htmlBlocksModule.createComment(comment)
+        );
+      }
+    });
+  }
+
+  static display(containerId, task) {
+    super.display(containerId, task);
+    this._updateCommentsList(task);
+    this._addHandlers(task);
+  }
+}
+
+class MainTaskDetailedUpdateView extends BaseView {
+  static makeStaticContent(task) {
+    this.root = htmlBlocksModule.createTaskDetailedUpdate(task);
+  }
+  static collectDynamic() {
+    this.dynamicElements.commentsList =
+      this.root.querySelector(".comments__list");
+    this.dynamicElements.executorSelect = this.root.querySelector(
+      `select[name="task_executor"]`
+    );
+    this.dynamicElements.taskForm = this.root.querySelector(
+      ".detailed__task__form"
+    );
+    this.dynamicElements.commentForm = this.root.querySelector(".add__comment");
+  }
+
+  static updateCommentsList(task) {
+    API.getComments(task.id).then((comments) => {
+      for (const comment of comments) {
+        this.dynamicElements.commentsList.append(
+          htmlBlocksModule.createComment(comment)
+        );
+      }
+    });
+  }
+
+  static _addHandlers(task) {
+    this.dynamicElements.taskForm.addEventListener("click", (event) => {
+      const button = event.target.closest(".standart__button");
+      if (button && !button.classList.contains("add__button")) {
+        if (button.classList.contains("back__button"))
+          MainTaskDetailedView.display("wrapper", task);
+      }
+    });
+
+    this.dynamicElements.taskForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let inputs = {
+        taskName: event.target.task_name,
+        taskExecutor: event.target.task_executor,
+        taskDescription: event.target.task_description,
+        taskStatus: event.target.task_status,
+        taskPriority: event.target.task_priority,
+        taskPrivacy: event.target.task_privacy,
+      };
+
+      for (const input of [inputs.taskName, inputs.taskDescription]) {
+        const message =
+          input.parentElement.parentElement.querySelector(".help__message");
+        message.textContent = "";
+      }
+
+      if (
+        [inputs.taskName, inputs.taskDescription].some((input) => !input.value)
+      ) {
+        for (const input of [inputs.taskName, inputs.taskDescription]) {
+          const message =
+            input.parentElement.parentElement.querySelector(".help__message");
+          message.textContent = "";
+          if (!input.value) {
+            console.log(input.value);
+            message.textContent = "Required Field";
+            message.classList.add("high__prioprity");
+          }
+          return;
+        }
+      }
+
+      if (inputs.taskName.value.length > 100) {
+        const message =
+          inputs.taskName.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 100";
+        message.classList.add("high__prioprity");
+        return;
+      }
+      if (inputs.taskDescription.value.length > 180) {
+        const message =
+          inputs.taskDescription.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 180";
+        message.classList.add("high__prioprity");
+        return;
+      }
+      const data = {
+        name: inputs.taskName.value,
+        assignee: inputs.taskExecutor.value,
+        description: inputs.taskDescription.value,
+        status: inputs.taskStatus.value,
+        priority: inputs.taskPriority.value,
+        isPrivate: inputs.taskPrivacy.value ? true : false,
+      };
+      API.patchTask(task.id, data)
+        .then((res) => {
+          console.log(res);
+          API.getTask(task.id).then((task_) => {
+            MainTaskDetailedView.display("wrapper", task_);
+          });
+        })
+        .catch((res) => {});
+    });
+
+    this.dynamicElements.commentForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (event.target.inner_text.value.length > 280) {
+        const message =
+          event.target.inner_text.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 280";
+        message.classList.add("high__priority");
+        return;
+      }
+      const data = {
+        text: event.target.inner_text.value,
+      };
+
+      API.postComment(task.id, data).then(
+        MainTaskDetailedUpdateView.display("wrapper", task)
+      );
+    });
+  }
+
+  static updateExecutorSelect(task) {
+    const select = this.dynamicElements.executorSelect;
+    API.getUsers().then((users) => {
+      select.innerHTML = "";
+      select.append(
+        htmlBlocksModule.createExecutorSelectorOption(task.assignee)
+      );
+      for (const user of users) {
+        if (user.id === task.assignee.id) continue;
+        select.append(htmlBlocksModule.createExecutorSelectorOption(user));
+      }
+    });
+  }
+
+  static display(containerId, task) {
+    super.display(containerId, task);
+    this.updateCommentsList(task);
+    this.updateExecutorSelect(task);
+    this._addHandlers(task);
+  }
+}
+
+class MainSignUpView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createSignUp();
+  }
+
+  static collectDynamic() {
+    this.dynamicElements.form = this.root.querySelector(".sign__form");
+  }
+
+  static _addHandlers() {
+    this.dynamicElements.form.addEventListener("click", (event) => {
+      const button = event.target.closest(".standart__button");
+      if (
+        button &&
+        !button.classList.contains("confirm__button") &&
+        !button.classList.contains("file__input")
+      ) {
+        event.preventDefault();
+        if (button.classList.contains("sign__in__button"))
+          MainSignInView.display("wrapper");
+        if (button.classList.contains("main__page__button"))
+          MainAppView.display("wrapper");
+      }
+    });
+
+    this.dynamicElements.form.addEventListener("change", (event) => {
+      event.preventDefault();
+      const fileInput = event.target.closest(`input[type="file"]`);
+      if (!fileInput) return;
+      fileInput.parentElement.style.backgroundColor = "var(--primary-color)";
+      fileInput.parentElement.style.opacity = "0.3";
+      if (!fileInput) return;
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(fileInput.files[0]);
+      fileReader.onload = () => {
+        fileInput.parentElement.parentElement.querySelector("img").src =
+          fileReader.result;
+        fileInput.photo = fileReader.result.replace(
+          /^data:image\/(png|jpeg|jpg);base64,/,
+          ""
+        );
+      };
+    });
+
+    this.dynamicElements.form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      let inputs = {
+        username: event.target.username,
+        login: event.target.login,
+        password: event.target.password,
+        password_repeat: event.target.password_repeat,
+      };
+
+      for (const input of Object.values(inputs)) {
+        const message =
+          input.parentElement.parentElement.querySelector(".help__message");
+        message.textContent = "";
+      }
+      if (Object.values(inputs).some((input) => !input.value)) {
+        for (const input of Object.values(inputs)) {
+          const message =
+            input.parentElement.parentElement.querySelector(".help__message");
+          message.textContent = "";
+          if (!input.value) {
+            message.textContent = "Required Field";
+            message.classList.add("high__prioprity");
+          }
+        }
+        return;
+      }
+      if (inputs.password.value !== inputs.password_repeat.value) {
+        const message =
+          inputs.password_rep.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Passwords are not same";
+        message.classList.add("high__prioprity");
+        return;
+      }
+
+      if (inputs.username.value.length > 100) {
+        const message =
+          inputs.username.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 100";
+        message.classList.add("high__prioprity");
+        return;
+      }
+
+      if (inputs.login.value.includes(" ")) {
+        const message =
+          inputs.login.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Can't include ' '";
+        message.classList.add("high__prioprity");
+        return;
+      }
+      console.log(event.target.user_avatar.photo);
+      if (!event.target.user_avatar.photo) {
+        event.target.user_avatar.parentElement.style.backgroundColor = "red";
+        event.target.user_avatar.parentElement.style.opacity = "0.8";
+        return;
+      }
+      const data = {
+        login: inputs.login.value,
+        userName: inputs.username.value,
+        password: inputs.password.value,
+        retypedPassword: inputs.password_repeat.value,
+        photo: event.target.user_avatar.photo,
+      };
+      API.getUsers().then((users) => {
+        for (const user of users) {
+          if (user.userName === data.userName) {
+            const message =
+              inputs.username.parentElement.parentElement.querySelector(
+                ".help__message"
+              );
+            message.textContent = "This username is already taken";
+            message.classList.add("high__prioprity");
+            return;
+          }
+          if (user.login === data.login) {
+            const message =
+              inputs.login.parentElement.parentElement.querySelector(
+                ".help__message"
+              );
+            message.textContent = "This login is already taken";
+            message.classList.add("high__prioprity");
+            return;
+          }
+        }
+        API.register(data).then((res) => MainSignInView.display());
+      });
+    });
+  }
+
+  static display(containerId) {
+    super.display(containerId);
+    this._addHandlers();
+  }
+}
+
+class MainSignInView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createSignIn();
+  }
+
+  static collectDynamic() {
+    this.dynamicElements.form = this.root.querySelector(".sign__form");
+  }
+
+  static _addHandlers() {
+    this.dynamicElements.form.addEventListener("click", (event) => {
+      const button = event.target.closest(".standart__button");
+      if (button && !button.classList.contains("confirm__button")) {
+        event.preventDefault();
+        if (button.classList.contains("sign__up__button"))
+          MainSignUpView.display("wrapper");
+        if (button.classList.contains("main__page__button"))
+          MainAppView.display("wrapper");
+      }
+    });
+
+    this.dynamicElements.form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!event.target.login.value || !event.target.password.value) {
+        let inputs = [event.target.login, event.target.password];
+        for (const input of inputs) {
+          const message =
+            input.parentElement.parentElement.querySelector(".help__message");
+          message.textContent = "";
+          if (!input.value) {
+            message.textContent = "Required Field";
+            message.classList.add("high__prioprity");
+          }
+        }
+        return;
+      }
+
+      const data = {
+        login: event.target.login.value,
+        password: event.target.password.value,
+      };
+
+      API.login(data).then((res) => {
+        localStorage.setItem("token", res.token);
+        API.getMyProfile().then((res) => {
+          res.password = data.password;
+          localStorage.setItem("user", JSON.stringify(res));
+          MainAppView.display("wrapper");
+          HeaderView.display("wrapper");
+        });
+      });
+    });
+  }
+
+  static display(containerId) {
+    super.display(containerId);
+    this._addHandlers();
+  }
+}
+
+class MainUserDetailedView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createUserDetialedView(
+      JSON.parse(localStorage.getItem("user"))
+    );
+  }
+
+  static collectDynamic() {
+    this.dynamicElements.userContainer = this.root.querySelector(".user");
+  }
+
+  static _addHandlers() {
+    this.dynamicElements.userContainer.addEventListener("click", (event) => {
+      event.preventDefault();
+      const button = event.target.closest("button");
+      if (button) {
+        if (button.classList.contains("main__page__button"))
+          MainAppView.display("wrapper");
+        if (button.classList.contains("delete__button")) {
+          localStorage.clear();
+          MainAppView.display("wrapper");
+          HeaderView.display("wrapper");
+        }
+
+        if (button.classList.contains("edit__button"))
+          MainUserUdateView.display("wrapper");
+
+        if (button.classList.contains("show__password")) {
+          const password =
+            this.dynamicElements.userContainer.querySelector("#password");
+          if (password.innerText.includes("*")) {
+            password.innerText = JSON.parse(
+              localStorage.getItem("user")
+            ).password;
+          } else {
+            password.innerText = "*".repeat(password.innerText.length);
+          }
+        }
+      }
+    });
+  }
+
+  static display(containerId) {
+    super.display(containerId);
+    this._addHandlers();
+  }
+}
+
+class MainUserUdateView extends BaseView {
+  static makeStaticContent() {
+    this.root = htmlBlocksModule.createUserDetialedUpdateView(
+      JSON.parse(localStorage.getItem("user"))
+    );
+  }
+
+  static collectDynamic() {
+    this.dynamicElements.userContainer = this.root.querySelector(".user");
+    this.dynamicElements.userForm = this.root.querySelector(".user__form");
+  }
+
+  static _addHandlers() {
+    this.dynamicElements.userContainer.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (button && !button.classList.contains("add__button")&& !button.classList.contains("delete__button")) {
+        event.preventDefault();
+        if (button.classList.contains("back__button"))
+          MainUserDetailedView.display("wrapper");
+
+        if (button.classList.contains("show__password")) {
+          const passwords = this.dynamicElements.userContainer.querySelectorAll(
             'input[type="password"]'
           );
           if (passwords.length !== 0) {
             for (const item of passwords) item.type = "text";
           } else {
             const texts =
-              this.innerContainer.querySelectorAll('input[type="text"]');
+              this.dynamicElements.userContainer.querySelectorAll(
+                'input[type="text"]'
+              );
             for (const item of [texts[1], texts[2]]) item.type = "password";
           }
-        });
-  }
-
-  display() {
-    this.innerContainer.classList = ["main"];
-    this.innerContainer.classList.add("main__user__page");
-    this.innerContainer.innerHTML = "";
-
-    this._addDetailedUser();
-    super.display();
-    this._addButtonsHandlers();
-
-    FOOT.display();
-  }
-}
-
-class UpdateUserView extends UserView {
-  constructor(id) {
-    super(id);
-  }
-
-  _addDetailedUser() {
-    const detailedUserUpdate = document.createElement("section");
-    detailedUserUpdate.classList.add("detailed__user");
-    detailedUserUpdate.innerHTML =
-      htmlBlocksModule.createUpdateUserDetailedHTML(enviroment.currentUser);
-    this.innerContainer.append(detailedUserUpdate);
-  }
-  _addButtonsHandlers() {
-    super._addButtonsHandlers();
-    const backButton = this.innerContainer.querySelector(".back__button");
-    const addForm = this.innerContainer.querySelector(".user__form");
-    !backButton
-      ? 0
-      : backButton.addEventListener("click", (event) => {
-          USER.display();
-        });
-    !addForm
-      ? 0
-      : addForm.addEventListener("submit", (event) => {
-          event.preventDefault();
-          if (
-            event.target.password.value !== event.target.password_repeat.value
-          ) {
-            const message =
-              event.target.password_repeat.parentElement.querySelector(
-                ".help__message"
-              );
-            message.textContent = "NOT SIMILAR";
-            message.classList.add("high__prioprity");
-            return;
-          }
-          for (let user of UserDBManager.getAll()) {
-            if (
-              event.target.username.value === user.name &&
-              enviroment.currentUser.name !== event.target.username.value
-            ) {
-              const message =
-                event.target.username.parentElement.querySelector(
-                  ".help__message"
-                );
-              message.textContent = "USERNAME EXISTS";
-              message.classList.add("high__prioprity");
-              return;
-            }
-          }
-
-          const data = {
-            image: event.target.user_avatar.value,
-            password: event.target.password.value,
-            name: event.target.username.value,
-          };
-
-          UserDBManager.update(enviroment.currentUser.id, data);
-          HEAD.updateUserContainer();
-          USER.display();
-        });
-  }
-
-  display() {
-    super.display();
-    FOOT.display();
-  }
-}
-
-class SignInView extends BaseView {
-  constructor(containerId) {
-    const main = document.createElement("main");
-    main.setAttribute("id", "main");
-    super(containerId, main);
-  }
-
-  _addForm() {
-    const form = htmlBlocksModule.createSignInFormHTML();
-    this.innerContainer.insertAdjacentHTML("afterbegin", form);
-  }
-
-  _addButtonHandlers() {
-    const mainPageButton = this.innerContainer.querySelector(
-      ".main__page__button"
-    );
-    const signUpButton = this.innerContainer.querySelector(".sign__up__button");
-    !mainPageButton
-      ? 0
-      : mainPageButton.addEventListener("click", (event) => {
-          MAIN.display();
-        });
-    !signUpButton
-      ? 0
-      : signUpButton.addEventListener("click", (event) => {
-          SIGN_UP.display();
-        });
-    const form = this.innerContainer.querySelector(".sign__form");
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const users = UserDBManager.getAll();
-      let targetUser;
-      for (const user of users) {
-        if (user.login === event.target.login.value) {
-          targetUser = user;
-          break;
         }
       }
-      const helpMessages = this.innerContainer.querySelectorAll(
-        ".input__block .help__message"
-      );
-      if (!targetUser) {
-        helpMessages[0].textContent = "Invalid login";
-        helpMessages[0].classList.add("high__prioprity");
-        return;
-      }
-      if (targetUser.password !== event.target.password.value) {
-        helpMessages[1].textContent = "Invalid password";
-        helpMessages[1].classList.add("high__prioprity");
-        return;
-      }
-      enviroment.currentUser = targetUser;
-      enviroment.save();
-      HEAD.updateUserContainer();
-      MAIN.display();
     });
-  }
 
-  display() {
-    this.innerContainer.classList = ["main"];
-    this.innerContainer.classList.add("sign__in__up");
-    this.innerContainer.innerHTML = "";
-
-    this._addForm();
-    super.display();
-    this._addButtonHandlers();
-    FOOT.display();
-  }
-}
-
-class SignUpView extends BaseView {
-  constructor(containerId) {
-    const main = document.createElement("main");
-    main.setAttribute("id", "main");
-    super(containerId, main);
-  }
-
-  _addForm() {
-    const form = htmlBlocksModule.createSignUpFormHTML();
-    this.innerContainer.insertAdjacentHTML("afterbegin", form);
-  }
-
-  _addButtonHandlers() {
-    const mainPageButton = this.innerContainer.querySelector(
-      ".main__page__button"
-    );
-    const signInButton = this.innerContainer.querySelector(".sign__in__button");
-
-    !mainPageButton
-      ? 0
-      : mainPageButton.addEventListener("click", (event) => {
-          MAIN.display();
-        });
-    !signInButton
-      ? 0
-      : signInButton.addEventListener("click", (event) => {
-          SIGN_IN.display();
-        });
-
-    const form = this.innerContainer.querySelector(".sign__form");
-    form.addEventListener("submit", (event) => {
+    this.dynamicElements.userForm.addEventListener("change", (event) => {
       event.preventDefault();
-      const users = UserDBManager.getAll();
-      const helpMessages = this.innerContainer.querySelectorAll(
-        ".input__block .help__message"
-      );
-      for (const user of users) {
-        if (user.login === event.target.login.value) {
-          helpMessages[0].textContent = "Login Exists";
-          helpMessages[0].classList.add("high__prioprity");
+      const fileInput = event.target.closest(`input[type="file"]`);
+      if (!fileInput) return;
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(fileInput.files[0]);
+      fileReader.onload = () => {
+        fileInput.parentElement.parentElement.querySelector("img").src =
+          fileReader.result;
+        fileInput.setAttribute(
+          "photo",
+          fileReader.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, "")
+        );
+      };
+    });
+
+    this.dynamicElements.userForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let inputs = {
+        username: event.target.username,
+        password: event.target.password,
+        password_rep: event.target.password_repeat,
+      };
+
+      for (const input of Object.values(inputs)) {
+        const message =
+          input.parentElement.parentElement.querySelector(".help__message");
+        message.textContent = "";
+      }
+
+      if (Object.values(inputs).some((input) => !input.value)) {
+        for (const input of Object.values(inputs)) {
+          const message =
+            input.parentElement.parentElement.querySelector(".help__message");
+          message.textContent = "";
+          if (!input.value) {
+            message.textContent = "Required Field";
+            message.classList.add("high__prioprity");
+          }
           return;
         }
       }
-      if (event.target.password.value !== event.target.password_repeat.value) {
-        helpMessages[2].textContent = "Incorrect repeat";
-        helpMessages[2].classList.add("high__prioprity");
+
+      if (inputs.password.value !== inputs.password_rep.value) {
+        const message =
+          inputs.password_rep.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Passwords are not same";
+        message.classList.add("high__prioprity");
         return;
       }
 
-      UserDBManager.create(
-        event.target.login.value,
-        event.target.login.value,
-        event.target.password.value
-      );
+      if (inputs.username.value.length > 100) {
+        const message =
+          inputs.username.parentElement.parentElement.querySelector(
+            ".help__message"
+          );
+        message.textContent = "Max length - 100";
+        message.classList.add("high__prioprity");
+        return;
+      }
 
-      SIGN_IN.display();
+      API.getUsers().then((users) => {
+        if (users.some((user) => user.userName === inputs.username.value)) {
+          const message =
+            inputs.username.parentElement.parentElement.querySelector(
+              ".help__message"
+            );
+          message.textContent = "This username is already taken";
+          message.classList.add("high__prioprity");
+          return;
+        }
+        const data = {
+          userName: event.target.username.value,
+          password: event.target.password.value,
+          retypedPassword: event.target.password_repeat.value,
+          photo: event.target.user_avatar.getAttribute("photo"),
+        };
+        API.patchUser(data).then((res) => {
+          const newUser = JSON.parse(localStorage.getItem("user"));
+          newUser.userName = data.userName;
+          newUser.password = data.password;
+          newUser.photo = data.photo;
+          localStorage.setItem("user", JSON.stringify(newUser));
+          MainUserDetailedView.display("wrapper");
+          HeaderView.display("wrapper");
+        });
+      });
     });
   }
 
-  display() {
-    this.innerContainer.classList = ["main"];
-    this.innerContainer.classList.add("sign__in__up");
-    this.innerContainer.innerHTML = "";
+  static display(containerId) {
+    super.display(containerId);
+    this._addHandlers();
+  }
+}
 
-    this._addForm();
-    super.display();
-    this._addButtonHandlers();
-    FOOT.display();
+class MainErrorView extends BaseView {
+  static makeStaticContent(error) {
+    this.root = htmlBlocksModule.createErrorPage(error);
+  }
+
+  static display(containerId, error) {
+    super.display(containerId, error);
   }
 }
 
@@ -1009,15 +1223,18 @@ function confirmStep(message, func) {
 
   document.body.insertAdjacentElement("afterend", modal);
   document.body.style.filter = "blur(1rem)";
+  document.body.style.pointerEvents = "none";
 
   cancelButton.addEventListener("click", (event) => {
     modal.remove();
     document.body.style.filter = "";
+    document.body.style.pointerEvents = "auto";
   });
   confirmButton.addEventListener("click", (event) => {
     modal.remove();
     func();
     document.body.style.filter = "";
+    document.body.style.pointerEvents = "auto";
   });
 }
 

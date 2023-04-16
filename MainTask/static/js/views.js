@@ -168,11 +168,11 @@ class BaseView {
   static root = document.createElement("div");
   static dynamicElements = {};
 
-  static makeStaticContent() {}
-  static collectDynamic() {}
+  static _makeStaticContent() {}
+  static _collectDynamic() {}
 
   static display(containerId, detailed) {
-    this.makeStaticContent(detailed);
+    this._makeStaticContent(detailed);
     this.outer_container = document.getElementById(containerId);
     const documentContainer = document.getElementById(this.root.id);
     if (documentContainer) {
@@ -180,16 +180,16 @@ class BaseView {
     } else {
       this.outer_container.append(this.root);
     }
-    this.collectDynamic();
+    this._collectDynamic();
   }
 }
 
 class HeaderView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createHeaderStatic();
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.userContainer =
       this.root.querySelector("#user_container");
     this.dynamicElements.logoContainer =
@@ -247,11 +247,11 @@ class HeaderView extends BaseView {
 }
 
 class MainAppView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createMainAppStatic();
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.executorFilter =
       this.root.querySelector("#executor_filter");
 
@@ -447,7 +447,7 @@ class MainAppView extends BaseView {
     }
   }
 
-  static addFilterTasksHandler() {
+  static _addFilterTasksHandler() {
     const filters = this.dynamicElements.filters;
     filters.addEventListener("change", (event) => {
       this.filterTasks();
@@ -569,21 +569,21 @@ class MainAppView extends BaseView {
     this.updateInProgressSection();
     this.updateCompletedSection();
     this._addHandlers();
-    this.addFilterTasksHandler();
+    this._addFilterTasksHandler();
   }
 }
 
 class FooterView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createFooterStatic();
   }
 }
 
 class MainTaskDetailedView extends BaseView {
-  static makeStaticContent(task) {
+  static _makeStaticContent(task) {
     this.root = htmlBlocksModule.createTaskDetailed(task);
   }
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.commentsList =
       this.root.querySelector(".comments__list");
     this.dynamicElements.task = this.root.querySelector(".task");
@@ -655,10 +655,10 @@ class MainTaskDetailedView extends BaseView {
 }
 
 class MainTaskDetailedUpdateView extends BaseView {
-  static makeStaticContent(task) {
+  static _makeStaticContent(task) {
     this.root = htmlBlocksModule.createTaskDetailedUpdate(task);
   }
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.commentsList =
       this.root.querySelector(".comments__list");
     this.dynamicElements.executorSelect = this.root.querySelector(
@@ -802,11 +802,11 @@ class MainTaskDetailedUpdateView extends BaseView {
 }
 
 class MainSignUpView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createSignUp();
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.form = this.root.querySelector(".sign__form");
   }
 
@@ -947,11 +947,11 @@ class MainSignUpView extends BaseView {
 }
 
 class MainSignInView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createSignIn();
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.form = this.root.querySelector(".sign__form");
   }
 
@@ -1007,13 +1007,13 @@ class MainSignInView extends BaseView {
 }
 
 class MainUserDetailedView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createUserDetialedView(
       JSON.parse(localStorage.getItem("user"))
     );
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.userContainer = this.root.querySelector(".user");
   }
 
@@ -1055,13 +1055,13 @@ class MainUserDetailedView extends BaseView {
 }
 
 class MainUserUdateView extends BaseView {
-  static makeStaticContent() {
+  static _makeStaticContent() {
     this.root = htmlBlocksModule.createUserDetialedUpdateView(
       JSON.parse(localStorage.getItem("user"))
     );
   }
 
-  static collectDynamic() {
+  static _collectDynamic() {
     this.dynamicElements.userContainer = this.root.querySelector(".user");
     this.dynamicElements.userForm = this.root.querySelector(".user__form");
   }
@@ -1190,7 +1190,7 @@ class MainUserUdateView extends BaseView {
 }
 
 class MainErrorView extends BaseView {
-  static makeStaticContent(error) {
+  static _makeStaticContent(error) {
     this.root = htmlBlocksModule.createErrorPage(error);
   }
 

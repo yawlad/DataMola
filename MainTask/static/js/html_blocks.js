@@ -219,7 +219,7 @@ const htmlBlocksModule = (() => {
           <h3 class="input__block__name">Status</h3>
           <div class="input__block__body">
             <label class="input__block__radio"><input type="radio" name="task_status" value="In progress" class="input__block__input">In progress</label>
-            <label class="input__block__radio"><input type="radio" name="task_status" value="Completed" class="input__block__input">Completed</label>
+            <label class="input__block__radio"><input type="radio" name="task_status" value="Complete" class="input__block__input">Completed</label>
             <label class="active__filter input__block__radio"><input type="radio" name="task_status" value="To Do" class="input__block__input" checked>To Do</label>
           </div>
         </div>
